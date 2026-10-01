@@ -1,0 +1,3205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6C74FF">
+<title>成长打卡</title>
+<style>
+:root{
+  --bg:#f5f7fc;
+  --bg-soft:#eef3ff;
+  --card:#ffffff;
+  --text:#182033;
+  --muted:#8390a7;
+  --line:#e9eef8;
+  --primary:#6c74ff;
+  --primary2:#8f6dff;
+  --green:#20b26c;
+  --green-soft:#e9f9f0;
+  --orange:#f6a437;
+  --orange-soft:#fff3df;
+  --red:#ef6565;
+  --red-soft:#fff0f0;
+  --blue-soft:#edf1ff;
+  --shadow:0 18px 45px rgba(38,57,112,.10);
+  --shadow-soft:0 10px 26px rgba(31,49,90,.08);
+  --radius:24px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top left, #f7eefe 0, transparent 28%),
+    radial-gradient(circle at top right, #eaf4ff 0, transparent 25%),
+    linear-gradient(180deg,#f9fbff 0%, var(--bg) 42%, #f4f6fb 100%);
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:560px;margin:0 auto;min-height:100vh;padding:18px 16px 110px;position:relative}
+.page{display:none}
+.page.active{display:block}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand h1,.brand h2{margin:0;font-size:28px;line-height:1.1;font-weight:900;letter-spacing:-.02em}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.avatar{
+  width:52px;height:52px;border-radius:18px;color:#fff;font-weight:900;font-size:22px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 14px 28px rgba(108,116,255,.28);
+}
+.avatar-button,.profile-avatar-button{border:0;padding:0;overflow:hidden;cursor:pointer}
+.avatar img,.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar-emoji{font-size:25px;line-height:1}
+.avatar-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin-top:8px}
+.avatar-option{
+  aspect-ratio:1;border:1px solid #e4eaf5;background:#f7f9fd;border-radius:16px;
+  display:grid;place-items:center;font-size:25px
+}
+.avatar-option.on{border-color:#bfc9ff;background:#eef1ff;box-shadow:0 0 0 3px rgba(108,116,255,.08)}
+.avatar-upload-preview{
+  width:92px;height:92px;border-radius:26px;margin:8px auto 12px;overflow:hidden;
+  display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:#fff;font-size:36px;font-weight:900;box-shadow:0 14px 28px rgba(108,116,255,.18)
+}
+.avatar-upload-preview img{width:100%;height:100%;object-fit:cover}
+
+.hero{
+  position:relative;overflow:hidden;
+  border-radius:28px;color:#fff;padding:18px 18px 16px;
+  background:linear-gradient(135deg,#6370ff 0%, #7b72ff 45%, #9a66ff 100%);
+  box-shadow:0 20px 42px rgba(95,109,255,.26);
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.22;background:#fff;
+}
+.hero:before{width:160px;height:160px;right:-45px;top:-50px}
+.hero:after{width:110px;height:110px;left:-35px;bottom:-40px}
+.hero-top{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+  position:relative;z-index:1;align-items:stretch
+}
+.hero-metric{
+  min-width:0;display:flex;flex-direction:column;justify-content:center;
+  padding:10px 8px;text-align:center;border-radius:16px;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(8px)
+}
+.hero-metric:first-child{text-align:left;align-items:flex-start;background:transparent;border-color:transparent;padding-left:0}
+.hero-label{font-size:11px;opacity:.9;margin-bottom:4px}
+.hero-num{font-size:42px;font-weight:900;line-height:1;letter-spacing:-.03em}
+.hero-value{font-size:25px;font-weight:900;line-height:1.05;white-space:nowrap}
+.hero-value small{font-size:11px;font-weight:800;opacity:.9}
+.hero-progress-block{position:relative;z-index:1;margin-top:14px}
+.hero-progress-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-bottom:7px;font-size:11px;font-weight:800;opacity:.95
+}
+.hero-progress-value{font-size:14px;font-weight:900}
+.hero-inline-bar{
+  width:100%;height:8px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden
+}
+.hero-inline-bar i{display:block;height:100%;border-radius:999px;background:#fff}
+.hero-foot{margin-top:10px;font-size:11px;opacity:.95;position:relative;z-index:1}
+.hero-foot span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.section{margin-top:22px}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:0 2px 12px}
+.section-title h3{margin:0;font-size:18px;font-weight:900;letter-spacing:-.01em}
+.section-title .link{
+  border:0;background:transparent;color:var(--primary);font-size:14px;font-weight:800;padding:4px 2px;
+}
+.card{
+  background:rgba(255,255,255,.92);backdrop-filter: blur(8px);
+  border:1px solid rgba(231,238,248,.95);border-radius:var(--radius);box-shadow:var(--shadow-soft);
+}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mini-grid.two{grid-template-columns:repeat(2,1fr)}
+.mini-card{
+  padding:16px 10px;text-align:center;background:rgba(255,255,255,.9);border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow-soft)
+}
+.mini-card b{display:block;font-size:30px;line-height:1.05;font-weight:900;letter-spacing:-.02em}
+.mini-card span{display:block;margin-top:8px;color:var(--muted);font-size:12px}
+.task-list,.reward-list,.tx-list,.bar-list,.settings-list{display:grid;gap:12px}
+.task-card,.reward-card{
+  display:flex;align-items:center;gap:14px;padding:16px;background:rgba(255,255,255,.95);
+  border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-soft)
+}
+.task-card.done{background:linear-gradient(180deg,#fbfffd 0,#f4fff8 100%);border-color:#dcf4e6}
+.icon-bubble,.reward-bubble{
+  width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:28px;flex:none;
+  background:linear-gradient(180deg,#f4f6ff 0,#eff3ff 100%);
+}
+.reward-bubble{background:linear-gradient(180deg,#fff7e8 0,#fff3df 100%)}
+.task-main,.reward-main{flex:1;min-width:0}
+.task-name,.reward-name{font-size:18px;font-weight:900;line-height:1.2;word-break:break-word}
+.task-desc,.reward-desc{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.35}
+.required-badge{
+  display:inline-flex;align-items:center;gap:4px;margin-top:8px;margin-right:6px;
+  padding:6px 10px;border-radius:999px;background:#fff0f4;color:#df5875;
+  font-size:12px;font-weight:900;border:1px solid #ffd9e3
+}
+.required-chip.on{
+  background:#fff0f4;border-color:#ffcbd8;color:#db5271
+}
+.points-pill{
+  display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:6px 10px;border-radius:999px;
+  background:var(--orange-soft);color:#d88712;font-size:12px;font-weight:900
+}
+.action-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{
+  border:0;border-radius:16px;padding:10px 14px;font-weight:800;font-size:14px;transition:.16s transform,.16s opacity,.16s background;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 10px 22px rgba(108,116,255,.22)}
+.btn-soft{background:var(--blue-soft);color:var(--primary)}
+.btn-success{background:var(--green-soft);color:var(--green)}
+.btn-warn{background:#f4f6fa;color:#6d7990}
+.btn-danger{background:var(--red-soft);color:var(--red)}
+.btn-reward{background:var(--orange-soft);color:#c97b0b}
+.card-block{padding:18px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.panel-head h3{margin:0;font-size:18px;font-weight:900}
+.panel-head .muted{font-size:12px;color:var(--muted)}
+.calendar-shell{padding:18px}
+.calendar-tools{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+.month-box{font-size:21px;font-weight:900}
+.inline-actions{display:flex;gap:8px;flex-wrap:wrap}
+.icon-btn{
+  width:38px;height:38px;border-radius:14px;border:0;background:#f3f6fb;color:#69748a;font-size:18px;font-weight:900
+}
+.week-grid,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center;width:100%}
+.week-grid{color:var(--muted);font-size:10px;margin-bottom:7px;padding:0 1px}
+.calendar-shell{padding:14px 12px}
+.calendar-tools{gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.month-box{font-size:19px}
+.inline-actions{gap:5px}
+.calendar-tools .icon-btn{width:34px;height:34px;border-radius:12px}
+.calendar-tools .btn{padding:8px 10px;font-size:12px}
+.day{
+  min-width:0;height:58px;border-radius:13px;background:#f7f9fc;display:flex;align-items:center;justify-content:center;
+  font-size:12px;border:1px solid transparent;position:relative;overflow:hidden;padding:3px 1px
+}
+.day>div{width:100%;min-width:0}
+.day{cursor:pointer;font-family:inherit}
+.day.has-single::after{content:'';position:absolute;right:5px;top:5px;width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.day:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.day .daynum{font-size:15px;font-weight:900;line-height:1.05}
+.day .daymark{font-size:9px;line-height:1.05;margin-top:3px;font-weight:900;opacity:.86;white-space:nowrap}
+.day .holiday-name{
+  display:block;max-width:100%;font-size:8px;line-height:1.05;margin-top:2px;color:#d46a62;font-weight:900;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 1px
+}
+.day.full{background:linear-gradient(180deg,#ebfcf3 0,#e3f7ed 100%);color:#159a59;font-weight:900;border-color:#d0efd9}
+.day.partial{background:linear-gradient(180deg,#fff8ec 0,#fff2df 100%);color:#cc7d12;font-weight:800;border-color:#f8e0b8}
+.day.today{outline:2px solid var(--primary);outline-offset:-2px}
+.day.type-holiday{background:linear-gradient(180deg,#fff5f5 0,#fff0f0 100%);border-color:#f5d7d7;color:#c85b59}
+.day.type-study.makeup{background:linear-gradient(180deg,#eef4ff 0,#e7efff 100%);border-color:#d8e3ff}
+@media (max-width:390px){
+  .calendar-shell{padding:12px 9px}
+  .week-grid,.calendar-grid{gap:4px}
+  .day{height:55px;border-radius:12px}
+  .day .daynum{font-size:14px}
+  .day .daymark{font-size:8px}
+  .day .holiday-name{font-size:7.5px}
+  .month-box{font-size:17px}
+}
+.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge-item{
+  position:relative;padding:16px 8px 12px;border-radius:20px;border:1px solid var(--line);text-align:center;background:#fbfcff
+}
+.badge-item.locked{opacity:.38;filter:grayscale(.15)}
+.badge-item .emoji{font-size:30px;line-height:1}
+.badge-item b{display:block;margin-top:8px;font-size:13px;line-height:1.25}
+.badge-item span{display:block;margin-top:4px;font-size:11px;color:var(--muted);line-height:1.35}
+.badge-unlock{position:absolute;top:8px;right:8px;font-size:10px;padding:3px 6px;border-radius:999px;background:var(--green-soft);color:var(--green);font-weight:900}
+.bar-row{display:grid;grid-template-columns:90px 1fr 42px;align-items:center;gap:10px;font-size:13px}
+.bar{height:10px;border-radius:999px;overflow:hidden;background:#eef3fa}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary2))}
+.tx-item{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.tx-item:last-child{border-bottom:0;padding-bottom:0}
+.tx-item b{display:block;font-size:14px}
+.tx-item small{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.plus{color:var(--green);font-weight:900}
+.minus{color:var(--red);font-weight:900}
+.profile-box{text-align:center;padding:6px 0 8px}
+.profile-avatar{
+  width:82px;height:82px;border-radius:28px;display:grid;place-items:center;margin:0 auto 12px;
+  color:#fff;font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 18px 34px rgba(108,116,255,.28)
+}
+.profile-box h3{margin:0;font-size:24px;font-weight:900}
+.profile-box p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.setting-item:last-child{border-bottom:0;padding-bottom:0}
+.setting-item span{color:#465166;font-size:14px}
+.setting-item b{font-size:14px}
+.empty{
+  padding:20px;border-radius:20px;background:linear-gradient(180deg,#fbfcff 0,#f7f9fd 100%);border:1px dashed #dfe6f3;
+  color:var(--muted);font-size:13px;line-height:1.6;text-align:center
+}
+.fab{
+  position:fixed;right:max(18px,calc((100vw - 560px)/2 + 18px));bottom:94px;width:60px;height:60px;border-radius:50%;
+  border:0;color:#fff;font-size:32px;background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 18px 38px rgba(104,114,255,.32);z-index:25
+}
+.bottom-nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.92);
+  backdrop-filter:blur(16px);border-top:1px solid rgba(225,232,243,.95);display:grid;grid-template-columns:repeat(5,1fr);z-index:24
+}
+.nav-btn{border:0;background:transparent;color:#95a0b6;padding:6px 0 4px;text-align:center}
+.nav-btn b{display:block;font-size:22px;line-height:1;margin-bottom:6px}
+.nav-btn span{font-size:11px;font-weight:800}
+.nav-btn.active{color:var(--primary)}
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(17,24,39,.34);backdrop-filter:blur(5px);z-index:50;align-items:flex-end;justify-content:center;padding:18px;
+}
+.modal.show{display:flex}
+.sheet{
+  width:min(560px,100%);max-height:82vh;overflow:auto;background:#fff;border-radius:28px;box-shadow:var(--shadow);
+  padding:20px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(8px);animation:rise .22s ease-out forwards
+}
+@keyframes rise{to{transform:translateY(0)}}
+.sheet h3{margin:0 0 14px;font-size:22px;font-weight:900}
+.sheet p.hint{margin:-4px 0 12px;color:var(--muted);font-size:13px;line-height:1.5}
+.field{margin-top:10px}
+.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:800;color:#48546d}
+.input, textarea{
+  width:100%;border:1px solid #e7edf7;border-radius:18px;background:#fbfcff;padding:14px 15px;color:var(--text);outline:none;
+  transition:border-color .15s, box-shadow .15s
+}
+.input:focus, textarea:focus{border-color:#cfd7ff;box-shadow:0 0 0 4px rgba(108,116,255,.10)}
+textarea{min-height:92px;resize:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  border:1px solid #e4eaf5;background:#f7f9fd;border-radius:16px;padding:9px 12px;font-size:13px;color:#5d6983;font-weight:800
+}
+.chip.on{background:#edf1ff;border-color:#d5ddff;color:var(--primary)}
+.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.dialog{
+  display:none;position:fixed;inset:0;background:rgba(18,24,38,.38);backdrop-filter:blur(6px);z-index:80;padding:22px;
+  align-items:center;justify-content:center
+}
+.dialog.show{display:flex}
+.dialog-panel{
+  width:min(420px,100%);background:#fff;border-radius:28px;box-shadow:var(--shadow);padding:22px 20px 18px;text-align:center;animation:pop .18s ease-out forwards;transform:scale(.96)
+}
+@keyframes pop{to{transform:scale(1)}}
+.dialog-icon{
+  width:58px;height:58px;border-radius:20px;display:grid;place-items:center;margin:0 auto 14px;font-size:28px;font-weight:900
+}
+.dialog-icon.primary{background:#edf1ff;color:var(--primary)}
+.dialog-icon.warn{background:var(--orange-soft);color:#cc7d12}
+.dialog-icon.danger{background:var(--red-soft);color:var(--red)}
+.dialog-title{font-size:22px;font-weight:900;margin:0}
+.dialog-text{white-space:pre-line;line-height:1.65;color:#516076;font-size:14px;margin:10px 0 0}
+.dialog-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:102px;background:rgba(25,31,45,.96);color:#fff;padding:12px 16px;border-radius:16px;
+  font-size:13px;box-shadow:0 16px 35px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:.2s;z-index:90
+}
+.toast.show{opacity:1}
+@media (max-width:420px){
+  .hero{padding:15px 13px 12px;border-radius:25px}
+  .hero-top{gap:7px}
+  .hero-metric{padding:9px 5px;border-radius:14px}
+  .hero-metric:first-child{padding-left:0}
+  .hero-num{font-size:38px}
+  .hero-value{font-size:22px}
+  .hero-num{font-size:40px}
+  .hero-subnum{font-size:26px}
+  .task-name,.reward-name{font-size:16px}
+  .action-row{gap:6px}
+  .btn{padding:10px 12px;font-size:13px}
+  .badges-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+.daytype-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.daytype-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:900}
+.daytype-study{background:#edf1ff;color:#5d69e8}
+.daytype-weekend{background:#eaf9f1;color:#1f9a60}
+.daytype-holiday{background:#fff1f4;color:#dd5f7b}
+.task-manage-card{display:flex;align-items:center;gap:14px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-soft)}
+.task-manage-card .manage-main{flex:1;min-width:0}
+.schedule-card{padding:18px}
+.range-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;width:100%
+}
+.range-grid .field{min-width:0;width:100%}
+.range-grid .input[type="date"]{
+  display:block;width:100%;max-width:100%;min-width:0;-webkit-min-logical-width:0;
+  box-sizing:border-box;padding:12px 10px;font-size:14px;line-height:1.2;
+  -webkit-appearance:none;appearance:none
+}
+.range-note{font-size:12px;line-height:1.55;color:var(--muted);margin-top:10px}
+@media (max-width:380px){
+  .range-grid{grid-template-columns:1fr;gap:8px}
+}
+.day .daynum{font-weight:800;line-height:1}
+.day .daymark{font-size:9px;line-height:1;margin-top:3px;color:var(--muted)}
+.day.type-study .daymark{color:#6873e8}
+.day.type-weekend .daymark{color:#1f9a60}
+.day.type-holiday{background:#fff3f6;color:#d75c78;border-color:#f5d7df}
+.day.type-holiday .daymark{color:#d75c78}
+
+
+.reward-preview{
+  display:flex; align-items:center; gap:12px; margin-top:10px;
+  padding:12px 14px; border-radius:18px; background:rgba(108,99,255,.08);
+  border:1px solid rgba(108,99,255,.12);
+}
+.reward-preview-icon{
+  width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+  background:#fff7eb; font-size:28px; flex:0 0 52px;
+}
+.reward-preview-text{ color:var(--muted); font-size:14px; line-height:1.45; }
+.reward-preview-text b{ color:var(--text); font-size:16px; display:block; margin-bottom:2px; }
+.reward-template-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;
+}
+.reward-template{
+  text-align:left; padding:14px; border:none; cursor:pointer; border-radius:18px;
+  background:#fff; box-shadow:0 10px 30px rgba(22,34,74,.06);
+  border:1px solid #eef1fb;
+}
+.reward-template:active{ transform:scale(.985); }
+.reward-template .top{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.reward-template .emoji{ font-size:24px; }
+.reward-template .name{ font-size:15px; font-weight:800; color:var(--text); line-height:1.3; }
+.reward-template .cost{ color:#d88a09; font-size:14px; font-weight:800; }
+.reward-template .tip{ color:var(--muted); font-size:12px; line-height:1.4; margin-top:4px; }
+@media (max-width:460px){
+  .reward-template-grid{ grid-template-columns:1fr; }
+}
+
+
+.plan-assistant-card{
+  padding:18px;border-radius:24px;background:linear-gradient(145deg,#f7f8ff,#ffffff);
+  border:1px solid #e8ebff;box-shadow:0 12px 34px rgba(37,50,95,.06)
+}
+.plan-assistant-head{display:flex;gap:14px;align-items:flex-start}
+.plan-assistant-icon{
+  width:54px;height:54px;border-radius:18px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-size:27px;flex:0 0 54px
+}
+.plan-assistant-head h3{margin:0;font-size:20px;font-weight:900}
+.plan-assistant-head p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.plan-step{margin-top:16px}
+.plan-step-title{font-size:13px;font-weight:900;color:#44506a;margin-bottom:8px}
+.plan-choice-grid{display:flex;gap:8px;flex-wrap:wrap}
+.plan-choice{
+  border:1px solid #e4e9f5;background:#fff;border-radius:15px;padding:9px 12px;
+  font-size:13px;font-weight:800;color:#5e6980
+}
+.plan-choice.on{background:#edf1ff;border-color:#d6ddff;color:var(--primary)}
+.plan-result{margin-top:16px;display:grid;gap:10px}
+.plan-result-card{
+  background:#fff;border:1px solid #e9edf6;border-radius:18px;padding:14px;
+  display:flex;gap:12px;align-items:flex-start
+}
+.plan-result-icon{
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+  background:#f2f4ff;font-size:22px;flex:0 0 42px
+}
+.plan-result-main{flex:1;min-width:0}
+.plan-result-name{font-weight:900;font-size:15px;color:var(--text)}
+.plan-result-desc{font-size:12px;line-height:1.55;color:var(--muted);margin-top:4px}
+.plan-result-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.plan-meta{
+  padding:4px 7px;border-radius:999px;background:#f6f7fb;color:#6a758c;font-size:11px;font-weight:800
+}
+.plan-result-actions{display:flex;gap:8px;margin-top:10px}
+.plan-added{color:#20a064;font-size:12px;font-weight:900}
+.plan-summary{
+  margin-top:14px;padding:12px 14px;border-radius:16px;background:#f6f8ff;color:#536078;font-size:12px;line-height:1.65
+}
+
+
+select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
+
+
+.profile-section-title{
+  margin-top:18px;padding-top:4px;font-size:14px;font-weight:900;color:#3f4b63
+}
+.profile-option-grid{display:flex;gap:8px;flex-wrap:wrap}
+.profile-option{
+  border:1px solid #e4e9f5;background:#fff;border-radius:15px;padding:9px 12px;
+  font-size:13px;font-weight:800;color:#5e6980
+}
+.profile-option.on{background:#edf1ff;border-color:#d6ddff;color:var(--primary)}
+.profile-helper{font-size:12px;line-height:1.55;color:var(--muted);margin-top:8px}
+
+/* Growth plan assistant V2 */
+.gv-tag{display:inline-block;border-radius:9px;background:#e9e6ff;color:#6952dd;padding:3px 7px;font-size:11px;vertical-align:middle}
+.gv-note{font-size:12px;line-height:1.65;color:#708098;margin:9px 0;overflow-wrap:anywhere}
+.gv-intake,.gv-sub,.gv-activity{border:1px solid #e4e9f6;border-radius:17px;background:#fff;margin:14px 0;padding:13px}
+.gv-intake>summary,.gv-sub>summary,.gv-activity>summary{cursor:pointer;font-size:14px;font-weight:850;color:#354564;line-height:1.6}
+.gv-sub{background:#f8faff}.gv-intake .field{margin-top:13px}.gv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gv-grid>*{min-width:0}
+.gv-intake select,.gv-intake input,.gv-intake textarea{width:100%;max-width:100%}.gv-intake input[type=checkbox]{width:auto;margin-right:5px;accent-color:var(--primary)}
+.gv-check{border:1px solid #e2e7f4;border-radius:12px;padding:9px 10px;display:flex;align-items:center;font-size:12px;background:#fff}
+.gv-check:has(input:checked){background:#edf1ff;border-color:#c7ceff;color:#575fdd}
+.gv-program{background:#f1f4ff;border:1px solid #dfe5fb;border-radius:18px;padding:15px;margin-top:16px}.gv-program h4,.gv-section-title{margin:0 0 8px;font-size:16px;color:#283b60}
+.gv-goal-list{display:grid;gap:7px;margin-top:12px}.gv-goal{background:#fff;padding:10px;border-radius:12px;font-size:12px;line-height:1.6}.gv-goal strong{display:block;color:#354668}.gv-goal span{color:#748098}
+.gv-roadmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.gv-road{border:1px solid #e1e6f3;background:#fff;border-radius:13px;padding:11px;font-size:12px;line-height:1.6}.gv-road.active{border-color:#979eff;background:#f1f2ff}.gv-road b{display:block;margin:4px 0}
+.gv-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.gv-tabs button[aria-selected=true]{background:#e8eaff;border-color:#aeb7ff;color:#4f58d7}
+.gv-day{border:1px solid #e6ebf5;border-radius:15px;padding:12px;margin:10px 0;background:#fff}.gv-day-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:13px;font-weight:850}.gv-budget{font-size:11px;font-weight:650;color:#7986a0}.gv-day details{margin:10px 0 0}.gv-activity summary{font-size:13px}.gv-activity p,.gv-activity li{font-size:12px;line-height:1.75;color:#53637d;overflow-wrap:anywhere}.gv-activity ol{padding-left:20px}.gv-activity h5{font-size:12px;color:#344969;margin:13px 0 4px}
+.gv-resource{border-radius:12px;background:#f5f8ff;padding:10px;font-size:12px;line-height:1.75}.gv-resource a{color:#555ee3;text-decoration:underline;overflow-wrap:anywhere}.gv-feedback{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.gv-feedback button{font-size:11px;padding:7px 9px}.gv-feedback button.on{background:#e7f7ed;border-color:#8fcda9;color:#248053}
+.gv-review{border-top:1px solid #dde4f1;margin-top:18px;padding-top:15px}.gv-review label{font-size:12px;color:#52627c}.gv-review textarea{width:100%}.gv-warning{background:#fff6e6;color:#926226;padding:10px;border-radius:12px;font-size:12px;line-height:1.6}
+.gv-home-guide{margin-top:7px;padding:6px 9px;font-size:11px}.gv-modal-body{max-height:68vh;overflow:auto}.gv-modal-body .gv-activity{border:0;padding:0}.gv-home-banner{border:1px solid #e0e5ff;background:#f5f6ff;border-radius:15px;padding:12px;margin:12px 0;font-size:12px;line-height:1.6;color:#51627e}
+.gv-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.gv-actions .btn{flex:1;min-width:120px}.gv-review-history{margin-top:12px;font-size:12px;line-height:1.7;color:#5f6e87}.gv-review-history details{padding:9px;background:#f9faff;border-radius:12px;margin:6px 0}.gv-check:focus-within,summary:focus-visible{outline:2px solid #868eff;outline-offset:2px}
+@media(max-width:380px){.gv-grid{grid-template-columns:1fr}.gv-roadmap{grid-template-columns:1fr}.gv-day-head{display:block}.gv-budget{display:block;margin-top:4px}.plan-assistant-card{padding:13px}}
+
+.gv-next{border:1px solid #cfd8f6;background:#f3f6ff;border-radius:15px;padding:13px;margin-top:14px}.gv-next p{font-size:12px;line-height:1.7}.gv-next .btn{margin:5px 4px 0 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <main id="homePage" class="page active">
+    <div class="topbar">
+      <div class="brand">
+        <h1>成长打卡</h1>
+        <p id="todayLabel">每天一点点，成长看得见。</p>
+      </div>
+      <button class="avatar avatar-button" id="headerAvatar" onclick="openAvatarModal()" aria-label="修改头像">🌱</button>
+    </div>
+
+    <section class="hero">
+      <div class="hero-top">
+        <div class="hero-metric">
+          <div class="hero-label">今日完成</div>
+          <div class="hero-num" id="heroNum">0/0</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-label">当前积分</div>
+          <div class="hero-value"><span id="heroPoints">0</span> <small>分</small></div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-label">连续打卡</div>
+          <div class="hero-value"><span id="streak">0</span> <small>天</small></div>
+        </div>
+      </div>
+      <div class="hero-progress-block">
+        <div class="hero-progress-head">
+          <span>完成进度</span>
+          <strong class="hero-progress-value" id="percent">0%</strong>
+        </div>
+        <div class="hero-inline-bar"><i id="progressBar" style="width:0%"></i></div>
+      </div>
+      <div class="hero-foot">
+        <span>每天一点点，比一口吃成学霸靠谱。</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div id="growthHomeBanner" class="gv-home-guide" style="display:none"></div>
+      <div class="section-title">
+        <h3>今日计划</h3>
+        <button class="link" onclick="openPlanModal('add')">＋ 新建计划</button>
+      </div>
+      <div id="taskList" class="task-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h3>积分兑换</h3>
+        <div class="points-pill">🪙 当前 <span id="homeRewardBalance">0</span> 积分</div>
+      </div>
+      <div id="homeRewardList" class="reward-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h3>成长概览</h3>
+      </div>
+      <div class="mini-grid">
+        <div class="mini-card"><b id="totalChecks">0</b><span>累计打卡</span></div>
+        <div class="mini-card"><b id="fullDays">0</b><span>全勤天数</span></div>
+        <div class="mini-card"><b id="rate">0%</b><span>近 7 天完成率</span></div>
+      </div>
+    </section>
+  </main>
+
+  <main id="calendarPage" class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h2>打卡日历</h2>
+        <p>绿色全勤，橙色部分完成。</p>
+      </div>
+    </div>
+    <section class="card calendar-shell">
+      <div class="calendar-tools">
+        <div class="month-box" id="monthLabel"></div>
+        <div class="inline-actions">
+          <button class="icon-btn" onclick="changeMonth(-1)">‹</button>
+          <button class="btn btn-soft" onclick="jumpToday()">回到今天</button>
+          <button class="icon-btn" onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
+      <div class="week-grid"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="range-note">点选日期可查看安排、提前添加单日任务。右上角紫点表示有家长设置的单日任务。</div>
+    </section>
+  </main>
+
+
+  <main id="tasksPage" class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h2>任务与奖励管理</h2>
+        <p>任务和积分奖励都在这里管理；首页负责日常打卡和兑换，管理入口统一放在这里。</p>
+      </div>
+    </div>
+
+    <section class="card schedule-card">
+      <div class="panel-head">
+        <h3>日期类型设置</h3>
+        <span class="muted" id="todayTypeText">今天</span>
+      </div>
+      <p class="hint" style="margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.6">默认周一到周五为学习日，周六周日为周末。学校放假、调休上课这类特殊日期，可以在这里覆盖默认规则。</p>
+      <div class="range-grid">
+        <div class="field" style="margin-top:0"><label>开始日期</label><input id="dateTypeStart" class="input" type="date"></div>
+        <div class="field" style="margin-top:0"><label>结束日期</label><input id="dateTypeEnd" class="input" type="date"></div>
+      </div>
+      <div class="field">
+        <label>设置为</label>
+        <div class="chips" id="dateTypeChips">
+          <button class="chip on" data-type="study" onclick="pickDateType(this)" type="button">📘 学习日</button>
+          <button class="chip" data-type="weekend" onclick="pickDateType(this)" type="button">🌿 周末</button>
+          <button class="chip" data-type="holiday" onclick="pickDateType(this)" type="button">🎈 假期</button>
+        </div>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn btn-soft" onclick="clearDateTypeRange()">恢复自动判断</button>
+        <button class="btn btn-primary" onclick="applyDateTypeRange()">保存日期设置</button>
+      </div>
+      <div class="range-note">结束日期可以不填，系统会只设置开始日期。手动设置优先于“工作日 / 周末”自动判断。</div>
+    </section>
+
+    <section class="section" id="growthAssistant">
+      <div class="plan-assistant-card">
+        <div class="plan-assistant-head">
+          <div class="plan-assistant-icon">✨</div>
+          <div><h3>成长计划助手 <span class="gv-tag">V2</span></h3><p>从家庭情况出发，安排四周方向、本周活动和家长陪伴方法。每周一起复盘，按实际情况调整。</p></div>
+        </div>
+        <div class="gv-note">当前为家庭活动试用版，使用已整理的活动和资源生成建议。英语详细样例以 4–6 岁家庭入门为主；其他年龄与方向提供基础活动参考。</div>
+        <details id="growthIntakePanel" class="gv-intake" open>
+          <summary>① 了解孩子与家庭安排</summary>
+          <form id="growthIntakeForm" onsubmit="event.preventDefault(); generateGrowthPlan()">
+            <div class="gv-grid">
+              <div class="field"><label for="gvAge">孩子年龄</label><input id="gvAge" class="input" type="number" min="3" max="15" step="1" required></div>
+              <div class="field"><label for="gvStart">方案开始日期</label><input id="gvStart" class="input" type="date" required></div>
+            </div>
+            <div class="field"><label>关心的成长方向（可多选，每项都会保留）</label><div id="gvGoals" class="plan-choice-grid"></div></div>
+            <div class="field"><label for="gvPriority">这次最想先推进</label><select id="gvPriority" class="input"></select><div class="gv-note">其他方向会穿插、结合或放到后续阶段，生成后可以查看每项原因。</div></div>
+            <div class="gv-grid">
+              <div class="field"><label for="gvBudget">每天活动总预算</label><select id="gvBudget" class="input"><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option><option value="40">40 分钟</option><option value="60">60 分钟</option><option value="90">90 分钟</option></select></div>
+              <div class="field"><label for="gvAdult">大人每天可陪伴</label><select id="gvAdult" class="input"><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option><option value="40">40 分钟</option><option value="60">60 分钟</option><option value="90">90 分钟</option></select></div>
+            </div>
+            <div class="field"><label for="gvOccupied">给已有任务预留多少分钟</label><input id="gvOccupied" class="input" type="number" min="0" max="90" step="1" value="0"><div class="gv-note">原有任务继续保留。请把希望一起执行的已有活动计入预留时间，助手用剩余时间排新增活动。</div></div>
+            <div class="field"><label>每周哪些天方便（至少一天）</label><div id="gvDays" class="plan-choice-grid"></div></div>
+            <div class="field"><label for="gvInterest">喜欢什么、最近有什么困难</label><textarea id="gvInterest" maxlength="240" placeholder="例如：喜欢恐龙，愿意听故事，但不喜欢被要求跟读"></textarea></div>
+            <details class="gv-sub" id="gvEnglishQuestions"><summary>英语活动的起点与资源</summary>
+              <div class="field"><label for="gvExperience">目前的英语接触情况</label><select id="gvExperience" class="input"><option value="new">接触很少，从熟悉声音和游戏开始</option><option value="some">听过儿歌，主要跟着大人做</option><option value="ready">熟悉简单词语，能回应部分动作或指图</option><option value="unsure">不确定，先观察孩子的反应</option></select></div>
+              <div class="gv-grid"><div class="field"><label for="gvMode">更喜欢的活动</label><select id="gvMode" class="input"><option value="play">玩具与动作游戏</option><option value="song">儿歌与节奏</option><option value="book">图片与故事</option></select></div><div class="field"><label for="gvScreen">孩子的屏幕安排</label><select id="gvScreen" class="input"><option value="none">暂不用屏幕</option><option value="short">大人陪同，短时听看</option></select></div></div>
+              <div class="gv-grid"><div class="field"><label for="gvBook">家中可用的英语绘本</label><select id="gvBook" class="input"><option value="no">暂时没有，使用玩具或自画图片</option><option value="yes">已有合法取得的 Dear Zoo</option><option value="brown">已有合法取得的 Brown Bear</option></select></div><div class="field"><label for="gvParent">大人的英语信心</label><select id="gvParent" class="input"><option value="help">希望有简单示范与准备指导</option><option value="confident">可以示范简短日常表达</option></select></div></div>
+            </details>
+            <div class="sheet-actions"><button class="btn btn-soft" type="button" onclick="resetGrowthPlanner()">从孩子资料重新填写</button><button class="btn btn-primary" type="submit">生成四周方案</button></div>
+          </form>
+        </details>
+        <div id="growthPlanSummary"></div>
+        <div id="growthPlanResults"></div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-title"><h3>全部任务</h3><button class="link" onclick="openPlanModal('add')">＋ 新建计划</button></div>
+      <div class="chips" style="margin-bottom:10px"><button class="chip" type="button" onclick="openSingleDayPlan()">📅 添加单日任务</button></div>
+      <div class="range-note" style="margin:0 0 12px">假期每天安排不同时，可提前添加单日任务，只在指定日期出现。学习日、周末和假期的重复任务仍按原设置显示；不需要的学习任务可编辑为仅适用学习日。</div>
+      <div id="manageTaskList" class="task-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-title"><h3>奖励管理</h3><button class="link" onclick="openRewardModal('add')">＋ 新建奖励</button></div><div class="range-note" style="margin:0 0 12px">这里负责新增、编辑和删除奖励；首页只显示兑换按钮。</div>
+      <div id="manageRewardList" class="reward-list"></div>
+    </section>
+  </main>
+
+  <main id="statsPage" class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h2>数据统计</h2>
+        <p>记录是为了鼓励，不是为了把日子过成 KPI。</p>
+      </div>
+    </div>
+
+    <section class="card card-block">
+      <div class="panel-head"><h3>各计划完成情况</h3><span class="muted">近 14 天</span></div>
+      <div id="bars" class="bar-list"></div>
+    </section>
+
+    <section class="card card-block section">
+      <div class="panel-head"><h3>成长徽章</h3><span class="muted">自动解锁</span></div>
+      <div id="badges" class="badges-grid"></div>
+    </section>
+
+    <section class="card card-block section">
+      <div class="panel-head"><h3>积分记录</h3><span class="muted">最近 30 条</span></div>
+      <div id="txList" class="tx-list"></div>
+    </section>
+  </main>
+
+  <main id="mePage" class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h2>我的</h2>
+        <p>把奖励规则固定下来，家长也轻松一点。</p>
+      </div>
+    </div>
+
+    <section class="card card-block">
+      <div class="panel-head">
+        <h3>账号与云同步</h3>
+        <span class="muted" id="syncStatus">正在检查登录状态</span>
+      </div>
+
+      <div id="signedOutBox">
+        <div class="field">
+          <label for="authEmail">邮箱</label>
+          <input id="authEmail" class="input" type="email" autocomplete="email" placeholder="例如：name@example.com">
+        </div>
+        <div class="field">
+          <label for="authPassword">密码</label>
+          <input id="authPassword" class="input" type="password" autocomplete="current-password" minlength="6" placeholder="至少 6 位">
+        </div>
+        <div class="sheet-actions">
+          <button id="authSignUpButton" class="btn btn-soft" onclick="signUpAccount()">注册账号</button>
+          <button id="authSignInButton" class="btn btn-primary" onclick="signInAccount()">登录</button>
+        </div>
+        <div id="authErrorDetail" class="range-note" role="status" aria-live="polite" hidden></div>
+        <div class="range-note">
+          登录后，孩子资料、成长方案与复盘、任务、积分、奖励、日期设置和打卡记录会保存到云端。同一个账号在微信、Safari、电脑登录后可同步。
+        </div>
+      </div>
+
+      <div id="signedInBox" style="display:none">
+        <div class="settings-list">
+          <div class="setting-item"><span>当前账号</span><b id="accountEmail">-</b></div>
+          <div class="setting-item"><span>云端状态</span><b id="accountCloudState">已连接</b></div>
+        </div>
+        <div class="sheet-actions">
+          <button class="btn btn-soft" onclick="manualCloudSync()">立即同步</button>
+          <button class="btn btn-danger" onclick="signOutAccount()">退出登录</button>
+        </div>
+        <div class="range-note">登录后会自动同步云端。任务、打卡、积分和头像等修改会在后台保存；切回页面时也会自动检查最新云端数据。</div>
+      </div>
+      <div style="margin-top:12px">
+        <button id="authConnectionButton" class="btn btn-soft" onclick="checkAuthConnection()">检查登录连接</button>
+        <div id="authConnectionResult" class="range-note" role="status" aria-live="polite" hidden></div>
+        <div class="range-note">当前版本 · 20261001-3</div>
+      </div>
+    </section>
+
+    <section class="card card-block">
+      <div class="profile-box">
+        <button class="profile-avatar profile-avatar-button" id="profileAvatar" onclick="openAvatarModal()" aria-label="编辑孩子资料">🌱</button>
+        <h3 id="profileNickname">我的孩子</h3>
+        <p id="profileMeta">年龄未填写 · 年级未填写</p>
+        <button class="btn btn-soft" style="margin-top:12px" onclick="openAvatarModal()" type="button">编辑孩子资料</button>
+      </div>
+    </section>
+
+    <section class="card card-block section">
+      <div class="settings-list">
+        <div class="setting-item"><span>计划数量</span><b id="planCount">0</b></div>
+        <div class="setting-item"><span>奖励数量</span><b id="rewardCount">0</b></div>
+        <div class="setting-item"><span>数据保存</span><b id="storageModeLabel">本机浏览器</b></div>
+        <div class="setting-item"><span>广告</span><b>0</b></div>
+        <div class="setting-item"><span>会员</span><b>不存在这玩意</b></div>
+      </div>
+    </section>
+
+    <section class="card card-block section">
+      <div class="sheet-actions" style="grid-template-columns:1fr;gap:10px;margin-top:0">
+        <button class="btn btn-soft" onclick="exportData()">导出备份</button>
+        <button class="btn btn-soft" onclick="triggerImport()">导入备份</button>
+        <button class="btn btn-danger" onclick="resetAll()">清空全部数据</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<button class="fab" onclick="openPlanModal('add')">＋</button>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="navTo('homePage', this)"><b>⌂</b><span>首页</span></button>
+  <button class="nav-btn" onclick="navTo('calendarPage', this)"><b>▦</b><span>日历</span></button>
+  <button class="nav-btn" onclick="navTo('tasksPage', this)"><b>☷</b><span>任务</span></button>
+  <button class="nav-btn" onclick="navTo('statsPage', this)"><b>▥</b><span>统计</span></button>
+  <button class="nav-btn" onclick="navTo('mePage', this)"><b>●</b><span>我的</span></button>
+</nav>
+
+<div id="checkModal" class="modal" onclick="closeOnBg(event, 'checkModal')">
+  <div class="sheet">
+    <h3 id="checkTitle">完成打卡</h3>
+    <p class="hint">可以顺手记一句今天做了什么，后面回看会很有成就感。</p>
+    <div class="field">
+      <label>今日备注</label>
+      <textarea id="checkNote" placeholder="例如：一起玩了问候游戏；读了喜欢的一页绘本……"></textarea>
+    </div>
+    <div class="field">
+      <label>心情标签</label>
+      <div class="chips" id="checkTags">
+        <button class="chip on" onclick="toggleTag(this)" type="button">😊 很开心</button>
+        <button class="chip" onclick="toggleTag(this)" type="button">💪 有进步</button>
+        <button class="chip" onclick="toggleTag(this)" type="button">🤔 有点难</button>
+        <button class="chip" onclick="toggleTag(this)" type="button">⭐ 想再来</button>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-soft" onclick="closeModal('checkModal')">取消</button>
+      <button class="btn btn-primary" onclick="submitCheck()">完成打卡</button>
+    </div>
+  </div>
+</div>
+
+<div id="planModal" class="modal" onclick="closeOnBg(event, 'planModal')">
+  <div class="sheet">
+    <h3 id="planModalTitle">新建计划</h3>
+    <p class="hint">任务名称尽量短一点，看起来更清爽，也更容易让孩子一眼知道今天做什么。</p>
+    <div class="field">
+      <label for="planName">计划名称</label>
+      <input id="planName" class="input" placeholder="例如：观看英文动画 20 分钟">
+    </div>
+    <div class="field">
+      <label for="planDesc">计划说明</label>
+      <input id="planDesc" class="input" placeholder="一句简单说明，例如：每天完成一点">
+    </div>
+    <div class="field">
+      <label for="planPoints">完成奖励积分</label>
+      <input id="planPoints" class="input" type="number" min="0" step="1" placeholder="默认 1 分，例如：1">
+    </div>
+    <div class="field">
+      <label>任务性质</label>
+      <div class="chips">
+        <button id="planRequiredChip" class="chip required-chip" onclick="togglePlanRequired(this)" type="button">⭐ 必做任务</button>
+      </div>
+      <div class="range-note">必做任务会影响“连续打卡”。当天所有适用的必做任务完成，才计为 1 个教育打卡日。</div>
+    </div>
+    <div class="field">
+      <label>适用日期</label>
+      <div id="planScheduleNote" class="gv-note" style="display:none"></div>
+      <div id="planScheduleModeField">
+        <label for="planScheduleMode">任务安排方式</label>
+        <select id="planScheduleMode" class="input" onchange="updatePlanScheduleFields()">
+          <option value="repeat">按日期类型重复</option>
+          <option value="single">仅指定一天</option>
+        </select>
+      </div>
+      <div id="planSingleDateField" style="display:none;margin-top:10px">
+        <label for="planSingleDate">执行日期</label>
+        <input id="planSingleDate" class="input" type="date">
+        <div class="range-note">仅在这一天显示，不受学习日、周末或假期分类影响。可以提前安排未来日期，不会计入今天的任务和完成率。</div>
+      </div>
+      <div class="chips" id="planDayTypeChips">
+        <button class="chip on" data-type="study" onclick="togglePlanDayType(this)" type="button">📘 学习日</button>
+        <button class="chip on" data-type="weekend" onclick="togglePlanDayType(this)" type="button">🌿 周末</button>
+        <button class="chip" data-type="holiday" onclick="togglePlanDayType(this)" type="button">🎈 假期</button>
+      </div>
+      <div class="range-note" id="planDayTypeHint">可以多选。某个日期不是任务的适用类型时，首页当天不会显示这个任务。</div>
+    </div>
+    <div class="field">
+      <label>图标</label>
+      <div class="chips" id="planIconChips">
+        <button class="chip on" data-icon="📘" onclick="pickPlanIcon(this)" type="button">📘 学习</button>
+        <button class="chip" data-icon="🎬" onclick="pickPlanIcon(this)" type="button">🎬 动画</button>
+        <button class="chip" data-icon="🎧" onclick="pickPlanIcon(this)" type="button">🎧 音频熏听</button>
+        <button class="chip" data-icon="🏃" onclick="pickPlanIcon(this)" type="button">🏃 运动</button>
+        <button class="chip" data-icon="🎨" onclick="pickPlanIcon(this)" type="button">🎨 兴趣</button>
+        <button class="chip" data-icon="🌱" onclick="pickPlanIcon(this)" type="button">🌱 习惯</button>
+        <button class="chip" data-icon="📚" onclick="pickPlanIcon(this)" type="button">📚 阅读</button>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-soft" onclick="closeModal('planModal')">取消</button>
+      <button class="btn btn-primary" onclick="savePlan()">保存计划</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="dayPlansModal" class="modal" onclick="closeOnBg(event, 'dayPlansModal')">
+  <div class="sheet">
+    <h3 id="dayPlansTitle">当天安排</h3>
+    <p id="dayPlansHint" class="hint"></p>
+    <div id="dayPlansList" class="task-list"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-soft" type="button" onclick="closeModal('dayPlansModal')">关闭</button>
+      <button id="dayPlansAdd" class="btn btn-primary" type="button" onclick="openSingleDayPlan(selectedDayPlansDate)">为这一天添加任务</button>
+    </div>
+  </div>
+</div>
+
+<div id="avatarModal" class="modal" onclick="closeOnBg(event, 'avatarModal')">
+  <div class="sheet">
+    <h3>孩子资料</h3>
+    <p class="hint">年龄和年级会用于成长计划推荐；头像、昵称和资料都会跟账号一起同步。</p>
+
+    <div id="avatarPreview" class="avatar-upload-preview">🌱</div>
+
+    <div class="field">
+      <label>昵称</label>
+      <input id="profileNicknameInput" class="input" maxlength="20" placeholder="例如：小雨 / 乐乐 / 我的孩子">
+    </div>
+
+    <div class="range-grid">
+      <div class="field">
+        <label>年龄</label>
+        <input id="profileAgeInput" class="input" type="number" min="3" max="15" step="1" inputmode="numeric" placeholder="例如：6">
+      </div>
+      <div class="field">
+        <label>年级</label>
+        <select id="profileGradeInput" class="input">
+          <option value="">请选择</option>
+          <option value="幼儿园小班">幼儿园小班</option>
+          <option value="幼儿园中班">幼儿园中班</option>
+          <option value="幼儿园大班">幼儿园大班</option>
+          <option value="一年级">一年级</option>
+          <option value="二年级">二年级</option>
+          <option value="三年级">三年级</option>
+          <option value="四年级">四年级</option>
+          <option value="五年级">五年级</option>
+          <option value="六年级">六年级</option>
+        </select>
+      </div>
+    </div>
+    <div class="range-note">年龄用于匹配发展阶段，年级用于调整学习、阅读和习惯类任务。两项都可以以后修改。</div>
+
+    <div class="profile-section-title">基础资料</div>
+
+    <div class="field">
+      <label>性别（选填）</label>
+      <div class="profile-option-grid" id="profileGenderOptions">
+        <button type="button" class="profile-option" data-value="" onclick="pickProfileSingle('gender',this)">不填写</button>
+        <button type="button" class="profile-option" data-value="男" onclick="pickProfileSingle('gender',this)">男</button>
+        <button type="button" class="profile-option" data-value="女" onclick="pickProfileSingle('gender',this)">女</button>
+      </div>
+      <div class="profile-helper">性别只用于资料记录，不会决定阅读、运动或学习能力类推荐。</div>
+    </div>
+
+    <div class="profile-section-title">成长画像</div>
+
+    <div class="field">
+      <label>兴趣爱好（可多选）</label>
+      <div class="profile-option-grid" id="profileInterestOptions">
+        <button type="button" class="profile-option" data-value="骑车" onclick="toggleProfileMulti('interests',this)">🚲 骑车</button>
+        <button type="button" class="profile-option" data-value="足球" onclick="toggleProfileMulti('interests',this)">⚽ 足球</button>
+        <button type="button" class="profile-option" data-value="画画" onclick="toggleProfileMulti('interests',this)">🎨 画画</button>
+        <button type="button" class="profile-option" data-value="恐龙" onclick="toggleProfileMulti('interests',this)">🦖 恐龙</button>
+        <button type="button" class="profile-option" data-value="汽车" onclick="toggleProfileMulti('interests',this)">🚗 汽车</button>
+        <button type="button" class="profile-option" data-value="积木" onclick="toggleProfileMulti('interests',this)">🧱 积木</button>
+        <button type="button" class="profile-option" data-value="阅读" onclick="toggleProfileMulti('interests',this)">📚 阅读</button>
+        <button type="button" class="profile-option" data-value="音乐" onclick="toggleProfileMulti('interests',this)">🎵 音乐</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>当前培养目标（可多选）</label>
+      <div class="profile-option-grid" id="profileGoalOptions">
+        <button type="button" class="profile-option" data-value="reading" onclick="toggleProfileMulti('goals',this)">阅读</button>
+        <button type="button" class="profile-option" data-value="english" onclick="toggleProfileMulti('goals',this)">英语</button>
+        <button type="button" class="profile-option" data-value="focus" onclick="toggleProfileMulti('goals',this)">专注</button>
+        <button type="button" class="profile-option" data-value="outdoor" onclick="toggleProfileMulti('goals',this)">户外运动</button>
+        <button type="button" class="profile-option" data-value="selfcare" onclick="toggleProfileMulti('goals',this)">生活自理</button>
+        <button type="button" class="profile-option" data-value="thinking" onclick="toggleProfileMulti('goals',this)">思维表达</button>
+        <button type="button" class="profile-option" data-value="emotion" onclick="toggleProfileMulti('goals',this)">情绪管理</button>
+        <button type="button" class="profile-option" data-value="social" onclick="toggleProfileMulti('goals',this)">社交</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>当前主要困难（可多选）</label>
+      <div class="profile-option-grid" id="profileDifficultyOptions">
+        <button type="button" class="profile-option" data-value="容易分心" onclick="toggleProfileMulti('difficulties',this)">容易分心</button>
+        <button type="button" class="profile-option" data-value="拖延" onclick="toggleProfileMulti('difficulties',this)">拖延</button>
+        <button type="button" class="profile-option" data-value="不愿阅读" onclick="toggleProfileMulti('difficulties',this)">不愿阅读</button>
+        <button type="button" class="profile-option" data-value="不爱运动" onclick="toggleProfileMulti('difficulties',this)">不爱运动</button>
+        <button type="button" class="profile-option" data-value="英语基础弱" onclick="toggleProfileMulti('difficulties',this)">英语基础弱</button>
+        <button type="button" class="profile-option" data-value="自理能力弱" onclick="toggleProfileMulti('difficulties',this)">自理能力弱</button>
+        <button type="button" class="profile-option" data-value="情绪容易激动" onclick="toggleProfileMulti('difficulties',this)">情绪容易激动</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>每天可投入时间</label>
+      <div class="profile-option-grid" id="profileTimeOptions">
+        <button type="button" class="profile-option" data-value="20" onclick="pickProfileSingle('dailyMinutes',this)">20 分钟</button>
+        <button type="button" class="profile-option" data-value="40" onclick="pickProfileSingle('dailyMinutes',this)">40 分钟</button>
+        <button type="button" class="profile-option" data-value="60" onclick="pickProfileSingle('dailyMinutes',this)">60 分钟</button>
+        <button type="button" class="profile-option" data-value="90" onclick="pickProfileSingle('dailyMinutes',this)">90 分钟+</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>孩子喜欢的奖励（可多选）</label>
+      <div class="profile-option-grid" id="profileRewardPrefOptions">
+        <button type="button" class="profile-option" data-value="动画" onclick="toggleProfileMulti('rewardPrefs',this)">📺 动画</button>
+        <button type="button" class="profile-option" data-value="户外" onclick="toggleProfileMulti('rewardPrefs',this)">🚲 户外</button>
+        <button type="button" class="profile-option" data-value="零食" onclick="toggleProfileMulti('rewardPrefs',this)">🍓 零食</button>
+        <button type="button" class="profile-option" data-value="玩具" onclick="toggleProfileMulti('rewardPrefs',this)">🧸 玩具</button>
+        <button type="button" class="profile-option" data-value="亲子活动" onclick="toggleProfileMulti('rewardPrefs',this)">👨‍👩‍👧 亲子活动</button>
+        <button type="button" class="profile-option" data-value="出游" onclick="toggleProfileMulti('rewardPrefs',this)">🎡 出游</button>
+        <button type="button" class="profile-option" data-value="阅读" onclick="toggleProfileMulti('rewardPrefs',this)">📚 阅读</button>
+        <button type="button" class="profile-option" data-value="游戏" onclick="toggleProfileMulti('rewardPrefs',this)">🎮 游戏</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>内置头像</label>
+      <div class="avatar-grid" id="avatarGrid">
+        <button class="avatar-option" data-avatar="🌱" onclick="chooseAvatarOption(this)" type="button">🌱</button>
+        <button class="avatar-option" data-avatar="⭐" onclick="chooseAvatarOption(this)" type="button">⭐</button>
+        <button class="avatar-option" data-avatar="🚀" onclick="chooseAvatarOption(this)" type="button">🚀</button>
+        <button class="avatar-option" data-avatar="🐯" onclick="chooseAvatarOption(this)" type="button">🐯</button>
+        <button class="avatar-option" data-avatar="🦖" onclick="chooseAvatarOption(this)" type="button">🦖</button>
+        <button class="avatar-option" data-avatar="🎧" onclick="chooseAvatarOption(this)" type="button">🎧</button>
+        <button class="avatar-option" data-avatar="📚" onclick="chooseAvatarOption(this)" type="button">📚</button>
+        <button class="avatar-option" data-avatar="🚲" onclick="chooseAvatarOption(this)" type="button">🚲</button>
+        <button class="avatar-option" data-avatar="⚽" onclick="chooseAvatarOption(this)" type="button">⚽</button>
+        <button class="avatar-option" data-avatar="🏆" onclick="chooseAvatarOption(this)" type="button">🏆</button>
+        <button class="avatar-option" data-avatar="🌈" onclick="chooseAvatarOption(this)" type="button">🌈</button>
+        <button class="avatar-option" data-avatar="😎" onclick="chooseAvatarOption(this)" type="button">😎</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>上传照片</label>
+      <button class="btn btn-soft" style="width:100%" onclick="document.getElementById('avatarFileInput').click()" type="button">从相册选择图片</button>
+      <input id="avatarFileInput" type="file" accept="image/*" hidden>
+    </div>
+
+    <div class="sheet-actions">
+      <button class="btn btn-soft" onclick="closeModal('avatarModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveAvatarProfile()">保存资料</button>
+    </div>
+  </div>
+</div>
+
+<div id="rewardModal" class="modal" onclick="closeOnBg(event, 'rewardModal')">
+  <div class="sheet">
+    <h3 id="rewardModalTitle">新建奖励</h3>
+    <p class="hint">把奖励定得具体一些，比如“周末吃一次冰淇淋”，比“奖励一下”更有仪式感。下面这些是适合低龄孩子的常用奖励，可以一键带入。</p>
+
+    <div class="field">
+      <label>推荐奖励（点一下自动填入）</label>
+      <div id="rewardTemplateGrid" class="reward-template-grid"></div>
+    </div>
+
+    <div class="field">
+      <label>奖励名称</label>
+      <input id="rewardName" class="input" placeholder="例如：周末吃一次冰淇淋">
+    </div>
+    <div class="field">
+      <label>兑换所需积分</label>
+      <input id="rewardCost" class="input" type="number" min="1" step="1" placeholder="例如：30">
+    </div>
+    <div class="field">
+      <label>奖励图标</label>
+      <div class="chips" id="rewardIconChips">
+        <button class="chip on" data-icon="🎁" onclick="pickRewardIcon(this)" type="button">🎁 通用</button>
+        <button class="chip" data-icon="📺" onclick="pickRewardIcon(this)" type="button">📺 动画</button>
+        <button class="chip" data-icon="🍓" onclick="pickRewardIcon(this)" type="button">🍓 零食</button>
+        <button class="chip" data-icon="🍽️" onclick="pickRewardIcon(this)" type="button">🍽️ 大餐</button>
+        <button class="chip" data-icon="📚" onclick="pickRewardIcon(this)" type="button">📚 绘本</button>
+        <button class="chip" data-icon="🚲" onclick="pickRewardIcon(this)" type="button">🚲 户外</button>
+        <button class="chip" data-icon="🎧" onclick="pickRewardIcon(this)" type="button">🎧 熏听</button>
+        <button class="chip" data-icon="🎬" onclick="pickRewardIcon(this)" type="button">🎬 电影</button>
+        <button class="chip" data-icon="🧸" onclick="pickRewardIcon(this)" type="button">🧸 玩具</button>
+        <button class="chip" data-icon="🎮" onclick="pickRewardIcon(this)" type="button">🎮 游戏</button>
+        <button class="chip" data-icon="⚽" onclick="pickRewardIcon(this)" type="button">⚽ 运动</button>
+        <button class="chip" data-icon="🎡" onclick="pickRewardIcon(this)" type="button">🎡 出游</button>
+      </div>
+      <input id="rewardEmoji" type="hidden" value="🎁">
+      <div class="reward-preview">
+        <div id="rewardPreviewIcon" class="reward-preview-icon">🎁</div>
+        <div class="reward-preview-text">
+          <b id="rewardPreviewName">通用奖励</b>
+          <span id="rewardPreviewDesc">可用于动画、零食、出游、购物等各类兑换奖励。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-actions">
+      <button class="btn btn-soft" onclick="closeModal('rewardModal')">取消</button>
+      <button id="rewardSaveBtn" class="btn btn-primary" onclick="saveReward()">创建奖励</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="growthGuideModal" class="modal" onclick="closeOnBg(event, 'growthGuideModal')">
+  <div class="sheet"><h3 id="growthGuideTitle">今日陪伴指南</h3><div id="growthGuideBody" class="gv-modal-body"></div><div class="sheet-actions"><button type="button" class="btn btn-soft" onclick="closeModal('growthGuideModal')">关闭指南</button></div></div>
+</div>
+<div id="dialogModal" class="dialog" onclick="dialogBgClose(event)">
+  <div class="dialog-panel">
+    <div id="dialogIcon" class="dialog-icon primary">✦</div>
+    <h3 id="dialogTitle" class="dialog-title">提示</h3>
+    <div id="dialogText" class="dialog-text">内容</div>
+    <div id="dialogActions" class="dialog-actions">
+      <button id="dialogCancel" class="btn btn-soft" onclick="resolveDialog(false)">取消</button>
+      <button id="dialogConfirm" class="btn btn-primary" onclick="resolveDialog(true)">确定</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<input id="importFile" type="file" accept="application/json,.json" hidden>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://tldrblgsxbxxszfapppp.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eroRHuOxy0y2a0kxTiVYcA_j0apDlyE";
+// 云服务脚本加载失败时，仍然初始化本地打卡、资料和任务功能。
+let sb = null;
+try{
+  if(window.supabase?.createClient){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  }
+}catch(err){
+  console.warn('Cloud client unavailable:', err);
+}
+let currentUser = null;
+let cloudSaveTimer = null;
+let cloudReady = false;
+
+const K = 'growth_checkin_v3';
+const defaultPlans = [
+  {id:'reading_demo', name:'每日阅读', desc:'每天阅读 10–15 分钟，理解和兴趣优先', icon:'📚', points:1, dayTypes:['study','weekend','holiday'], required:true},
+  {id:'outdoor_demo', name:'户外活动', desc:'跑跳、骑车、球类或自由玩耍 30 分钟左右', icon:'🚲', points:1, dayTypes:['study','weekend','holiday'], required:true},
+  {id:'tidy_demo', name:'自己整理物品', desc:'整理书包、玩具或书桌，完成一个小区域即可', icon:'🧺', points:1, dayTypes:['study','weekend','holiday'], required:false},
+  {id:'talk_demo', name:'亲子聊天', desc:'聊一件今天发生的事，说说自己的想法和理由', icon:'💬', points:1, dayTypes:['study','weekend','holiday'], required:false}
+];
+
+function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+function createDefaultState(){
+  return {
+    plans: clone(defaultPlans),
+    days: {},
+    rewards: [],
+    transactions: [],
+    calendarOverrides: {},
+    growth: createGrowthState(),
+    profile:{
+      avatarType:'text',
+      avatarValue:'🌱',
+      nickname:'我的孩子',
+      age:null,
+      grade:'',
+      gender:'',
+      interests:[],
+      goals:['reading','outdoor'],
+      difficulties:[],
+      dailyMinutes:40,
+      rewardPrefs:[]
+    }
+  };
+}
+
+function loadState(){
+  let raw = null;
+  try{ raw = JSON.parse(localStorage.getItem(K) || 'null'); }catch(e){ raw = null; }
+  const base = createDefaultState();
+  const state = raw && typeof raw === 'object' ? raw : base;
+  if(!Array.isArray(state.plans)) state.plans = clone(defaultPlans);
+  if(!state.days || typeof state.days !== 'object') state.days = {};
+  if(!Array.isArray(state.rewards)) state.rewards = [];
+  if(!Array.isArray(state.transactions)) state.transactions = [];
+  if(!state.calendarOverrides || typeof state.calendarOverrides !== 'object') state.calendarOverrides = {};
+  state.growth = normalizeGrowthState(state.growth);
+  if(!state.profile || typeof state.profile !== 'object') state.profile = {};
+  if(!state.profile.avatarType) state.profile.avatarType = 'text';
+  if(!state.profile.avatarValue) state.profile.avatarValue = '🌱';
+  if(!state.profile.nickname) state.profile.nickname = '我的孩子';
+
+  // 公共产品迁移：清理早期测试版遗留的个人化默认资料。
+  // 只匹配早期精确默认值，不影响用户后来自己填写的名字或头像。
+  if(state.profile.nickname === '周智宸') state.profile.nickname = '我的孩子';
+  if(state.profile.avatarType === 'text' && state.profile.avatarValue === '宸') state.profile.avatarValue = '🌱';
+
+  if(state.profile.age === undefined) state.profile.age = null;
+  if(state.profile.grade === undefined) state.profile.grade = '';
+  if(state.profile.gender === undefined) state.profile.gender = '';
+  if(!Array.isArray(state.profile.interests)) state.profile.interests = [];
+  if(!Array.isArray(state.profile.goals)) state.profile.goals = ['reading','outdoor'];
+  if(!Array.isArray(state.profile.difficulties)) state.profile.difficulties = [];
+  if(!Number.isFinite(Number(state.profile.dailyMinutes))) state.profile.dailyMinutes = 40;
+  if(!Array.isArray(state.profile.rewardPrefs)) state.profile.rewardPrefs = [];
+  // 公共版迁移：移除早期测试账号里仍残留的专属示例任务。
+  state.plans = state.plans.filter(p => !['WOW English','RAZ 绘本'].includes(String(p?.name || '').trim()));
+
+  state.plans = state.plans.map(p => ({
+    id: p.id || ('p' + Date.now() + Math.random()),
+    name: p.name || '未命名计划',
+    desc: p.desc || '每天完成一点',
+    icon: p.icon || '📘',
+    points: Number.isFinite(Number(p.points)) ? Math.max(0, Math.floor(Number(p.points))) : 1,
+    dayTypes: Array.isArray(p.dayTypes) && p.dayTypes.length ? p.dayTypes.filter(x=>['study','weekend','holiday'].includes(x)) : ['study','weekend'],
+    required: p.required === true,
+    scheduleDates: Array.isArray(p.scheduleDates) ? p.scheduleDates.filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)) : null,
+    growthProgramId: typeof p.growthProgramId==='string' ? p.growthProgramId : null,
+    growthActivityId: typeof p.growthActivityId==='string' ? p.growthActivityId : null,
+    growthWeek: Number.isInteger(p.growthWeek) ? p.growthWeek : null,
+    guide: validGrowthActivity(p.guide) ? p.guide : null
+  }));
+  state.rewards = state.rewards.map(r => ({
+    id: r.id || ('r' + Date.now() + Math.random()),
+    name: r.name || '未命名奖励',
+    cost: Math.max(1, Math.floor(Number(r.cost)||1)),
+    emoji: r.emoji || '🎁'
+  }));
+  state.transactions = state.transactions.filter(Boolean).map(t => {
+    const title = t.title || '';
+    const looksLikeUndo = /取消打卡|扣回|撤销打卡/.test(title) || t.reason === 'undo';
+    return {
+      id: t.id || ('tx' + Date.now() + Math.random()),
+      type: t.type || 'earn',
+      subtype: looksLikeUndo ? 'undo' : (t.subtype || (t.type === 'spend' ? 'redeem' : 'checkin')),
+      points: Math.abs(Math.floor(Number(t.points)||0)),
+      title,
+      time: t.time || new Date().toISOString(),
+      planId: t.planId || null,
+      rewardId: t.rewardId || null,
+      date: t.date || null
+    };
+  });
+  // 清理早期版本留下的“取消打卡扣回”错误流水。
+  // 若当天任务最终处于未完成状态，则对应的旧 +积分记录也一并移除；
+  // 若最终已完成，只保留最后一次有效 +积分记录。
+  const undoKeys = new Set(
+    state.transactions
+      .filter(t => t.subtype === 'undo')
+      .map(t => (t.planId || '') + '|' + (t.date || ''))
+      .filter(k => k !== '|')
+  );
+  const keepEarnIds = new Set();
+  undoKeys.forEach(key => {
+    const [pid, date] = key.split('|');
+    const active = !!(state.days?.[date]?.[pid]?.done);
+    if(active){
+      const earns = state.transactions
+        .filter(t => t.type === 'earn' && t.subtype === 'checkin' && t.planId === pid && t.date === date)
+        .sort((a,b) => new Date(b.time) - new Date(a.time));
+      if(earns[0]) keepEarnIds.add(earns[0].id);
+    }
+  });
+  state.transactions = state.transactions.filter(t => {
+    if(t.subtype === 'undo') return false;
+    const key = (t.planId || '') + '|' + (t.date || '');
+    if(
+      undoKeys.has(key) &&
+      t.type === 'earn' &&
+      t.subtype === 'checkin'
+    ){
+      return keepEarnIds.has(t.id);
+    }
+    return true;
+  });
+  Object.keys(state.days).forEach(k => {
+    if(!state.days[k] || typeof state.days[k] !== 'object') state.days[k] = {};
+    Object.keys(state.days[k]).forEach(pid => {
+      const rec = state.days[k][pid];
+      if(!rec || typeof rec !== 'object') return delete state.days[k][pid];
+      rec.done = !!rec.done;
+      rec.note = rec.note || '';
+      rec.tags = Array.isArray(rec.tags) ? rec.tags : [];
+      rec.time = rec.time || new Date().toISOString();
+      const plan = state.plans.find(x => x.id === pid);
+      rec.pointsAwarded = Number.isFinite(Number(rec.pointsAwarded))
+        ? Math.max(0, Math.floor(Number(rec.pointsAwarded)))
+        : Math.max(0, Math.floor(Number(plan?.points||0)));
+    });
+  });
+  return state;
+}
+
+let state = loadState();
+let currentPage = 'homePage';
+let currentCheckPlanId = null;
+let planModalMode = 'add';
+let editingPlanId = null;
+let selectedPlanIcon = '📘';
+let selectedPlanDayTypes = new Set(['study','weekend']);
+let selectedPlanRequired = false;
+let selectedDayPlansDate = null;
+let selectedDateType = 'study';
+let pendingAvatarType = 'text';
+let pendingAvatarValue = '🌱';
+let pendingProfile = {
+  gender:'',
+  interests:new Set(),
+  goals:new Set(['reading','outdoor']),
+  difficulties:new Set(),
+  dailyMinutes:40,
+  rewardPrefs:new Set()
+};
+let viewDate = new Date();
+let selectedRewardEmoji = '🎁';
+let rewardModalMode = 'add';
+let editingRewardId = null;
+
+const growthGoalNames = {
+  reading:'阅读习惯',
+  english:'英语启蒙',
+  focus:'专注与课堂习惯',
+  outdoor:'户外运动',
+  selfcare:'生活自理',
+  thinking:'思维与表达',
+  emotion:'情绪管理',
+  social:'社交'
+};
+const rewardIconTips = {
+  '🎁':'通用奖励，适合一切可兑换的小惊喜。',
+  '📺':'适合“看一集喜欢的英文动画”这类轻奖励。',
+  '🍓':'适合健康零食、水果、酸奶等小奖励。',
+  '🍽️':'适合和家人吃大餐、外出就餐等大奖励。',
+  '📚':'适合买一本书、绘本或读物。',
+  '🚲':'适合额外骑车、户外活动、去公园。',
+  '🎧':'适合音频熏听、听故事、听儿歌。',
+  '🎬':'适合电影之夜、家庭观影。',
+  '🧸':'适合玩具、积木、模型等奖励。',
+  '🎮':'适合桌游、闯关、小型游戏时间。',
+  '⚽':'适合运动项目、球类、体能活动。',
+  '🎡':'适合去游乐场、动物园、科技馆等外出活动。'
+};
+const rewardTemplates = [
+  { name:'观看喜欢的英文动画', cost:30, emoji:'📺', tip:'轻奖励，容易达成，适合作为短期激励。' },
+  { name:'买一样喜欢且健康的零食', cost:50, emoji:'🍓', tip:'比动画奖励略高，适合一周内努力兑换。' },
+  { name:'和家人出去吃一次大餐', cost:100, emoji:'🍽️', tip:'中大型奖励，适合持续完成必做任务。' },
+  { name:'睡前多听一个故事', cost:12, emoji:'🎧', tip:'低门槛奖励，适合培养持续动力。' },
+  { name:'多骑车 20 分钟', cost:15, emoji:'🚲', tip:'对爱骑车的孩子很有吸引力，也健康。' },
+  { name:'周末看一场电影', cost:90, emoji:'🎬', tip:'家庭仪式感强，适合周末兑换。' },
+  { name:'买一本喜欢的绘本', cost:80, emoji:'📚', tip:'把奖励也变成阅读投入，一举两得。' },
+  { name:'选一个喜欢的小玩具', cost:150, emoji:'🧸', tip:'高价值奖励，避免太容易换到。' },
+  { name:'玩一次亲子桌游/角色扮演', cost:25, emoji:'🎮', tip:'不一定花钱，但很有吸引力。' },
+  { name:'去游乐场 / 动物园 / 科技馆', cost:200, emoji:'🎡', tip:'适合节假日的大目标奖励。' }
+];
+let dialogResolve = null;
+
+function saveState(){ localStorage.setItem(K, JSON.stringify(state)); }
+function todayKey(d = new Date()){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+// 2026 年中国大陆法定节假日与调休工作日（国务院办公厅正式安排）
+const CN_HOLIDAY_2026 = {
+  holidays: {
+    '2026-01-01':'元旦','2026-01-02':'元旦','2026-01-03':'元旦',
+    '2026-02-15':'春节','2026-02-16':'春节','2026-02-17':'春节','2026-02-18':'春节','2026-02-19':'春节','2026-02-20':'春节','2026-02-21':'春节','2026-02-22':'春节','2026-02-23':'春节',
+    '2026-04-04':'清明节','2026-04-05':'清明节','2026-04-06':'清明节',
+    '2026-05-01':'劳动节','2026-05-02':'劳动节','2026-05-03':'劳动节','2026-05-04':'劳动节','2026-05-05':'劳动节',
+    '2026-06-19':'端午节','2026-06-20':'端午节','2026-06-21':'端午节',
+    '2026-09-25':'中秋节','2026-09-26':'中秋节','2026-09-27':'中秋节',
+    '2026-10-01':'国庆节','2026-10-02':'国庆节','2026-10-03':'国庆节','2026-10-04':'国庆节','2026-10-05':'国庆节','2026-10-06':'国庆节','2026-10-07':'国庆节'
+  },
+  workdays: {
+    '2026-01-04':'元旦调休上班',
+    '2026-02-14':'春节调休上班','2026-02-28':'春节调休上班',
+    '2026-05-09':'劳动节调休上班',
+    '2026-09-20':'国庆节调休上班','2026-10-10':'国庆节调休上班'
+  }
+};
+function officialHolidayInfo(k){
+  if(CN_HOLIDAY_2026.holidays[k]) return {type:'holiday', name:CN_HOLIDAY_2026.holidays[k], official:true};
+  if(CN_HOLIDAY_2026.workdays[k]) return {type:'study', name:CN_HOLIDAY_2026.workdays[k], official:true, makeup:true};
+  return null;
+}
+function festivalNameFor(k){
+  return officialHolidayInfo(k)?.name || '';
+}
+function isMakeupWorkday(k){ return !!officialHolidayInfo(k)?.makeup; }
+
+function dateTypeFor(input = new Date()){
+  let d;
+  if(input instanceof Date) d = input;
+  else if(typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input)){
+    const [y,m,day] = input.split('-').map(Number);
+    d = new Date(y,m-1,day);
+  }else d = new Date(input);
+  const k = todayKey(d);
+  if(state.calendarOverrides && state.calendarOverrides[k]) return state.calendarOverrides[k];
+  const official = officialHolidayInfo(k);
+  if(official) return official.type;
+  const dow = d.getDay();
+  return (dow === 0 || dow === 6) ? 'weekend' : 'study';
+}
+function dayTypeLabel(type){ return ({study:'学习日', weekend:'周末', holiday:'假期'})[type] || '学习日'; }
+function dayTypeIcon(type){ return ({study:'📘', weekend:'🌿', holiday:'🎈'})[type] || '📘'; }
+function applicablePlansForDate(k = todayKey()){
+  const type = dateTypeFor(k);
+  return state.plans.filter(p => Array.isArray(p.scheduleDates) ? p.scheduleDates.includes(k) : Array.isArray(p.dayTypes) && p.dayTypes.includes(type));
+}
+function requiredPlansForDate(k = todayKey()){
+  return applicablePlansForDate(k).filter(p => p.required === true);
+}
+function educationCheckinComplete(k = todayKey()){
+  const plans = requiredPlansForDate(k);
+  if(!plans.length) return false;
+  const d = state.days[k] || {};
+  return plans.every(p => d[p.id]?.done);
+}
+function planAppliesOn(pid, k = todayKey()){
+  const p = planById(pid); if(!p) return false;
+  return Array.isArray(p.scheduleDates) ? p.scheduleDates.includes(k) : (p.dayTypes || []).includes(dateTypeFor(k));
+}
+function ensureDay(k = todayKey()){
+  if(!state.days[k] || typeof state.days[k] !== 'object') state.days[k] = {};
+  return state.days[k];
+}
+function planById(id){ return state.plans.find(x => x.id === id); }
+function rewardById(id){ return state.rewards.find(x => x.id === id); }
+function recordOf(pid, k = todayKey()){ return ensureDay(k)[pid] || null; }
+function planDone(pid, k = todayKey()){ return !!(recordOf(pid, k)?.done); }
+function esc(str){
+  return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+}
+function totalChecks(){
+  let n = 0;
+  Object.values(state.days).forEach(day => Object.values(day).forEach(rec => { if(rec && rec.done) n++; }));
+  return n;
+}
+function fullForDate(k){
+  const plans = applicablePlansForDate(k);
+  if(!plans.length) return false;
+  const d = state.days[k] || {};
+  return plans.every(p => d[p.id]?.done);
+}
+function partialForDate(k){
+  const plans = applicablePlansForDate(k);
+  const d = state.days[k] || {};
+  return plans.some(p => d[p.id]?.done);
+}
+function fullDays(){ return Object.keys(state.days).filter(k => fullForDate(k)).length; }
+function streak(){
+  let count = 0;
+  const d = new Date();
+  const today = todayKey();
+  let checked = 0;
+
+  while(checked < 3660){
+    const k = todayKey(d);
+    const required = requiredPlansForDate(k);
+
+    // 没有必做任务的日期，不计数，也不中断。
+    if(!required.length){
+      d.setDate(d.getDate()-1);
+      checked++;
+      continue;
+    }
+
+    // 今天仍在进行中。今天还没完成时，先保留此前连续记录；
+    // 到明天若仍未完成，它就会成为真正的断点。
+    if(k === today && !educationCheckinComplete(k)){
+      d.setDate(d.getDate()-1);
+      checked++;
+      continue;
+    }
+
+    if(educationCheckinComplete(k)){
+      count++;
+      d.setDate(d.getDate()-1);
+      checked++;
+      continue;
+    }
+
+    break;
+  }
+  return count;
+}
+function pointEarned(){
+  let total = 0;
+  Object.values(state.days).forEach(day => {
+    Object.values(day).forEach(rec => {
+      if(rec && rec.done) total += Math.max(0, Math.floor(Number(rec.pointsAwarded)||0));
+    });
+  });
+  return total;
+}
+function pointSpent(){
+  return state.transactions
+    .filter(t => t.type === 'spend' && t.subtype === 'redeem' && !/取消打卡|扣回|撤销打卡/.test(t.title||''))
+    .reduce((sum, t) => sum + Math.abs(Math.floor(Number(t.points)||0)), 0);
+}
+function pointBalance(){ return Math.max(0, pointEarned() - pointSpent()); }
+function rewardRedeemCount(){ return state.transactions.filter(t => t.type === 'spend' && t.subtype === 'redeem' && !/取消打卡|扣回|撤销打卡/.test(t.title||'')).length; }
+function completionRate(days = 7){
+  let totalSlots = 0, done = 0;
+  const d = new Date();
+  for(let i=0; i<days; i++){
+    const k = todayKey(d);
+    const plans = applicablePlansForDate(k);
+    totalSlots += plans.length;
+    plans.forEach(p => { if(planDone(p.id, k)) done++; });
+    d.setDate(d.getDate()-1);
+  }
+  return totalSlots ? Math.round(done / totalSlots * 100) : 0;
+}
+function addTx(tx){
+  state.transactions.unshift({
+    id:'tx' + Date.now() + Math.random(),
+    time:new Date().toISOString(),
+    type:'earn',
+    subtype:'checkin',
+    points:0,
+    title:'',
+    ...tx
+  });
+}
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove('show'), 1700);
+}
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function closeOnBg(e, id){ if(e.target.id === id) closeModal(id); }
+
+function setDialogTone(tone){
+  const icon = document.getElementById('dialogIcon');
+  icon.className = 'dialog-icon ' + (tone || 'primary');
+}
+function showDialog({title='提示', message='', icon='✦', tone='primary', confirmText='确定', cancelText='取消', showCancel=true}){
+  document.getElementById('dialogTitle').textContent = title;
+  document.getElementById('dialogText').textContent = message;
+  document.getElementById('dialogIcon').textContent = icon;
+  setDialogTone(tone);
+  const cancelBtn = document.getElementById('dialogCancel');
+  const confirmBtn = document.getElementById('dialogConfirm');
+  cancelBtn.style.display = showCancel ? '' : 'none';
+  document.getElementById('dialogActions').style.gridTemplateColumns = showCancel ? '1fr 1fr' : '1fr';
+  cancelBtn.textContent = cancelText;
+  confirmBtn.textContent = confirmText;
+  document.getElementById('dialogModal').classList.add('show');
+  return new Promise(resolve => { dialogResolve = resolve; });
+}
+function resolveDialog(v){
+  document.getElementById('dialogModal').classList.remove('show');
+  if(dialogResolve){ const fn = dialogResolve; dialogResolve = null; fn(v); }
+}
+function dialogBgClose(e){ if(e.target.id === 'dialogModal') resolveDialog(false); }
+function alertBox(message, title='提示', tone='primary', icon='✦', confirmText='我知道了'){
+  return showDialog({title, message, tone, icon, confirmText, showCancel:false});
+}
+function confirmBox(message, title='确认一下', tone='primary', icon='？', confirmText='确定', cancelText='取消'){
+  return showDialog({title, message, tone, icon, confirmText, cancelText, showCancel:true});
+}
+
+
+
+// Family growth plans: stored content, bounded schedules, dated execution and review.
+const growthResourceCatalog = {
+  hello:{title:'Hello! · Super Simple Songs', url:'https://supersimple.com/song/hello/', owner:'Super Simple / Skyship Entertainment', type:'儿歌动画与音频', checked:'2026-09-30', note:'官方入口可能包含广告或外部播放器；国内播放可用性未确认。无需购买，打不开可用下方玩偶活动。'},
+  walking:{title:'Walking Walking · Super Simple Songs', url:'https://supersimple.com/song/walking-walking/', owner:'Super Simple / Skyship Entertainment', type:'动作儿歌动画与音频', checked:'2026-09-30', note:'短时选择熟悉内容共同听看；活动时长不等于视频片长。打不开可直接进行示范动作游戏。'},
+  zoo:{title:'Dear Zoo · Rod Campbell', url:'https://www.panmacmillan.com/authors/rod-campbell/dear-zoo/9781529017571', owner:'Macmillan Children’s Books', type:'纸质翻翻书', checked:'2026-09-30', note:'ISBN 9781529017571，出版社介绍入口，不是免费整本阅读。优先用家中已有合法书籍，没有书可用动物玩具或自画图片。'},
+  parentHello:{title:'How To Teach Hello! · 家长准备参考',url:'https://supersimple.com/how-to-teach-super-simple-songs/how-to-teach-hello/',owner:'Super Simple',type:'家长示范参考',checked:'2026-09-30',note:'家长可自行预先熟悉，不要求孩子额外看屏幕。'},
+  brown:{title:'Brown Bear, Brown Bear, What Do You See?',url:'https://us.macmillan.com/books/9780805047905/brownbearbrownbearwhatdoyousee/',owner:'Bill Martin Jr. / Eric Carle · Henry Holt',type:'纸板绘本',checked:'2026-10-01',note:'ISBN 9780805047905。出版社介绍入口，书籍需合法取得；已有此书时可替代动物图片活动。先选一两幅动物图，不要求读完或掌握所有颜色。'},
+  finnyHide:{title:'Hide And Seek (Finny the Shark)',url:'https://supersimple.com/song/hide-and-seek-finny-the-shark/',owner:'Super Simple / Skyship Entertainment',type:'歌曲动画',checked:'2026-10-01',note:'已核对官方标题和躲藏游戏主题；未完成逐帧审看或国内播放验证。家长先预览，再决定是否选用；不要求整首听完或跟唱，打不开用玩具躲藏游戏。'}
+};
+const growthStageTitles = {
+  english:['愿意参与：问候与玩偶','听声音做动作','一起读图与讲故事','熟悉活动回到生活'],
+  reading:['挑一本愿意翻的书','重复与找细节','轮流讲一小段','把故事连到生活'],
+  focus:['一次只做一步','重复指令后再行动','两步清单与检查','自己选择与回顾'],
+  outdoor:['选择喜欢的户外玩法','重复与变化','观察与合作','保留喜欢的活动'],
+  selfcare:['自己完成一个小步骤','固定顺序与位置','逐步减少提醒','独立尝试与回顾'],
+  thinking:['表达一个真实选择','说说自己的理由','比较两种办法','提问与共同探索'],
+  emotion:['平静时认识感受','选择一种平静办法','练习表达需要','回顾一次应对'],
+  social:['熟悉的人之间轮流','练习请求与感谢','表达需要与边界','回顾一次相处']
+};
+let growthViewWeek = null;
+function createGrowthState(){return {version:2,intake:null,draft:null,activeId:null,programs:[],feedback:{},nextDraft:null};}
+function validGrowthActivity(a){return !!(a&&typeof a.id==='string'&&Number.isFinite(a.minutes)&&a.minutes>=3&&Array.isArray(a.goals)&&a.guide&&typeof a.guide.name==='string'&&Array.isArray(a.guide.steps)&&a.guide.steps.length===3&&Array.isArray(a.guide.combined));}
+function validGrowthWeek(w){return !!(w&&Number.isInteger(w.index)&&w.index>=0&&w.index<4&&Number.isInteger(w.stage)&&w.stage>=0&&w.stage<=3&&Array.isArray(w.days)&&w.days.length===7&&w.days.every(d=>d&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)&&Array.isArray(d.activities)&&d.activities.every(validGrowthActivity)));}
+function validGrowthProgram(p){return !!(p&&typeof p.id==='string'&&Number.isInteger(p.activeWeek)&&p.activeWeek>=0&&p.activeWeek<4&&Array.isArray(p.weeks)&&p.weeks.length===4&&p.weeks.every(validGrowthWeek)&&p.intake&&Array.isArray(p.intake.goals)&&p.intake.goals.length&&p.intake.goals.includes(p.intake.priority));}
+function normalizeGrowthState(raw){
+  const g=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:createGrowthState();
+  g.version=2;
+  g.programs=Array.isArray(g.programs)?g.programs.filter(validGrowthProgram):[];
+  g.feedback=g.feedback&&typeof g.feedback==='object'&&!Array.isArray(g.feedback)?g.feedback:{};
+  if(g.draft&&!validGrowthProgram(g.draft))g.draft=null;
+  if(g.activeId&&!g.programs.some(p=>p.id===g.activeId))g.activeId=null;
+  if(g.nextDraft&&(!validGrowthWeek(g.nextDraft.week)||!g.programs.some(p=>p.id===g.nextDraft.programId)))g.nextDraft=null;
+  return g;
+}
+function growthId(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,9);}
+function growthDatePlus(key,days){const d=parseLocalDate(key);d.setDate(d.getDate()+days);return todayKey(d);}
+function growthActiveProgram(){return state.growth.programs.find(p=>p.id===state.growth.activeId)||null;}
+function growthDefaults(){
+  const age=Number(state.profile?.age)||5;
+  const goals=(state.profile?.goals||[]).filter(g=>growthGoalNames[g]);
+  const time=Number(state.profile?.dailyMinutes)||20;
+  const budget=[5,10,15,20,30,40,60,90].reduce((a,b)=>Math.abs(b-time)<Math.abs(a-time)?b:a,20);
+  return {age,start:todayKey(),goals:goals.length?goals:['english','reading'],priority:goals.includes('english')?'english':(goals[0]||'english'),budget,adult:Math.min(budget,15),occupied:0,days:[1,2,3,5,6],interest:(state.profile?.interests||[]).join('、'),experience:'new',mode:'play',screen:'none',book:'no',parent:'help'};
+}
+function fillGrowthIntake(intake){
+  const f={...growthDefaults(),...(intake||{})};
+  const goals=Array.isArray(f.goals)?f.goals.filter(g=>growthGoalNames[g]):['english'];
+  document.getElementById('gvGoals').innerHTML=Object.entries(growthGoalNames).map(([key,label])=>`<label class="gv-check"><input type="checkbox" name="growthGoal" value="${key}" ${goals.includes(key)?'checked':''} onchange="updateGrowthPriority()">${esc(label)}</label>`).join('');
+  document.getElementById('gvDays').innerHTML=['周日','周一','周二','周三','周四','周五','周六'].map((label,day)=>({label,day})).sort((a,b)=>((a.day+6)%7)-((b.day+6)%7)).map(({label,day})=>`<label class="gv-check"><input type="checkbox" name="growthDay" value="${day}" ${(f.days||[]).includes(day)?'checked':''}>${label}</label>`).join('');
+  const map={gvAge:'age',gvStart:'start',gvBudget:'budget',gvAdult:'adult',gvOccupied:'occupied',gvInterest:'interest',gvExperience:'experience',gvMode:'mode',gvScreen:'screen',gvBook:'book',gvParent:'parent'};
+  Object.entries(map).forEach(([id,key])=>{document.getElementById(id).value=f[key];});
+  updateGrowthPriority(f.priority);
+}
+function updateGrowthPriority(preferred){
+  const select=document.getElementById('gvPriority');
+  const old=typeof preferred==='string'?preferred:select.value;
+  const goals=[...document.querySelectorAll('#gvGoals input:checked')].map(x=>x.value);
+  select.innerHTML=goals.map(g=>`<option value="${g}">${esc(growthGoalNames[g])}</option>`).join('');
+  select.value=goals.includes(old)?old:(goals[0]||'');
+  document.getElementById('gvEnglishQuestions').style.display=goals.includes('english')?'block':'none';
+}
+function syncPlannerWithProfile(){
+  state.growth=normalizeGrowthState(state.growth);
+  growthViewWeek=null;
+  fillGrowthIntake(state.growth.intake||growthDefaults());
+  document.getElementById('growthIntakePanel').open=!state.growth.draft&&!growthActiveProgram();
+  renderGrowthAssistant();
+}
+function resetGrowthPlanner(){
+  fillGrowthIntake(growthDefaults());
+  document.getElementById('growthIntakePanel').open=true;
+  toast('已带入孩子资料；已确认的方案与记录保留');
+}
+function readGrowthIntake(){
+  const value=id=>document.getElementById(id).value;
+  const goals=[...document.querySelectorAll('#gvGoals input:checked')].map(x=>x.value);
+  return {age:Number(value('gvAge')),start:value('gvStart'),goals,priority:value('gvPriority'),budget:Number(value('gvBudget')),adult:Number(value('gvAdult')),occupied:Number(value('gvOccupied')),days:[...document.querySelectorAll('#gvDays input:checked')].map(x=>Number(x.value)),interest:value('gvInterest').trim(),experience:value('gvExperience'),mode:value('gvMode'),screen:value('gvScreen'),book:value('gvBook'),parent:value('gvParent')};
+}
+function validateGrowthIntake(f){
+  if(!Number.isInteger(f.age)||f.age<3||f.age>15)return '年龄请填写 3–15 岁之间的整数。';
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(f.start)||todayKey(parseLocalDate(f.start))!==f.start||f.start<todayKey())return '请选择今天或之后的有效开始日期。';
+  if(!f.goals.length||!f.goals.includes(f.priority))return '至少选择一个成长方向，再确定本次重点。';
+  if(!f.days.length)return '请至少选择一个方便活动的星期。';
+  if(![5,10,15,20,30,40,60,90].includes(f.budget)||![5,10,15,20,30,40,60,90].includes(f.adult))return '请选择有效的活动预算与陪伴时间。';
+  if(!Number.isInteger(f.occupied)||f.occupied<0||f.occupied>f.budget)return '已有活动的预留时间应在 0 和每天总预算之间。';
+  if(f.budget-f.occupied<3)return '目前剩余时间不足 3 分钟。请减少预留、增加预算，或先继续已有活动。';
+  return '';
+}
+function growthGenericGuide(goal,stage,f){
+  if(goal==='english')return growthEnglishGuide(stage,{...f,screen:'none'},0);
+  const topic=f.interest?`孩子提到的兴趣“${f.interest}”`:'孩子今天愿意参与的内容';
+  const guides={
+    reading:{name:['挑一本愿意翻的书','找熟悉故事里的细节','轮流讲一小段','故事里的办法用到生活'][stage],prepare:'家里已有的一本图多、孩子愿意看的书；不需要买新书。',steps:['让孩子选书或选一页，大人接住这个选择。','大人读或讲一小段，停下来给孩子指图、翻页或提问的机会。','聊一个具体发现，再由孩子决定是否继续；时间到了一起收好。'],say:'“你想先看哪一页？可以指给我看，不用把整本讲完。”',observe:'是否愿意选书、指图或停留；不以读了几页评价效果。',fallback:'没有合适的书，用家中照片或孩子画的一张图共同讲一件事。'},
+    focus:{name:['听清一个步骤再行动','先说一遍要做什么','完成一个两步小清单','自己选顺序并检查'][stage],prepare:'桌面上只留两三件安全物品，准备一个短任务。',steps:['大人给一个具体指令，例如把一件物品放到指定位置。','先示范一次，再让孩子用动作或自己的话表示明白了。','等待孩子完成，最后一起检查；熟悉后才加第二步。'],say:'“我们先只做这一步。你准备怎么做？”',observe:'是否需要示范或重复；一次分心不等于专注能力不足。',fallback:'缩成一件物品、一个动作，让大人和孩子一起做。'},
+    outdoor:{name:['选一个户外小玩法','重复喜欢的走动游戏','一起观察周围变化','保留最喜欢的户外玩法'][stage],prepare:'安全、适合天气的户外地点，大人陪同；已有户外活动可继续。',steps:['让孩子在安全范围内选走路、找一种颜色或观察树叶。','一起活动、观察，留意舒适程度，不比速度和次数。','回家前说一个发现，结束这段小活动。'],say:'“今天你想找树叶，还是一起走到那边看看？”',observe:'是否愿意活动、喜欢哪种玩法；这只是短时家庭活动，不代表已满足全天运动需要。',fallback:'天气或场地不合适时，改成室内安全走动与伸展，并记录原因。'},
+    selfcare:{name:['自己整理一个小区域','固定三件物品的位置','照图完成两个步骤','自己检查今天的小整理'][stage],prepare:'三件玩具或生活物品、容易够到的收纳位置。',steps:['让孩子选一个很小的区域，大人明确物品应该放在哪里。','让孩子先放一件，大人等待；需要时示范而不全部代做。','一起看是否放好了，给出具体反馈并结束。'],say:'“这三件里面，你想先放哪一件？我等你做完。”',observe:'哪些步骤能独立做，哪里需要位置提示。',fallback:'缩成只收一件物品，成功后结束，不临时追加整个房间。'},
+    thinking:{name:['表达一个真实选择','说说为什么这样选','比较两种解决办法','一起找一个问题的线索'][stage],prepare:`用${topic}，或两件孩子熟悉的物品。`,steps:['提出有真实选择空间的问题，不预设唯一正确答案。','认真听孩子的表达；可以画、指或演示，不要求完整长句。','大人复述孩子的意思，一起试一个办法并回顾。'],say:'“你这样选有什么原因？我们可以试试看。”',observe:'是否表达选择、理由或问题；不按大人的答案评分。',fallback:'给两个具体选项，让孩子先指一个，大人帮忙说出意思。'},
+    emotion:{name:['平静时说一种感受','选一个舒服的平静动作','练习说我需要什么','回顾一次被理解的感受'][stage],prepare:'在平静、愿意聊天时，准备表情画或玩偶。',steps:['大人用今天的一件小事示范一种感受，不追问让孩子难受的经历。','邀请孩子选择表情、指出玩偶的感受或说一句；愿意说多少都可以。','一起选择一个舒服的动作，比如慢呼吸或喝口水，结束练习。'],say:'“我愿意听。你可以说，也可以指给我看。”',observe:'愿不愿意表达、哪种回应更舒服；不据此做心理诊断。',fallback:'今天不想聊就改成安静陪伴，情绪激动时先支持，不强行练习。'},
+    social:{name:['两个人轮流玩一回合','练习请求和回应','用玩偶说需要与边界','回顾一次舒服的相处'][stage],prepare:'两个玩偶或一种可轮流的玩具，与熟悉的人一起。',steps:['大人先示范一人一回合，让轮流的规则可见。','邀请孩子选择角色；允许拒绝分享自己的私人东西。','练习一次请求或回应，最后感谢一次具体合作。'],say:'“你还想玩一回合，还是现在轮到我？我们一起约好。”',observe:'是否愿意轮流、表达需要；不强迫与陌生人互动。',fallback:'改成大人操纵两个玩偶，孩子观看或决定下一个角色。'}
+  };
+  const g=guides[goal];
+  return {...g,goal,resource:null,why:`围绕${growthGoalNames[goal]}，先从可完成的小情境开始。${f.age<=6?'允许动作、指图和短句回应。':'让孩子参与选择和回顾，不只接受指令。'}`,harder:'只增加一个变化，例如由孩子安排先后；不同时增加时长和难度。',busy:'时间很少时只做第一步，记录“做了一部分”，下次继续。',parent:'先准备好材料，用短句说明；观察反应后再决定是否继续。',screenMinutes:0,combined:[]};
+}
+function growthEnglishSession(stage,f,session){
+  const book=f.book==='yes'?'Dear Zoo':f.book==='brown'?'Brown Bear, Brown Bear, What Do You See?':null;
+  const bank=[
+    [
+      ['先让一个玩偶和你打招呼','愿意停留或看一眼就是今天的线索。','Hello. 来选一个你喜欢的角色。',['把两个玩偶放在桌上，请孩子选一个；大人拿另一个，挥手说 Hello。','大人让玩偶碰面并挥手；孩子可以看、指、挥手，不要求跟说。','问还想再玩一回合还是收好；尊重选择，记录愿意停留多久。']],
+      ['两位角色轮流见面','是否开始主动选择下一个角色。','Your turn. 现在你来选。',['沿用昨天的两个角色，让孩子决定谁先出现。','一次只让一个角色出来，大人示范问候后等待孩子选择下一位。','让两位角色挥手离开；一起收一件材料，不增加新单词。']],
+      ['敲敲纸门，熟悉角色出现','是否对同一角色再次出现有期待。','Hello. 原来是你呀。',['把一张纸折成小门，只藏一个熟悉的玩偶，孩子可以先知道是谁。','大人敲敲纸门，慢慢露出角色，挥手问候；再让孩子决定要不要交换。','角色回家后关好纸门，结束游戏；不突然问孩子记住了什么。']],
+      ['今天让孩子当小导演','有选择机会时是否更愿意参与。','Hello. 我等你来安排。',['请孩子用指或动作安排角色在哪儿出现；不要求说英语说明规则。','大人按孩子的安排问候，留出等待时间；没回应就再做一次示范。','说出一个具体行为，例如刚才你决定了先后，再一起收好。']],
+      ['保留最喜欢的问候玩法','孩子喜欢哪一项、大人能否轻松坚持。','Hello. 今天继续玩你选的那个。',['摆出这周用过的两样材料，让孩子挑一项。','重复所选玩法，保持同一个问候表达；不为了周末再加新材料。','大人记下一项适合的玩法和一个困难，留给周复盘。']]
+    ],
+    [
+      ['大人示范：走与停','先区分跟着示范与听声音回应。','Walk. Stop. 我们慢慢来。',['清出安全的小空间，大人用 walk 走两步，用 stop 停下。','一起重复两轮，大人同时做动作；孩子可让玩偶走，不一定自己走。','问还想再来还是休息，收尾时不考反应速度。']],
+      ['换成玩偶走与停','更喜欢身体活动还是桌上玩偶。','Walk. Stop. 让玩偶停在这里。',['把昨天的两个动作放到桌上，让孩子选一只玩偶。','大人先带玩偶走和停，再邀请孩子控制另一只；每次只给一个声音提示。','把玩偶送回纸盒，告诉孩子今天怎样一起完成了游戏。']],
+      ['一起听，再一起行动','减少动作提示后是否仍能自然参与。','Stop. 停一下也可以先看着我。',['重复一次熟悉动作，确认孩子知道玩法。','大人先说一个声音，稍等再示范；没回应就恢复同步动作，不当作错误。','用孩子最熟悉的动作结束；记录是独自回应还是需要示范。']],
+      ['让孩子带大人走一回合','有轮流和控制感时是否愿意继续。','Your turn. 这回你来带我。',['请孩子决定玩偶走到哪里，大人说明安全范围。','孩子可以用动作带路，大人配简短英文；只熟悉走与停，不同时加跑跳。','轮流结束后一起收好，肯定一次等待或选择。']],
+      ['走与停放进收玩具','换成生活情境后是否仍愿意回应。','Walk. Stop. 送玩偶回家。',['用一只熟悉的玩偶和它的收纳盒，告诉孩子今天要送它回家。','走到盒边再停，把熟悉声音接到真实动作；没反应就一起示范。','大人记录最适合的活动载体，复盘时决定重复还是换一步。']]
+    ],
+    [
+      ['先选一幅动物图','愿意自己选图、翻页或触碰材料。','Dog. 你可以指给我看。',[book?'把已有绘本放在面前，让孩子选一幅动物图，大人先用中文说大意。':'准备两张自画动物图或两只动物玩具，让孩子先选一只。','大人只示范所选动物的一个英文名称，配合指图；不要求整本读完或逐词翻译。','让孩子决定再看一次还是收好，只记录一次真实参与。']],
+      ['同一幅图再看一次','熟悉材料是否比换新书更容易参与。','Dog. 又找到这个朋友了。',['拿出昨天选的同一幅图或玩具，先让孩子确认这是熟悉的材料。','大人说熟悉的名称，和孩子一起找到对应图；需要时先指给孩子看。','孩子可以把图放到喜欢的位置，收尾不加一串新词。']],
+      ['两张图里找熟悉的那张','是跟着指图，还是能对熟悉名称回应。','Dog. 我们一起找。',['加入另一张明显不同的动物图；最多比较两张，不铺满桌面。','先共同看一遍，再说已经熟悉的一个名称；孩子指、拿或看向它都可记录。','不想选就大人示范后结束；不要反复追问到答对。']],
+      ['把动物图和玩具放在一起','能否在不同材料中保持兴趣。','Look. 这两个像不像？',['把熟悉的动物图和相似玩具摆在一起；没有玩具就再画一张。','大人边指图边示范熟悉名称，邀请孩子把相似的材料放在一起；可用中文谈发现。','只保留孩子愿意看的材料，记录图、书或玩具哪一种更合适。']],
+      ['孩子来选故事顺序','愿意用指图、动作或短句表达一个选择。','Your turn. 你想先看谁？',['用这周的两张图或已有书里孩子喜欢的部分，让孩子决定先后。','大人依照选择讲一个很短的原创小情境，用熟悉名称配合角色出现。','记录孩子选了什么、是否还想再来，准备周复盘；不做单词测验。']]
+    ],
+    [
+      ['孩子选：这一轮保留什么','最愿意主动选择的活动。','Your turn. 我来陪你选的那个。',['摆出问候角色、动作玩偶或动物图，让孩子选一项熟悉活动。','按前几周的步骤再玩一轮，先不添加新表达或延长时间。','大人记下保留的材料和最省力的陪伴办法。']],
+      ['换一个地方，沿用同一玩法','换位置后是否仍愿意参与。','Hello. 我们在这里再见一面。',['把熟悉角色放在家中另一个安全位置，提前说明玩法仍一样。','大人先示范原来的问候或动作；孩子没兴趣就回到熟悉位置。','只记录环境变化带来的反应，不把今天表现当作能力下降。']],
+      ['熟悉玩具藏起来，再找出来','愿意指向、寻找或决定藏在哪里。','Look. 找到了，轮到你选。',['用一件熟悉玩具和一张纸，只遮住一部分，告诉孩子在哪里。','一起露出玩具并配一个熟悉英文名称；孩子可决定下一次藏哪里，不要求会数到十。','找一两轮后收好，让孩子选择是否继续；材料不好找时改回问候。']],
+      ['给另一位家人演示玩法','与另一位熟悉照护者互动是否舒服。','Hello. 我们一起玩这一回合。',['如果另一位熟悉家人在场，由孩子决定是否加入；否则仍由原照护者陪伴。','大人说明孩子喜欢的玩法，演示一次，再由孩子决定角色或顺序。','感谢一次具体合作，不让孩子表演背诵；记录照护者是否知道怎么陪。']],
+      ['四周回顾：留下一个能坚持的习惯','真实兴趣、理解线索和家长负担。','Your turn. 以后还想玩哪个？',['让孩子选一个最喜欢的活动，重复熟悉开场。','用原来的短步骤再玩一次，不额外做四周结业测试。','大人整理喜欢的活动、需要示范的地方及下轮时间；可以继续本阶段，不必升级。']]
+    ]
+  ];
+  const item=bank[stage][session%5];
+  return {name:item[0],observe:item[1],say:item[2],steps:[...item[3]],sessionFocus:`第 ${session+1} 次活动：${session>=5?'再次重复本周熟悉活动，保持轻松。':item[0]}`};
+}
+function growthEnglishGuide(stage,f,session){
+  const interest=f.interest?`优先选与“${f.interest}”相关的家中物品。`:'让孩子挑一个喜欢的玩偶或动物图片。';
+  const noScreen=f.screen==='none';
+  const bookMode=f.mode==='book';
+  const templates=[
+    {name:bookMode?'图片里的角色互相问候':'玩偶见面：问候与轮流',prepare:'两个家中玩偶或两张自画角色图片，无需购买教具。',steps:['让孩子选角色，大人先用 Hello 做一次简单问候。',noScreen?'两个角色轮流出现，大人配合挥手示范，让孩子决定下一个是谁。':'大人共同听看《Hello!》中愿意参与的一小段，随后关闭屏幕，让玩偶轮流打招呼。','给孩子留一个选择或回应的机会；可以只挥手，再收好角色结束。'],say:'“Hello！你想让哪个角色先来？挥挥手也可以。”',observe:'是否愿意参与、选择或挥手；暂不开口也可以继续。',resource:noScreen?null:'hello',fallback:'没有玩偶就用手或自画图片；资源打不开直接进行无屏幕问候游戏。'},
+    {name:'听声音做动作：走与停',prepare:'清出一小块安全空间，先用大人示范。',steps:['大人用 walk 示范走几步，用 stop 示范停下来；先只用这两个动作。',noScreen?'两个人轮流当示范者，慢慢做，不考反应速度。':'共同听看《Walking Walking》的一小段后关闭屏幕，用熟悉的动作再玩一轮。','孩子愿意时让他选择下一个动作；大人跟着做并结束。'],say:'“Walk。我们一起走。Stop。停一下；你也可以来带我。”',observe:'是跟示范行动，还是能对熟悉声音回应；记录真实线索，不判定掌握。',resource:noScreen?null:'walking',fallback:'改成玩偶走与停，或用中文说规则、英语配合动作，不要求跑跳。'},
+    {name:f.book==='yes'?'一起翻 Dear Zoo，找动物':'动物图片小故事：指图与选择',prepare:f.book==='yes'?'家中合法取得的 Dear Zoo。选择孩子愿意翻的少量页面，无须整本读完。':'两三张自画动物图片或家中动物玩具，不用购买绘本。',steps:[f.book==='yes'?'先让孩子选一个想看的动物或翻页，大人先讲大意。':'让孩子选一个动物，大人把它藏在纸后，慢慢揭开。','大人指图示范一个熟悉的动物名称，例如 dog；邀请孩子寻找或选择，允许只指图。','让孩子决定再看一次还是换一个角色，结束时收好材料。'],say:'“你想先找哪一个？Dog。可以指给我看，不用跟读。”',observe:'是否能把声音、图片或实物联系起来，是否愿意重复。',resource:f.book==='yes'?'zoo':null,fallback:'没有书或内容太难时，回到两张自画图片。语言示范减少为一个熟悉词。'},
+    {name:'把熟悉的英语游戏带回生活',prepare:'沿用家中玩偶、动物图片或已有绘本，孩子选择最喜欢的活动。',steps:['先问孩子今天想玩哪一个熟悉活动，重复已愿意参与的内容。','在收玩具或家人问候时自然复用一个熟悉表达；大人先示范，不突然测验。','说出一个具体参与行为，记录什么适合，结束本轮活动。'],say:'“今天继续玩你喜欢的那个。你来选，我陪你。”',observe:'是否主动选择，换情境后是否仍愿意参与。',resource:null,fallback:'回到最熟悉的一个角色、一个动作，不添加新材料。'}
+  ];
+  const daily=growthEnglishSession(stage,f,session);
+  const base={...templates[stage],...daily};
+  if(stage===2&&f.book==='brown'){base.prepare='家中合法取得的 Brown Bear，先挑一两幅孩子喜欢的动物图。大人可先按自己的理解讲图，不逐词考孩子。';base.resource='brown';}
+  if(stage===2&&f.book==='yes')base.name='Dear Zoo · '+base.name;
+  if(stage===2&&f.book==='brown')base.name='Brown Bear · '+base.name;
+  if(!noScreen&&stage<=1)base.steps[1]='可先共同听看 '+(stage===0?'Hello!':'Walking Walking')+' 的熟悉内容，在本次屏幕上限内结束；不用整首播放。随后关闭屏幕。'+base.steps[1];
+  if(!noScreen&&stage===3&&session%5===2&&f.experience==='ready'&&f.mode==='song'){
+    base.resource='finnyHide';base.steps[1]='家长已预览且孩子愿意时，可在本次屏幕上限内听看 Hide And Seek (Finny the Shark)，然后关闭屏幕。'+base.steps[1];
+    base.prepare+=' 动画是可选材料：大人先确认内容和播放器适合，孩子不想看直接进行玩具游戏。';
+  }
+  if(f.mode==='song'&&stage<=1){base.name='儿歌与节奏 · '+base.name;base.prepare+=' 大人可以慢慢拍手给节奏，不需要额外播放器。';if(noScreen)base.steps[1]+=' 大人可轻轻拍手给节奏，允许孩子选择挥手、动作或旁观。';}
+  const combined=stage===0?['emotion','social']:stage===1?['focus']:stage===2?['reading','thinking']:['selfcare'];
+  const g={...base,goal:'english',why:`${f.experience==='unsure'?'起点还不确定，本周先观察参与与回应。':f.experience==='ready'?'你填写了能回应部分词语，因此先尝试带动作或指图的互动。':'从熟悉声音和可理解的情境开始，先建立愿意参与的时段。'} ${interest}`,steps:[...base.steps],combined:combined.filter(x=>f.goals.includes(x)),screenMinutes:noScreen?0:3,harder:'让孩子选择角色、动作或先后顺序，一次只增加一个变化，不要求背词或整段跟读。',busy:'只做一轮问候、一个动作或找一张图，约 2–3 分钟即可；不补做欠账。',parent:f.parent==='help'?'大人先熟悉一个简短表达；有条件时自行预听官方声音示范。信心不足可用中文说明规则，英文只配合一个动作，不使用拼音标注猜发音。':'大人示范简短日常表达，留出等待时间，接受动作和指图回应。'};
+  g.steps[0]+=` ${f.age<=4?'先只用一个角色，大人全程示范。':f.age>=6?'愿意时可由孩子安排先后；不要求自己读文字。':'允许先观看，再自行选择是否加入。'}`;
+  if(g.combined.includes('emotion'))g.steps[2]+=' 允许孩子用玩偶表情表示愿意、累了或想休息。';
+  if(g.combined.includes('social'))g.steps[1]+=' 明确一人一回合，练习轮流与选择。';
+  if(g.combined.includes('reading'))g.steps[0]+=' 一起看图或翻页，作为亲子阅读的一次参与。';
+  if(g.combined.includes('thinking'))g.steps[2]+=' 让孩子选择并说、指或演示自己的理由。';
+  if(g.combined.includes('focus'))g.steps[1]+=' 每次只给一个动作，先确认理解再执行。';
+  if(g.combined.includes('selfcare'))g.steps[2]+=' 邀请孩子收好一件材料，大人先等待。';
+  return g;
+}
+function buildGrowthWeek(f,index,stage,programId,options={}){
+  const start=options.start||growthDatePlus(f.start,index*7);
+  const available=Math.min(f.budget-f.occupied,f.adult,options.short?5:90);
+  const limitDays=options.fewer?3:7;
+  const dayList=[];let session=0;
+  for(let n=0;n<7;n++){
+    const date=growthDatePlus(start,n),dow=parseLocalDate(date).getDay();
+    const day={date,activities:[],reserved:f.occupied,total:f.occupied,adult:0,screen:0};
+    if(f.days.includes(dow)&&session<limitDays){
+      const guide=f.priority==='english'?growthEnglishGuide(stage,f,session):growthGenericGuide(f.priority,stage,f);
+      const mainMinutes=Math.min(available,f.age<=6?10:12);
+      guide.screenMinutes=['hello','walking','finnyHide'].includes(guide.resource)&&f.screen==='short'?Math.min(3,Math.floor(mainMinutes/3)):0;
+      const main={id:`${programId}w${index}d${n}a0`,minutes:mainMinutes,adultMinutes:mainMinutes,screenMinutes:guide.screenMinutes,goals:[f.priority,...guide.combined],guide};
+      day.activities.push(main);
+      const remaining=available-mainMinutes;
+      const support=f.goals.filter(g=>g!==f.priority&&!main.goals.includes(g));
+      if(support.length&&remaining>=3){
+        const goal=support[(index*5+session)%support.length],extra=growthGenericGuide(goal,stage,f),minutes=Math.min(5,remaining);
+        day.activities.push({id:`${programId}w${index}d${n}a1`,minutes,adultMinutes:minutes,screenMinutes:0,goals:[goal],guide:extra});
+      }
+      day.total+=day.activities.reduce((s,a)=>s+a.minutes,0);
+      day.adult=day.activities.reduce((s,a)=>s+a.adultMinutes,0);
+      day.screen=day.activities.reduce((s,a)=>s+a.screenMinutes,0);
+      session++;
+    }
+    dayList.push(day);
+  }
+  return {index,stage,start,end:growthDatePlus(start,6),title:growthStageTitles[f.priority][stage],intake:clone(f),constraints:{short:!!options.short,fewer:!!options.fewer},days:dayList,confirmed:false};
+}
+function buildGrowthProgram(f){
+  const id=growthId();const startingStage=f.priority==='english'&&f.experience==='ready'?1:0;
+  return {id,version:2,title:`${growthGoalNames[f.priority]} · 家庭四周方案`,createdAt:new Date().toISOString(),intake:clone(f),activeWeek:0,reviews:[],weeks:Array.from({length:4},(_,w)=>buildGrowthWeek(f,w,Math.min(3,startingStage+w),id))};
+}
+function generateGrowthPlan(){
+  const f=readGrowthIntake(),problem=validateGrowthIntake(f);
+  if(problem)return alertBox(problem,'还需要一点信息','warn','✎');
+  state.growth.intake=clone(f);state.growth.draft=buildGrowthProgram(f);growthViewWeek=0;
+  saveState();renderGrowthAssistant();document.getElementById('growthIntakePanel').open=false;
+  document.getElementById('growthPlanSummary').scrollIntoView({behavior:'smooth',block:'start'});
+  toast('方案已保存为预览，确认本周后再加入任务');
+}
+function growthGoalStatus(program,week,goal){
+  const activities=week.days.flatMap(d=>d.activities);
+  const direct=activities.filter(a=>a.guide.goal===goal),combined=activities.filter(a=>a.guide.goal!==goal&&a.goals.includes(goal));
+  if(direct.length)return {status:goal===program.intake.priority?'本周重点':'穿插安排',reason:`本周安排 ${direct.length} 次具体活动，已计入每日预算。`};
+  if(combined.length)return {status:'结合开展',reason:`融入 ${combined.length} 次${growthGoalNames[program.intake.priority]}活动，共用时长与打卡积分；不代表这个领域已经达标。`};
+  const next=program.weeks.find(w=>w.index>week.index&&w.days.some(d=>d.activities.some(a=>a.goals.includes(goal))));
+  return {status:next?`后续第 ${next.index+1} 周`:'待重新安排',reason:next?'本周先保留重点活动，后续已有预览安排，周复盘后可调整。':'当前陪伴或活动预算不足，目标仍保留；可减少预留时间、换重点或增加方便的日期。'};
+}
+function growthCall(name,...args){return esc(`${name}(${args.map(x=>JSON.stringify(x)).join(',')})`);}
+function growthResourceHTML(key){
+  const r=growthResourceCatalog[key];
+  if(!r)return '<div class="gv-resource"><b>材料：家中物品 / 自画图片</b><br>下方步骤可直接进行，无需购买或打开外部资源。</div>';
+  return `<div class="gv-resource"><b>${esc(r.title)}</b><br>${esc(r.type)} · ${esc(r.owner)}<br><a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">打开官方资源介绍</a><br>${esc(r.note)}<br><span class="gv-note">来源核对：${esc(r.checked)}；本页提供原创陪伴指南，未提供完整媒体或书籍。</span></div>`;
+}
+function growthEnglishWeekHTML(week){
+  const f=week.intake;
+  if(!f||!f.goals.includes('english'))return '';
+  if(!week.days.some(d=>d.activities.some(a=>a.guide.goal==='english')))return '<div class="gv-note">英语方向仍保留在方案中，本周没有单独安排英语活动。可查看上方目标去向，复盘时调整重点或时间。</div>';
+  const stage=week.stage,main=stage===0?'hello':stage===1?'walking':stage===2?(f.book==='brown'?'brown':'zoo'):'finnyHide';
+  const aims=['让孩子愿意留下来，找到舒服的短时开场。','把两个熟悉声音和动作连起来，允许继续跟着大人做。','重复看少量动物图，支持指图、选择和共同讲述。','找出喜欢且家长能坚持的活动，在生活中重复。'];
+  const observe=['愿意停留、选择角色或挥手。','记录是否需要同步动作示范，不考反应速度。','是否愿意选图、翻页，或对熟悉图片作出回应。','能否主动选活动，家长能否轻松准备和陪伴。'];
+  const backup=['用两个家中玩偶或自画角色图片做问候。','用一个玩偶和纸盒示范走与停，不需要播放设备。','用两张自画动物图或已有玩具，重复同样步骤。','重复前几周最喜欢的玩具游戏，完全可以不看动画。'];
+  const resource=growthResourceCatalog[main];
+  const canUse=week.days.some(d=>d.activities.some(a=>a.guide.resource===main));
+  const chosen=stage===2&&canUse?'优先用你已有的 '+resource.title+'，选一两幅喜欢的动物图反复共读。':backup[stage];
+  return `<details class="gv-review"><summary>本周英语准备清单与材料选择</summary><p><b>本阶段目的：</b>${esc(aims[stage])}</p><p><b>按家庭情况先这样做：</b>${esc(chosen)} ${f.screen==='none'?'你选择了不使用屏幕，孩子活动无需打开视频。':''}${f.book==='no'&&stage===2?'你填写了暂无绘本，已按玩具/图片排活动，无需为执行计划先买书。':''}</p><p><b>具体材料${canUse?'':'（可选参考）'}：</b>${esc(resource.title)}。${stage===3?'只在有熟悉理解线索、喜欢儿歌且允许短时听看的活动中作为选项；先由家长预览。':'同一材料可以整周重复，不用每天换新。'}</p>${growthResourceHTML(main)}${stage===2?'<p class="gv-note">如果家里已有另一种书，可作为备选；不需要两本都买。</p>'+growthResourceHTML(main==='zoo'?'brown':'zoo'):''}<p><b>本周准备一次即可：</b>${stage===1?'一个玩偶、一个纸盒和安全的活动空间。':stage===2?'两幅喜欢的动物图或已有书中的少量图页，以及一个纸盒。':'两个熟悉的角色、一张纸和一个收纳盒。'} ${f.parent==='help'?'先只熟悉活动卡上的一两个表达；中文解释玩法也可以。':'先熟悉步骤，给孩子等待和选择的机会。'}</p><p><b>周末观察：</b>${esc(observe[stage])} 只有愿意参与且对熟悉内容有回应时，复盘才建议下一步；否则重复或缩短。</p><p class="gv-note">这些是家庭陪伴建议，四周并非掌握进度承诺。资源介绍已核对，国内实际播放及书籍取得仍需家长确认；没有材料时可直接使用本页原创活动。</p></details>`;
+}
+function growthActivityHTML(a,date,feedback=true){
+  const g=a.guide,resource=growthResourceHTML(g.resource),existing=state.plans.find(p=>p.growthActivityId===a.id);
+  const first=Math.max(1,Math.floor(a.minutes/4)),last=1,middle=a.minutes-first-last;
+  const labels=[`开始约 ${first} 分钟`,`一起做约 ${middle} 分钟`,`结束约 ${last} 分钟`];
+  const selected=state.growth.feedback[a.id];
+  const buttons=feedback?`<h5>今天的感受（不代表掌握程度）</h5><div class="gv-feedback">${[['like','喜欢'],['mixed','一般'],['dislike','不喜欢'],['skip','今天没做']].map(([key,label])=>`<button type="button" class="plan-choice ${selected?.value===key?'on':''}" onclick="${growthCall('recordGrowthFeedback',a.id,key)}">${label}</button>`).join('')}</div>`:'';
+  return `<details class="gv-activity" data-activity="${esc(a.id)}"><summary>${esc(g.name)} · ${a.minutes} 分钟${existing?' · 已加入任务':''}</summary>
+    <p><b>为什么这样安排：</b>${esc(g.why)}</p>${g.sessionFocus?`<p><b>本次重点：</b>${esc(g.sessionFocus)}</p>`:''}
+    <p><b>孩子今天做：</b>${esc(g.name)}。可以用动作或指图参与。</p>
+    <p><b>大人今天做：</b>${esc(g.parent)}</p>
+    <h5>准备材料</h5><p>${esc(g.prepare)}</p>${resource}
+    <h5>陪伴步骤</h5><ol>${g.steps.map((s,i)=>`<li><b>${labels[i]||'继续'}：</b>${esc(s)}</li>`).join('')}</ol>
+    <h5>家长可以这样说</h5><p>${esc(g.say)}</p>
+    <h5>没有材料 / 不愿参与 / 太难</h5><p>${esc(g.fallback)}</p>
+    <h5>已经很熟悉</h5><p>${esc(g.harder)}</p>
+    <h5>今天只有几分钟</h5><p>${esc(g.busy)}</p>
+    <h5>观察什么</h5><p>${esc(g.observe)}</p>
+    <p class="gv-note">${g.combined.length?'结合目标：'+g.combined.map(x=>growthGoalNames[x]).map(esc).join('、')+'；同一次活动只计一次时长和积分。':'完成参与后可打卡；打卡与能力观察分别记录。'}${a.screenMinutes?' 本次听看上限 '+a.screenMinutes+' 分钟，其余时间共同游戏。':' 本次孩子无需使用屏幕。'}</p>${buttons}</details>`;
+}
+function renderGrowthAssistant(){
+  if(!state.growth||!document.getElementById('growthPlanResults'))return;
+  const openActivities=[...document.querySelectorAll('#growthPlanResults details.gv-activity[open]')].map(el=>el.dataset.activity);
+  const draft=state.growth.draft,program=draft||growthActiveProgram();
+  const summary=document.getElementById('growthPlanSummary'),results=document.getElementById('growthPlanResults');
+  if(!program){summary.innerHTML='';results.innerHTML='<div class="gv-note">填写家庭情况后生成预览。确认本周安排之前，不会添加新任务。</div>';return;}
+  const selected=Math.max(0,Math.min(program.weeks.length-1,growthViewWeek??program.activeWeek));
+  const week=program.weeks[selected],f=week.intake||program.intake,current=selected===program.activeWeek;
+  const sessions=week.days.filter(d=>d.activities.length).length;
+  const entries=week.days.flatMap(d=>d.activities).length;
+  summary.innerHTML=`<div class="gv-program"><h4>${esc(program.title)}</h4><span class="gv-tag">${draft?'方案预览':'已确认方案'}</span><p class="gv-note">${f.age} 岁 · 每天总预算 ${f.budget} 分钟，预留已有活动 ${f.occupied} 分钟 · 大人最多陪伴 ${f.adult} 分钟。${f.interest?'你填写：'+esc(f.interest)+'。':''}</p><p class="gv-note">本轮以${esc(growthGoalNames[f.priority])}为重点；四周是可调整的方向。第 ${selected+1} 周有 ${sessions} 个活动日、${entries} 项活动，日期到了也不强制进阶。</p>${f.priority==='english'&&f.experience==='unsure'?'<div class="gv-warning">起点尚不确定：先从简单互动观察参与情况，复盘时再决定是否继续。</div>':''}<div class="gv-goal-list">${f.goals.map(goal=>{const s=growthGoalStatus(program,week,goal);return `<div class="gv-goal"><strong>${esc(growthGoalNames[goal])} · ${esc(s.status)}</strong><span>${esc(s.reason)}</span></div>`;}).join('')}</div></div>`;
+  const roadmap=`<h4 class="gv-section-title" style="margin-top:18px">② 四周路线</h4><div class="gv-roadmap">${program.weeks.map(w=>`<div class="gv-road ${w.index===selected?'active':''}"><span>第 ${w.index+1} 周 · ${w.confirmed?'已确认':'可调整预览'}</span><b>${esc(w.title)}</b><span>${esc(w.start)} — ${esc(w.end)}</span></div>`).join('')}</div><div class="gv-tabs" role="tablist" aria-label="查看不同周安排">${program.weeks.map(w=>`<button type="button" class="plan-choice" role="tab" aria-selected="${selected===w.index}" onclick="${growthCall('showGrowthWeek',w.index)}">第 ${w.index+1} 周</button>`).join('')}</div>`;
+  let actions='';
+  if(draft&&selected===0)actions=`<div class="gv-actions"><button type="button" class="btn btn-primary" onclick="confirmGrowthWeek()">确认并加入本周任务</button>${growthActiveProgram()?'<button type="button" class="btn btn-soft" onclick="discardGrowthDraft()">回到当前方案</button>':''}</div>`;
+  else if(draft)actions='<div class="gv-note">后续周用于预览。先确认第 1 周，再根据周复盘确认后续安排。</div>';
+  else if(!current&&!week.confirmed)actions='<div class="gv-note">这是后续预览。请在当前执行周完成复盘，再确认下一周的具体安排。</div>';
+  else if(week.confirmed)actions=`<div class="gv-note">本周活动按指定日期显示在首页，未安排的日子可以休息。过去的打卡与积分记录保留。</div><button type="button" class="btn btn-soft" onclick="restoreGrowthWeekTasks()">补回本周误删的未完成活动</button>`;
+  const days=`<h4 class="gv-section-title" style="margin-top:18px">③ 第 ${selected+1} 周 · 每日陪伴指南</h4>${week.days.map(day=>`<div class="gv-day"><div class="gv-day-head"><span>${esc(day.date)} · ${['周日','周一','周二','周三','周四','周五','周六'][parseLocalDate(day.date).getDay()]}</span><span class="gv-budget">总计 ${day.total}/${f.budget} 分钟 · 新增陪伴 ${day.adult} 分钟</span></div>${day.activities.length?day.activities.map(a=>growthActivityHTML(a,day.date,!draft&&week.confirmed&&day.date<=todayKey())).join(''):'<p class="gv-note">本日不新增活动。可以休息或继续已预留的安排；不补做欠账。</p>'}</div>`).join('')}`;
+  results.innerHTML=roadmap+growthEnglishWeekHTML(week)+actions+days+(!draft&&current?growthReviewHTML(program,week):'');
+  document.querySelectorAll('#growthPlanResults details.gv-activity').forEach(el=>{el.open=openActivities.includes(el.dataset.activity);});
+  const review=state.growth.nextDraft?.programId===program.id?state.growth.nextDraft.review:null;
+  if(review&&!draft&&current){Object.entries({gvReviewCause:'cause',gvReviewInterest:'interest',gvReviewUnderstanding:'understanding',gvReviewNote:'note'}).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.value=review[key]||'';});}
+  renderGrowthHomeBanner();
+}
+function showGrowthWeek(index){growthViewWeek=index;renderGrowthAssistant();}
+function discardGrowthDraft(){state.growth.draft=null;growthViewWeek=null;saveState();renderGrowthAssistant();}
+function growthTaskFromActivity(program,week,day,a){
+  return {id:'task_'+a.id,name:a.guide.name,desc:`${day.date} · ${a.minutes} 分钟 · 第 ${week.index+1} 周`,icon:({english:'🌍',reading:'📚',focus:'🎯',outdoor:'🚲',selfcare:'🧺',thinking:'💡',emotion:'😊',social:'🤝'})[a.guide.goal],points:1,required:false,dayTypes:['study','weekend','holiday'],scheduleDates:[day.date],growthProgramId:program.id,growthActivityId:a.id,growthWeek:week.index,guide:clone(a)};
+}
+function importGrowthWeek(program,week){
+  let count=0;
+  week.days.forEach(day=>day.activities.forEach(a=>{
+    if(day.date<todayKey()||Object.values(state.days).some(d=>d['task_'+a.id]?.done))return;
+    const existing=state.plans.find(p=>p.growthActivityId===a.id);
+    if(!existing){state.plans.push(growthTaskFromActivity(program,week,day,a));count++;}
+    else if(!existing.scheduleDates.includes(day.date)){existing.scheduleDates.push(day.date);count++;}
+  }));
+  return count;
+}
+function pauseFutureGrowthTasks(programId,weekIndex=null){
+  state.plans.filter(p=>p.growthProgramId===programId&&(weekIndex===null||p.growthWeek===weekIndex)).forEach(p=>{
+    p.scheduleDates=(p.scheduleDates||[]).filter(date=>date<todayKey()||state.days[date]?.[p.id]?.done);
+  });
+}
+async function confirmGrowthWeek(){
+  const draft=state.growth.draft;if(!draft)return;
+  if(draft.intake.start<todayKey())return alertBox('开始日期已经过去，请重新选择日期并生成预览。','调整开始日期','warn','📅');
+  const previous=growthActiveProgram(),id=draft.id;
+  const ok=await confirmBox(`将第 1 周活动按日期加入任务，每次参与可获 1 积分。原有自建任务继续保留，请确认已为它们预留时间。${previous?'切换方案会暂停旧方案今天起尚未完成的助手活动，历史打卡与积分保留。':''}`,'确认本周安排？','primary','🌱','确认加入','再调整');
+  if(!ok||state.growth.draft?.id!==id)return;
+  if(previous)pauseFutureGrowthTasks(previous.id);
+  const program=clone(state.growth.draft);program.weeks[0].confirmed=true;
+  state.growth.programs.push(program);state.growth.activeId=program.id;state.growth.draft=null;state.growth.nextDraft=null;growthViewWeek=0;
+  const count=importGrowthWeek(program,program.weeks[0]);render();toast(`已加入 ${count} 项本周活动，按日期显示`);
+}
+function restoreGrowthWeekTasks(){
+  const p=growthActiveProgram();if(!p)return;
+  const selected=growthViewWeek??p.activeWeek;if(!p.weeks[selected]?.confirmed)return;
+  const count=importGrowthWeek(p,p.weeks[selected]);render();toast(count?`已补回 ${count} 项活动`:'本周活动已在任务中，未重复添加');
+}
+function recordGrowthFeedback(activityId,value){
+  if(!['like','mixed','dislike','skip'].includes(value))return;
+  const program=state.growth.programs.find(p=>p.weeks.some(w=>w.confirmed&&w.days.some(d=>d.date<=todayKey()&&d.activities.some(a=>a.id===activityId))));
+  if(!program)return;
+  state.growth.feedback[activityId]={value,time:new Date().toISOString()};saveState();
+  renderGrowthAssistant();if(document.getElementById('growthGuideModal').classList.contains('show'))refreshGrowthGuide();
+  toast('感受已保存，打卡和积分状态不变');
+}
+let currentGrowthGuidePlanId=null;
+function openGrowthGuide(pid){currentGrowthGuidePlanId=pid;refreshGrowthGuide();openModal('growthGuideModal');}
+function refreshGrowthGuide(){
+  const plan=planById(currentGrowthGuidePlanId);if(!plan?.guide)return;
+  document.getElementById('growthGuideTitle').textContent='今日陪伴 · '+plan.name;
+  document.getElementById('growthGuideBody').innerHTML=growthActivityHTML(plan.guide,todayKey(),true);
+  const details=document.querySelector('#growthGuideBody details');if(details)details.open=true;
+}
+function renderGrowthHomeBanner(){
+  const el=document.getElementById('growthHomeBanner');if(!el)return;
+  const p=growthActiveProgram();
+  if(!p){el.style.display='none';return;}
+  const w=p.weeks.find(w=>w.confirmed&&w.start<=todayKey()&&w.end>=todayKey())||p.weeks[p.activeWeek],today=w.days.find(d=>d.date===todayKey());
+  const visible=state.plans.filter(t=>t.growthProgramId===p.id&&Array.isArray(t.scheduleDates)&&t.scheduleDates.includes(todayKey())).length;
+  el.style.display='block';el.innerHTML=`<b>${esc(p.title)} · 第 ${w.index+1} 周</b><br>${visible?`今天安排 ${visible} 项活动，展开任务的“陪伴指南”查看怎么做。`:today?'今天不新增活动，可以休息或继续已有安排。':todayKey()<w.start?'本周安排尚未开始。':'本周日期已结束，可以到任务页做复盘并确认下一周。'}<br><button type="button" class="link" onclick="openGrowthAssistant()">查看成长方案与复盘 →</button>`;
+}
+function openGrowthAssistant(){const btn=[...document.querySelectorAll('.nav-btn')].find(b=>b.getAttribute('onclick')?.includes('tasksPage'));navTo('tasksPage',btn);document.getElementById('growthAssistant').scrollIntoView({behavior:'smooth',block:'start'});}
+
+function buildGrowthAdjustment(program,week,review){
+  const f=clone(week.intake||program.intake);let stage=week.stage;
+  const reasons=[],options={};
+  if(review.cause==='time'){options.short=true;options.fewer=true;reasons.push('时间不足：下一周最多三个活动日，每次最多 5 分钟，保持熟悉内容。');}
+  if(review.cause==='difficulty'){stage=Math.max(0,stage-1);reasons.push('感觉太难：退回一个更简单的活动阶段，大人先示范。');}
+  else if(review.understanding==='needsdemo'){reasons.push('仍需要示范：维持当前阶段，允许动作和指图回应。');}
+  if(review.cause==='unavailable'){f.book='no';f.screen='none';reasons.push('材料或资源不方便：改用家中物品与自画图片，无需屏幕或购买。');}
+  if(review.cause==='resistance'||review.interest==='dislike'){f.mode='play';f.screen='none';options.short=true;reasons.push('暂时不喜欢：缩短为最多 5 分钟，改用孩子选择的游戏，不强迫跟读。');}
+  const advance=review.cause==='none'&&review.interest==='like'&&review.understanding==='responds';
+  if(advance){stage=Math.min(3,stage+1);reasons.push('愿意参与且有熟悉回应：试下一步；不同时增加时长。');}
+  if(!reasons.length)reasons.push('观察还不明确：保持熟悉活动，再收集一周真实反馈，不因日期到了自动进阶。');
+  const plannedStart=growthDatePlus(week.start,7);
+  options.start=plannedStart<todayKey()?todayKey():plannedStart;
+  if(options.start!==plannedStart)reasons.push('原定下一周日期已过去，从今天重新安排，不补过去的活动。');
+  const next=buildGrowthWeek(f,week.index+1,stage,program.id,options);
+  return {programId:program.id,fromWeek:week.index,week:next,review:{...review,time:new Date().toISOString(),explanation:reasons.join(' '),previousStage:week.stage,nextStage:stage}};
+}
+function growthReviewHTML(program,week){
+  const due=week.days.filter(d=>d.date<=todayKey()).flatMap(d=>d.activities.map(a=>({a,date:d.date})));
+  const completed=due.filter(({a,date})=>state.days[date]?.['task_'+a.id]?.done).length;
+  const feedback=due.filter(({a})=>state.growth.feedback[a.id]).length;
+  const history=(program.reviews||[]).map(r=>`<p>第 ${r.fromWeek+1} 周 → 第 ${r.fromWeek+2} 周：${esc(r.explanation)}${r.note?'<br>家长记录：'+esc(r.note):''}</p>`).join('');
+  if(week.index===3)return `<div class="gv-review"><h4>④ 本轮回顾</h4><p>截至今天，已到日期的 ${due.length} 项活动中打卡 ${completed} 项、感受记录 ${feedback} 项。这些是参与记录，不是能力评分。</p><p>四周结束后，可展开家庭信息重新生成方案，保留适合的活动。不会自动增加任务。</p>${history?'<details class="gv-review-history"><summary>查看调整记录</summary>'+history+'</details>':''}</div>`;
+  const pending=state.growth.nextDraft?.programId===program.id&&state.growth.nextDraft.fromWeek===week.index?state.growth.nextDraft:null;
+  return `<div class="gv-review"><h4>④ 每周复盘 · 再确认下一周</h4><p class="gv-note">截至今天，已到日期的 ${due.length} 项活动中打卡 ${completed} 项、感受记录 ${feedback} 项。未来活动不算缺席；参与次数不等于掌握。可随时预览调整，下一周按日期开始。</p>
+    <form onsubmit="event.preventDefault(); previewGrowthReview()"><div class="gv-grid">
+      <div class="field"><label for="gvReviewCause">这周最大的阻碍</label><select class="input" id="gvReviewCause"><option value="none">没有明显阻碍</option><option value="time">时间不够</option><option value="difficulty">内容太难</option><option value="unavailable">材料或资源不方便</option><option value="resistance">孩子不愿参与</option></select></div>
+      <div class="field"><label for="gvReviewInterest">孩子对活动的感受</label><select class="input" id="gvReviewInterest"><option value="unknown">还不确定</option><option value="like">多数时候愿意参与</option><option value="mixed">有些喜欢，有些一般</option><option value="dislike">多数时候不喜欢</option></select></div>
+      <div class="field"><label for="gvReviewUnderstanding">你实际观察到了什么</label><select class="input" id="gvReviewUnderstanding"><option value="unknown">还没有足够线索</option><option value="responds">对熟悉内容有动作或指图回应</option><option value="needsdemo">仍需要大人一起示范</option></select></div>
+    </div><div class="field"><label for="gvReviewNote">记录一个具体情境（可不填）</label><textarea id="gvReviewNote" class="input" maxlength="240" rows="2" placeholder="例如：喜欢玩偶挥手，但今天累了，没想继续"></textarea></div><button type="submit" class="btn btn-primary">预览下一周调整</button></form>
+    ${pending?`<div class="gv-next"><h4>下一周待确认 · ${esc(pending.week.title)}</h4><p>${esc(pending.review.explanation)}</p><p>${esc(pending.week.start)} — ${esc(pending.week.end)}；${pending.week.days.filter(d=>d.activities.length).length} 个活动日；新增陪伴每天最多 ${Math.max(...pending.week.days.map(d=>d.adult))} 分钟。</p>${pending.week.days.map(d=>`<p class="gv-note">${esc(d.date)}：${d.activities.length?d.activities.map(a=>esc(a.guide.name)+' '+a.minutes+' 分钟').join('；'):'不新增活动'}</p>`).join('')}<p class="gv-note">确认前不会添加任务。确认后更新下一周，历史打卡和积分保留。</p><button type="button" class="btn btn-primary" onclick="confirmGrowthNextWeek()">确认下一周安排</button><button type="button" class="btn btn-soft" onclick="discardGrowthNextWeek()">取消这次调整</button></div>`:''}
+    ${history?'<details class="gv-review-history"><summary>查看已确认的调整记录</summary>'+history+'</details>':''}</div>`;
+}
+function previewGrowthReview(){
+  const p=growthActiveProgram();if(!p||p.activeWeek>=3||state.growth.draft)return;
+  const value=id=>document.getElementById(id).value;
+  const review={cause:value('gvReviewCause'),interest:value('gvReviewInterest'),understanding:value('gvReviewUnderstanding'),note:value('gvReviewNote').trim()};
+  state.growth.nextDraft=buildGrowthAdjustment(p,p.weeks[p.activeWeek],review);saveState();renderGrowthAssistant();
+  document.querySelector('.gv-next')?.scrollIntoView({behavior:'smooth',block:'center'});toast('下一周调整已保存为预览，还未添加任务');
+}
+function discardGrowthNextWeek(){state.growth.nextDraft=null;saveState();renderGrowthAssistant();}
+async function confirmGrowthNextWeek(){
+  const pending=state.growth.nextDraft,p=growthActiveProgram();
+  if(!pending||!p||pending.programId!==p.id||pending.fromWeek!==p.activeWeek||p.activeWeek>=3)return;
+  if(pending.week.start<todayKey())return alertBox('预览日期已经过去，请重新做一次复盘预览。','更新日期','warn','📅');
+  const signature=JSON.stringify(pending);
+  const ok=await confirmBox(`第 ${pending.week.index+1} 周从 ${pending.week.start} 开始，加入 ${pending.week.days.flatMap(d=>d.activities).length} 项按日期显示的活动。${pending.review.explanation}`,'确认下一周？','primary','🌱','确认安排','再看看');
+  if(!ok||state.growth.activeId!==p.id||JSON.stringify(state.growth.nextDraft)!==signature||p.activeWeek!==pending.fromWeek)return;
+  const next=clone(pending.week);next.confirmed=true;p.weeks[next.index]=next;p.activeWeek=next.index;
+  p.reviews=p.reviews||[];p.reviews.push({...clone(pending.review),fromWeek:pending.fromWeek});
+  // Unconfirmed later weeks follow the new family constraints, never auto-import.
+  for(let i=next.index+1;i<4;i++)p.weeks[i]=buildGrowthWeek(next.intake,i,Math.min(3,next.stage+i-next.index),p.id,{start:growthDatePlus(next.start,(i-next.index)*7),short:next.constraints?.short===true,fewer:next.constraints?.fewer===true});
+  state.growth.nextDraft=null;growthViewWeek=next.index;const count=importGrowthWeek(p,next);render();toast(`下一周已确认，加入 ${count} 项活动`);
+}
+
+function render(){
+  saveState();
+  renderTop();
+  renderTasks();
+  renderManageTasks();
+  renderRewards();
+  renderHomeStats();
+  renderCalendar();
+  renderBars();
+  renderBadges();
+  renderTransactions();
+  renderMe();
+  renderGrowthAssistant();
+  renderGrowthHomeBanner();
+}
+function renderTop(){
+  const now = new Date();
+  const k = todayKey(now);
+  const type = dateTypeFor(k);
+  const holidayName = festivalNameFor(k);
+  document.getElementById('todayLabel').textContent = now.toLocaleDateString('zh-CN', {month:'long', day:'numeric', weekday:'long'}) + ' · ' + dayTypeIcon(type) + ' ' + dayTypeLabel(type) + (holidayName ? ' · ' + holidayName : '');
+  const plans = applicablePlansForDate(k);
+  const done = plans.filter(p => planDone(p.id, k)).length;
+  const total = plans.length;
+  const percent = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('heroNum').textContent = done + '/' + total;
+  document.getElementById('streak').textContent = streak();
+  document.getElementById('heroPoints').textContent = pointBalance();
+  document.getElementById('progressBar').style.width = percent + '%';
+  document.getElementById('percent').textContent = percent + '%';
+  const tt = document.getElementById('todayTypeText');
+  if(tt) tt.textContent = '今天：' + dayTypeIcon(type) + ' ' + dayTypeLabel(type);
+}
+function renderTasks(){
+  const box = document.getElementById('taskList');
+  const k = todayKey();
+  const type = dateTypeFor(k);
+  const plans = applicablePlansForDate(k);
+  if(!plans.length){
+    box.innerHTML = `<div class="empty">今天是 ${dayTypeIcon(type)} ${dayTypeLabel(type)}，没有需要显示的任务。<br>可以到“任务”栏调整任务适用日期。</div>`;
+    return;
+  }
+  box.innerHTML = plans.map(p => {
+    const done = planDone(p.id, k);
+    return `
+      <div class="task-card ${done ? 'done' : ''}">
+        <div class="icon-bubble">${esc(p.icon)}</div>
+        <div class="task-main">
+          <div class="task-name">${esc(p.name)}</div>
+          <div class="task-desc">${esc(p.desc || '每天完成一点')}</div>
+          ${p.required ? '<span class="required-badge">⭐ 必做</span>' : ''}
+          ${p.guide ? `<button type="button" class="link" onclick="${growthCall('openGrowthGuide',p.id)}">陪伴指南</button>` : ''}
+          <div class="points-pill">🪙 +${Math.max(0, Math.floor(Number(p.points)||0))} 积分</div>
+        </div>
+        <div class="action-row">
+          <button class="btn ${done ? 'btn-success' : 'btn-soft'}" onclick="${done ? `undo('${p.id}')` : `openCheck('${p.id}')`}">${done ? '已完成' : '打卡'}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+function renderManageTasks(){
+  const box = document.getElementById('manageTaskList');
+  if(!box) return;
+  if(!state.plans.length){ box.innerHTML='<div class="empty">还没有任务。</div>'; return; }
+  box.innerHTML = state.plans.map(p => {
+    const badges = Array.isArray(p.scheduleDates) ? `<span class="daytype-badge">${p.scheduleDates.length?(p.growthProgramId?'🌱 助手 · ':'📅 单日 · ')+p.scheduleDates.map(esc).join('、'):'活动已暂停'}</span>` : (p.dayTypes||[]).map(t=>`<span class="daytype-badge daytype-${t}">${dayTypeIcon(t)} ${dayTypeLabel(t)}</span>`).join('');
+    return `
+      <div class="task-manage-card">
+        <div class="icon-bubble">${esc(p.icon)}</div>
+        <div class="manage-main">
+          <div class="task-name">${esc(p.name)}</div>
+          <div class="task-desc">${esc(p.desc || '')}</div>
+          ${p.required ? '<span class="required-badge">⭐ 必做</span>' : ''}
+          <div class="daytype-badges">${badges}</div>
+          <div class="points-pill">🪙 ${Math.max(0, Math.floor(Number(p.points)||0))} 积分</div>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-warn" onclick="openPlanModal('edit','${p.id}')">编辑</button>
+          <button class="btn btn-danger" onclick="deletePlan('${p.id}')">${p.growthProgramId?'暂停':'删除'}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+function renderRewards(){
+  const balanceEl = document.getElementById('homeRewardBalance');
+  if(balanceEl) balanceEl.textContent = pointBalance();
+
+  const homeBox = document.getElementById('homeRewardList');
+  const manageBox = document.getElementById('manageRewardList');
+
+  if(!state.rewards.length){
+    const emptyHtml = '<div class="empty">还没有设置奖励。到“任务”页的「奖励管理」里新建一个，孩子就能在首页直接兑换。</div>';
+    if(homeBox) homeBox.innerHTML = emptyHtml;
+    if(manageBox) manageBox.innerHTML = emptyHtml;
+    return;
+  }
+
+  if(homeBox){
+    homeBox.innerHTML = state.rewards.map(r => `
+      <div class="reward-card">
+        <div class="reward-bubble">${esc(r.emoji||'🎁')}</div>
+        <div class="reward-main">
+          <div class="reward-name">${esc(r.name)}</div>
+          <div class="reward-desc">${Math.max(1, Math.floor(Number(r.cost)||1))} 积分兑换</div>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-reward" onclick="redeemReward('${r.id}')">兑换</button>
+        </div>
+      </div>`).join('');
+  }
+
+  if(manageBox){
+    manageBox.innerHTML = state.rewards.map(r => `
+      <div class="reward-card">
+        <div class="reward-bubble">${esc(r.emoji||'🎁')}</div>
+        <div class="reward-main">
+          <div class="reward-name">${esc(r.name)}</div>
+          <div class="reward-desc">${Math.max(1, Math.floor(Number(r.cost)||1))} 积分兑换</div>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-warn" onclick="openRewardModal('edit','${r.id}')">编辑</button>
+          <button class="btn btn-danger" onclick="deleteReward('${r.id}')">删除</button>
+        </div>
+      </div>`).join('');
+  }
+}
+function renderHomeStats(){
+  document.getElementById('totalChecks').textContent = totalChecks();
+  document.getElementById('fullDays').textContent = fullDays();
+  document.getElementById('rate').textContent = completionRate(7) + '%';
+}
+function festivalShortName(name){
+  if(!name) return '';
+  return String(name)
+    .replace('调休上班','调班')
+    .replace('国庆节','国庆')
+    .replace('劳动节','劳动')
+    .replace('清明节','清明')
+    .replace('端午节','端午')
+    .replace('中秋节','中秋');
+}
+function renderCalendar(){
+  document.getElementById('monthLabel').textContent = viewDate.getFullYear() + ' 年 ' + (viewDate.getMonth()+1) + ' 月';
+  const grid = document.getElementById('calendarGrid');
+  grid.innerHTML = '';
+  const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+  const offset = (first.getDay() + 6) % 7;
+  for(let i=0; i<offset; i++) grid.appendChild(document.createElement('div'));
+  const total = new Date(viewDate.getFullYear(), viewDate.getMonth()+1, 0).getDate();
+  const today = todayKey();
+  for(let d=1; d<=total; d++){
+    const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), d);
+    const k = todayKey(date);
+    const el = document.createElement('button');
+    el.type = 'button';
+    const type = dateTypeFor(k);
+    const holidayName = festivalNameFor(k);
+    const makeup = isMakeupWorkday(k);
+    el.className = 'day type-' + type + (makeup ? ' makeup' : '') + (fullForDate(k) ? ' full' : partialForDate(k) ? ' partial' : '') + (k === today ? ' today' : '');
+    const dayMark = makeup ? '调班' : (type==='study'?'学':type==='weekend'?'周末':'假');
+    el.innerHTML = `<div><div class="daynum">${d}</div><div class="daymark">${dayMark}</div>${holidayName ? `<div class="holiday-name">${esc(festivalShortName(holidayName))}</div>` : ''}</div>`;
+    el.title = k + ' · ' + dayTypeLabel(type) + (holidayName ? ' · ' + holidayName : '');
+    const singles=applicablePlansForDate(k).filter(p=>Array.isArray(p.scheduleDates)&&!p.growthProgramId).length;
+    if(singles) el.classList.add('has-single');
+    el.setAttribute('aria-label',el.title+(singles?' · '+singles+' 项单日任务':'')+' · 查看安排');
+    el.addEventListener('click',()=>openDayPlans(k));
+    grid.appendChild(el);
+  }
+}
+function renderBars(){
+  const box = document.getElementById('bars');
+  if(!state.plans.length){
+    box.innerHTML = '<div class="empty">先有计划，才有统计。</div>';
+    return;
+  }
+  box.innerHTML = state.plans.map(p => {
+    let hit = 0, eligible = 0;
+    const days = 14;
+    const d = new Date();
+    for(let i=0; i<days; i++){
+      const k = todayKey(d);
+      if(planAppliesOn(p.id, k)){
+        eligible++;
+        if(planDone(p.id, k)) hit++;
+      }
+      d.setDate(d.getDate()-1);
+    }
+    const pc = eligible ? Math.round(hit / eligible * 100) : 0;
+    return `
+      <div class="bar-row">
+        <span>${esc(p.icon)} ${esc(p.name)}</span>
+        <div class="bar"><i style="width:${pc}%"></i></div>
+        <b title="${eligible?'近 14 天已到日期的完成率':'近 14 天暂无已到日期的安排'}">${eligible?pc+'%':'—'}</b>
+      </div>`;
+  }).join('');
+}
+function badgeList(){
+  const t = totalChecks();
+  const f = fullDays();
+  const s = streak();
+  const earned = pointEarned();
+  const redeemed = rewardRedeemCount();
+  return [
+    ['🌱','初次打卡','完成第 1 次打卡', t >= 1],
+    ['🔥','连续 3 天','连续打卡 3 天', s >= 3],
+    ['⭐','连续 7 天','连续打卡 7 天', s >= 7],
+    ['👑','连续 30 天','连续打卡 30 天', s >= 30],
+    ['🏅','打卡达人','累计完成 10 次打卡', t >= 10],
+    ['🚀','坚持不懈','累计完成 50 次打卡', t >= 50],
+    ['🏆','百次成就','累计完成 100 次打卡', t >= 100],
+    ['🌟','全勤一周','累计 7 个全勤日', f >= 7],
+    ['💎','全勤一月','累计 30 个全勤日', f >= 30],
+    ['🪙','积分新手','累计获得 100 积分', earned >= 100],
+    ['💰','积分达人','累计获得 500 积分', earned >= 500],
+    ['🎁','第一次兑换','完成 1 次奖励兑换', redeemed >= 1],
+    ['🎉','奖励猎人','完成 5 次奖励兑换', redeemed >= 5],
+    ['🧭','长期主义','完成 10 次奖励兑换', redeemed >= 10]
+  ];
+}
+function renderBadges(){
+  const box = document.getElementById('badges');
+  box.innerHTML = badgeList().map(([emoji, name, desc, ok]) => `
+    <div class="badge-item ${ok ? '' : 'locked'}">
+      ${ok ? '<div class="badge-unlock">已解锁</div>' : ''}
+      <div class="emoji">${emoji}</div>
+      <b>${esc(name)}</b>
+      <span>${esc(desc)}</span>
+    </div>`).join('');
+}
+function renderTransactions(){
+  const box = document.getElementById('txList');
+  const rows = state.transactions.filter(tx => tx.subtype !== 'undo' && !/取消打卡|扣回|撤销打卡/.test(tx.title||'')).slice(0, 30);
+  if(!rows.length){
+    box.innerHTML = '<div class="empty">还没有积分记录。</div>';
+    return;
+  }
+  box.innerHTML = rows.map(tx => {
+    const d = new Date(tx.time);
+    const plus = tx.type === 'earn';
+    return `
+      <div class="tx-item">
+        <div>
+          <b>${esc(tx.title)}</b>
+          <small>${d.toLocaleString('zh-CN')}</small>
+        </div>
+        <div class="${plus ? 'plus' : 'minus'}">${plus ? '+' : '-'}${Math.abs(Math.floor(Number(tx.points)||0))}</div>
+      </div>`;
+  }).join('');
+}
+function renderAvatarElement(el){
+  if(!el) return;
+  const profile = state.profile || {avatarType:'text', avatarValue:'🌱'};
+  if(profile.avatarType === 'image' && profile.avatarValue){
+    el.innerHTML = `<img src="${profile.avatarValue}" alt="头像">`;
+  }else{
+    const value = esc(profile.avatarValue || '🌱');
+    el.innerHTML = `<span class="avatar-emoji">${value}</span>`;
+  }
+}
+function renderMe(){
+  document.getElementById('planCount').textContent = state.plans.length;
+  document.getElementById('rewardCount').textContent = state.rewards.length;
+  renderAvatarElement(document.getElementById('headerAvatar'));
+  renderAvatarElement(document.getElementById('profileAvatar'));
+
+  const nick = document.getElementById('profileNickname');
+  if(nick) nick.textContent = state.profile?.nickname || '我的孩子';
+
+  const meta = document.getElementById('profileMeta');
+  if(meta){
+    const ageText = state.profile?.age ? `${state.profile.age} 岁` : '年龄未填写';
+    const gradeText = state.profile?.grade || '年级未填写';
+    const goalCount = Array.isArray(state.profile?.goals) ? state.profile.goals.length : 0;
+    meta.textContent = `${ageText} · ${gradeText}${goalCount ? ` · ${goalCount} 个培养目标` : ''}`;
+  }
+}
+
+function navTo(pageId, btn){
+  currentPage = pageId;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+  if(pageId==='tasksPage'){
+    const today=todayKey();
+    if(!document.getElementById('dateTypeStart').value) document.getElementById('dateTypeStart').value=today;
+    if(!document.getElementById('dateTypeEnd').value) document.getElementById('dateTypeEnd').value=today;
+    selectedDateType=dateTypeFor(today);
+    document.querySelectorAll('#dateTypeChips .chip').forEach(x=>x.classList.toggle('on',x.dataset.type===selectedDateType));
+  }
+}
+function changeMonth(step){ viewDate.setMonth(viewDate.getMonth() + step); renderCalendar(); }
+function jumpToday(){ viewDate = new Date(); renderCalendar(); }
+
+function validPlanDate(date){return /^\d{4}-\d{2}-\d{2}$/.test(date)&&Number(date.slice(0,4))>=1000&&todayKey(parseLocalDate(date))===date;}
+function openDayPlans(date){
+  if(!validPlanDate(date)) return;
+  selectedDayPlansDate=date;
+  document.getElementById('dayPlansTitle').textContent=date+' · 当天安排';
+  const plans=applicablePlansForDate(date).sort((a,b)=>Number(Array.isArray(b.scheduleDates)&&!b.growthProgramId)-Number(Array.isArray(a.scheduleDates)&&!a.growthProgramId));
+  document.getElementById('dayPlansHint').textContent=dayTypeIcon(dateTypeFor(date))+' '+dayTypeLabel(dateTypeFor(date))+' · '+plans.length+' 项任务。单日任务与当天适用的重复任务一起显示；打卡请在当天首页完成。';
+  document.getElementById('dayPlansList').innerHTML=plans.length?plans.map(p=>`<div class="task-manage-card"><div class="icon-bubble">${esc(p.icon)}</div><div class="manage-main"><div class="task-name">${esc(p.name)}</div><div class="task-desc">${esc(p.desc)}</div><div class="daytype-badges"><span class="daytype-badge">${p.growthProgramId?'成长助手':Array.isArray(p.scheduleDates)?'单日任务':'重复任务'}${p.required?' · 必做':''}${state.days[date]?.[p.id]?.done?' · 已完成':''}</span></div><div class="points-pill">🪙 ${p.points} 积分</div></div><button class="btn btn-warn" type="button" onclick="closeModal('dayPlansModal');openPlanModal('edit','${p.id}')">编辑</button></div>`).join(''):'<div class="empty">这一天还没有任务，可以提前安排。</div>';
+  document.getElementById('dayPlansAdd').style.display=date<todayKey()?'none':'';
+  openModal('dayPlansModal');
+  const sheet=document.querySelector('#dayPlansModal .sheet');if(sheet) sheet.scrollTop=0;
+}
+function openSingleDayPlan(date=todayKey()){
+  closeModal('dayPlansModal');
+  openPlanModal('add');
+  document.getElementById('planScheduleMode').value='single';
+  document.getElementById('planSingleDate').value=validPlanDate(date)?date:todayKey();
+  document.getElementById('planModalTitle').textContent='添加单日任务';
+  updatePlanScheduleFields();
+}
+
+function openCheck(pid){
+  const p = planById(pid); if(!p) return;
+  if(!planAppliesOn(pid)){render();return alertBox('这项任务不在今天的安排中，请在执行日期当天打卡。','日期提醒','warn','📅');}
+  currentCheckPlanId = pid;
+  document.getElementById('checkTitle').textContent = '完成打卡 · ' + p.name;
+  document.getElementById('checkNote').value = '';
+  document.querySelectorAll('#checkTags .chip').forEach((c, i) => c.classList.toggle('on', i === 0));
+  openModal('checkModal');
+}
+function toggleTag(el){ el.classList.toggle('on'); }
+function submitCheck(){
+  if(!currentCheckPlanId) return;
+  const p = planById(currentCheckPlanId); if(!p) return;
+  if(!planAppliesOn(currentCheckPlanId)){closeModal('checkModal');render();return alertBox('日期已变化，这项任务不在今天的安排中。','日期提醒','warn','📅');}
+  if(planDone(currentCheckPlanId)) return closeModal('checkModal');
+  const tags = Array.from(document.querySelectorAll('#checkTags .chip.on')).map(x => x.textContent.trim());
+  ensureDay()[currentCheckPlanId] = {
+    done:true,
+    note:document.getElementById('checkNote').value.trim(),
+    tags,
+    time:new Date().toISOString(),
+    pointsAwarded:Math.max(0, Math.floor(Number(p.points)||0))
+  };
+  addTx({
+    type:'earn', subtype:'checkin', points:Math.max(0, Math.floor(Number(p.points)||0)),
+    title:'完成任务：' + p.name, planId:p.id, date:todayKey()
+  });
+  closeModal('checkModal');
+  toast('打卡成功，+' + Math.max(0, Math.floor(Number(p.points)||0)) + ' 积分');
+  render();
+}
+async function undo(pid){
+  const p = planById(pid); if(!p || !planDone(pid)) return;
+  const ok = await confirmBox('取消后，这次打卡和对应积分都会一起撤销。', '取消打卡？', 'warn', '↺', '确认取消', '先不取消');
+  if(!ok) return;
+  const k = todayKey();
+  const idx = state.transactions.findIndex(tx => tx.type==='earn' && tx.subtype==='checkin' && tx.planId===pid && tx.date===k);
+  if(idx >= 0) state.transactions.splice(idx, 1);
+  delete ensureDay(k)[pid];
+  toast('已取消打卡，积分已撤销');
+  render();
+}
+
+function togglePlanDayType(btn){
+  const type = btn.dataset.type;
+  if(!type) return;
+  if(selectedPlanDayTypes.has(type)) selectedPlanDayTypes.delete(type); else selectedPlanDayTypes.add(type);
+  btn.classList.toggle('on', selectedPlanDayTypes.has(type));
+}
+function pickDateType(btn){
+  selectedDateType = btn.dataset.type || 'study';
+  document.querySelectorAll('#dateTypeChips .chip').forEach(x=>x.classList.toggle('on', x.dataset.type===selectedDateType));
+}
+function parseLocalDate(s){
+  const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d);
+}
+function eachDate(startStr,endStr,cb){
+  const start=parseLocalDate(startStr), end=parseLocalDate(endStr||startStr);
+  if(end<start) return false;
+  const cur=new Date(start);
+  while(cur<=end){ cb(todayKey(cur)); cur.setDate(cur.getDate()+1); }
+  return true;
+}
+async function applyDateTypeRange(){
+  const start=document.getElementById('dateTypeStart').value;
+  const end=document.getElementById('dateTypeEnd').value || start;
+  if(!start) return alertBox('先选择开始日期。','还差一点','warn','📅');
+  if(!eachDate(start,end,k=>{state.calendarOverrides[k]=selectedDateType;})) return alertBox('结束日期不能早于开始日期。','日期不对','warn','📅');
+  toast('日期类型已保存'); render();
+}
+async function clearDateTypeRange(){
+  const start=document.getElementById('dateTypeStart').value;
+  const end=document.getElementById('dateTypeEnd').value || start;
+  if(!start) return alertBox('先选择开始日期。','还差一点','warn','📅');
+  if(!eachDate(start,end,k=>{delete state.calendarOverrides[k];})) return alertBox('结束日期不能早于开始日期。','日期不对','warn','📅');
+  toast('已恢复自动判断'); render();
+}
+function pickPlanIcon(btn){
+  document.querySelectorAll('#planIconChips .chip').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  selectedPlanIcon = btn.dataset.icon || '📘';
+}
+function togglePlanRequired(btn){
+  selectedPlanRequired = !selectedPlanRequired;
+  btn.classList.toggle('on', selectedPlanRequired);
+}
+function resetPlanModalFields(){
+  document.getElementById('planName').value = '';
+  document.getElementById('planDesc').value = '';
+  document.getElementById('planPoints').value = '1';
+  document.getElementById('planScheduleMode').value = 'repeat';
+  document.getElementById('planSingleDate').value = todayKey();
+  document.getElementById('planSingleDate').min = todayKey();
+  document.querySelectorAll('#planIconChips .chip').forEach((x, i) => x.classList.toggle('on', i === 0));
+  selectedPlanIcon = '📘';
+  selectedPlanDayTypes = new Set(['study','weekend']);
+  selectedPlanRequired = false;
+  const requiredChip = document.getElementById('planRequiredChip');
+  if(requiredChip) requiredChip.classList.remove('on');
+  document.querySelectorAll('#planDayTypeChips .chip').forEach(x => x.classList.toggle('on', selectedPlanDayTypes.has(x.dataset.type)));
+}
+function planScheduleLocked(p){return !!p&&(!!p.growthProgramId||(Array.isArray(p.scheduleDates)&&p.scheduleDates.length!==1));}
+function updatePlanScheduleFields(){
+  const p=planModalMode==='edit'?planById(editingPlanId):null;
+  const locked=planScheduleLocked(p);
+  const single=document.getElementById('planScheduleMode').value==='single';
+  document.getElementById('planScheduleModeField').style.display=locked?'none':'block';
+  document.getElementById('planSingleDateField').style.display=!locked&&single?'block':'none';
+  document.getElementById('planDayTypeChips').style.display=!locked&&!single?'flex':'none';
+  document.getElementById('planDayTypeHint').style.display=!locked&&!single?'block':'none';
+  const note=document.getElementById('planScheduleNote');note.style.display=locked?'block':'none';
+  note.textContent=locked?'此活动沿用原方案的指定日期。编辑名称或积分不会更改安排，暂停的活动也不会变成每日任务。':'';
+}
+function openPlanModal(mode='add', pid=null){
+  planModalMode = mode;
+  editingPlanId = pid;
+  resetPlanModalFields();
+  if(mode === 'edit' && pid){
+    const p = planById(pid); if(!p) return;
+    document.getElementById('planModalTitle').textContent = '编辑计划';
+    document.getElementById('planName').value = p.name || '';
+    document.getElementById('planDesc').value = p.desc || '';
+    document.getElementById('planPoints').value = Math.max(0, Math.floor(Number(p.points)||0));
+    if(Array.isArray(p.scheduleDates)){
+      document.getElementById('planScheduleMode').value='single';
+      document.getElementById('planSingleDate').value=p.scheduleDates[0]||todayKey();
+      // Keep an existing past date editable without allowing a new past arrangement.
+      if(p.scheduleDates[0]<todayKey()) document.getElementById('planSingleDate').min=p.scheduleDates[0];
+    }
+    document.querySelectorAll('#planIconChips .chip').forEach(x => x.classList.toggle('on', x.dataset.icon === p.icon));
+    selectedPlanIcon = p.icon || '📘';
+    selectedPlanDayTypes = new Set((p.dayTypes && p.dayTypes.length) ? p.dayTypes : ['study','weekend']);
+    selectedPlanRequired = p.required === true;
+    const requiredChip = document.getElementById('planRequiredChip');
+    if(requiredChip) requiredChip.classList.toggle('on', selectedPlanRequired);
+    document.querySelectorAll('#planDayTypeChips .chip').forEach(x => x.classList.toggle('on', selectedPlanDayTypes.has(x.dataset.type)));
+  }else{
+    document.getElementById('planModalTitle').textContent = '新建计划';
+  }
+  updatePlanScheduleFields();
+  openModal('planModal');
+  const sheet=document.querySelector('#planModal .sheet');if(sheet) sheet.scrollTop=0;
+}
+function savePlan(){
+  const name = document.getElementById('planName').value.trim();
+  const existing=planModalMode==='edit'?planById(editingPlanId):null;
+  if(planModalMode==='edit'&&!existing) return;
+  const locked=planScheduleLocked(existing);
+  const single=document.getElementById('planScheduleMode').value==='single';
+  const date=document.getElementById('planSingleDate').value;
+  const desc = document.getElementById('planDesc').value.trim() || (single?'按当天安排完成':'每天完成一点');
+  const points = Math.max(0, Math.floor(Number(document.getElementById('planPoints').value)||0));
+  if(!name) return alertBox('计划名称不能为空。', '还差一点', 'warn', '✎');
+  if(!locked&&single){
+    if(!validPlanDate(date)) return alertBox('请选择有效的执行日期。','还差一点','warn','📅');
+    const sameDate=existing&&Array.isArray(existing.scheduleDates)&&existing.scheduleDates.length===1&&existing.scheduleDates[0]===date;
+    if(date<todayKey()&&!sameDate) return alertBox('新安排请选择今天或未来的日期。','日期不对','warn','📅');
+  }
+  if(!locked&&!single&&!selectedPlanDayTypes.size) return alertBox('至少选择一种适用日期：学习日、周末或假期。', '还差一点', 'warn', '📅');
+  const scheduleDates=locked?existing.scheduleDates:single?[date]:null;
+  if(existing&&!locked&&JSON.stringify(existing.scheduleDates||null)!==JSON.stringify(scheduleDates)&&Object.values(state.days).some(day=>day?.[existing.id]?.done)){
+    return alertBox('这项任务已有打卡记录，请保留原日期安排。需要另一天的任务时，可以新建单日任务。','保留打卡记录','warn','📅');
+  }
+  if(planModalMode === 'edit' && editingPlanId){
+    const p = planById(editingPlanId); if(!p) return;
+    p.name = name; p.desc = desc; p.points = points; p.icon = selectedPlanIcon || '📘'; p.dayTypes = Array.from(selectedPlanDayTypes); p.required = selectedPlanRequired;
+    if(!locked) p.scheduleDates=scheduleDates;
+    toast('计划已更新');
+  }else{
+    state.plans.push({ id:'p'+Date.now()+Math.random().toString(36).slice(2,8), name, desc, icon:selectedPlanIcon || '📘', points, dayTypes:Array.from(selectedPlanDayTypes), scheduleDates, required:selectedPlanRequired });
+    toast(single?'单日任务已安排在 '+date:'计划创建好了');
+  }
+  closeModal('planModal');
+  render();
+}
+async function deletePlan(pid){
+  const p = planById(pid); if(!p) return;
+  if(p.growthProgramId){
+    const ok=await confirmBox(`暂停“${p.name}”的未完成活动？历史打卡与积分保留，可在当前方案中补回。`,'暂停助手活动？','warn','🌱','确认暂停','保留');
+    if(!ok)return;
+    p.scheduleDates=(p.scheduleDates||[]).filter(date=>date<todayKey()||state.days[date]?.[p.id]?.done);
+    render();toast('助手活动已暂停，历史记录保留');return;
+  }
+  const ok = await confirmBox(`确定删除“${p.name}”这个计划吗？\n\n这个计划的历史打卡记录也会一起删除，不能恢复。`, '删除计划？', 'danger', '🗑', '确认删除', '先保留');
+  if(!ok) return;
+  state.plans = state.plans.filter(x => x.id !== pid);
+  Object.keys(state.days).forEach(k => { if(state.days[k]) delete state.days[k][pid]; });
+  state.transactions = state.transactions.filter(tx => tx.planId !== pid);
+  toast('计划已删除');
+  render();
+}
+
+
+function avatarPreviewHTML(type, value){
+  if(type === 'image' && value){
+    return `<img src="${value}" alt="头像预览">`;
+  }
+  return `<span>${esc(value || '🌱')}</span>`;
+}
+
+
+function refreshProfileOptionUI(){
+  document.querySelectorAll('#profileGenderOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', x.dataset.value === (pendingProfile.gender || ''));
+  });
+  document.querySelectorAll('#profileInterestOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', pendingProfile.interests.has(x.dataset.value));
+  });
+  document.querySelectorAll('#profileGoalOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', pendingProfile.goals.has(x.dataset.value));
+  });
+  document.querySelectorAll('#profileDifficultyOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', pendingProfile.difficulties.has(x.dataset.value));
+  });
+  document.querySelectorAll('#profileTimeOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', Number(x.dataset.value) === Number(pendingProfile.dailyMinutes));
+  });
+  document.querySelectorAll('#profileRewardPrefOptions .profile-option').forEach(x=>{
+    x.classList.toggle('on', pendingProfile.rewardPrefs.has(x.dataset.value));
+  });
+}
+
+function pickProfileSingle(field, btn){
+  if(field === 'gender'){
+    pendingProfile.gender = btn.dataset.value || '';
+  }else if(field === 'dailyMinutes'){
+    pendingProfile.dailyMinutes = Number(btn.dataset.value || 40);
+  }
+  refreshProfileOptionUI();
+}
+
+function toggleProfileMulti(field, btn){
+  const value = btn.dataset.value;
+  if(!value) return;
+  const set = pendingProfile[field];
+  if(!(set instanceof Set)) return;
+  if(set.has(value)) set.delete(value); else set.add(value);
+  refreshProfileOptionUI();
+}
+
+function openAvatarModal(){
+  const profile = state.profile || {};
+  pendingAvatarType = profile.avatarType || 'text';
+  pendingAvatarValue = profile.avatarValue || '🌱';
+
+  pendingProfile = {
+    gender: profile.gender || '',
+    interests: new Set(Array.isArray(profile.interests) ? profile.interests : []),
+    goals: new Set(Array.isArray(profile.goals) && profile.goals.length ? profile.goals : ['reading','outdoor']),
+    difficulties: new Set(Array.isArray(profile.difficulties) ? profile.difficulties : []),
+    dailyMinutes: Number(profile.dailyMinutes || 40),
+    rewardPrefs: new Set(Array.isArray(profile.rewardPrefs) ? profile.rewardPrefs : [])
+  };
+
+  const input = document.getElementById('profileNicknameInput');
+  if(input) input.value = profile.nickname || '我的孩子';
+
+  const ageInput = document.getElementById('profileAgeInput');
+  if(ageInput) ageInput.value = profile.age ? String(profile.age) : '';
+
+  const gradeInput = document.getElementById('profileGradeInput');
+  if(gradeInput) gradeInput.value = profile.grade || '';
+
+  const preview = document.getElementById('avatarPreview');
+  if(preview) preview.innerHTML = avatarPreviewHTML(pendingAvatarType, pendingAvatarValue);
+
+  document.querySelectorAll('#avatarGrid .avatar-option').forEach(btn => {
+    btn.classList.toggle('on', pendingAvatarType === 'text' && btn.dataset.avatar === pendingAvatarValue);
+  });
+
+  refreshProfileOptionUI();
+  openModal('avatarModal');
+}
+
+function chooseAvatarOption(btn){
+  pendingAvatarType = 'text';
+  pendingAvatarValue = btn.dataset.avatar || '🌱';
+
+  document.querySelectorAll('#avatarGrid .avatar-option').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+
+  const preview = document.getElementById('avatarPreview');
+  if(preview) preview.innerHTML = avatarPreviewHTML(pendingAvatarType, pendingAvatarValue);
+}
+
+async function compressAvatarFile(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const img = new Image();
+
+      img.onload = () => {
+        const size = Math.min(img.width, img.height);
+        const sx = Math.max(0, (img.width - size) / 2);
+        const sy = Math.max(0, (img.height - size) / 2);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 256;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, 256, 256);
+
+        let quality = 0.82;
+        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+        // 尽量把头像控制在约 120 KB 以下，避免把整份云端 JSON 撑得太肥。
+        while(dataUrl.length > 160000 && quality > 0.45){
+          quality -= 0.08;
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        resolve(dataUrl);
+      };
+
+      img.onerror = () => reject(new Error('图片读取失败'));
+      img.src = reader.result;
+    };
+
+    reader.onerror = () => reject(new Error('文件读取失败'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleAvatarFile(file){
+  if(!file) return;
+
+  if(!file.type.startsWith('image/')){
+    return alertBox('请选择图片文件。', '图片格式不对', 'warn', '🖼');
+  }
+
+  try{
+    const dataUrl = await compressAvatarFile(file);
+    pendingAvatarType = 'image';
+    pendingAvatarValue = dataUrl;
+
+    document.querySelectorAll('#avatarGrid .avatar-option').forEach(x => x.classList.remove('on'));
+
+    const preview = document.getElementById('avatarPreview');
+    if(preview) preview.innerHTML = avatarPreviewHTML('image', dataUrl);
+  }catch(err){
+    await alertBox(err.message || '头像处理失败', '处理失败', 'danger', '!');
+  }
+}
+
+function saveAvatarProfile(){
+  const nickname = document.getElementById('profileNicknameInput')?.value.trim() || '我的孩子';
+  const ageRaw = document.getElementById('profileAgeInput')?.value.trim() || '';
+  const grade = document.getElementById('profileGradeInput')?.value || '';
+  const age = ageRaw ? Math.floor(Number(ageRaw)) : null;
+
+  if(age !== null && (!Number.isFinite(age) || age < 3 || age > 15)){
+    return alertBox('年龄请填写 3–15 岁之间的整数。', '年龄信息有误', 'warn', '🎂');
+  }
+
+  if(!state.profile || typeof state.profile !== 'object') state.profile = {};
+  state.profile.nickname = nickname;
+  state.profile.age = age;
+  state.profile.grade = grade;
+  state.profile.gender = pendingProfile.gender || '';
+  state.profile.interests = [...pendingProfile.interests];
+  state.profile.goals = [...pendingProfile.goals];
+  state.profile.difficulties = [...pendingProfile.difficulties];
+  state.profile.dailyMinutes = Number(pendingProfile.dailyMinutes || 40);
+  state.profile.rewardPrefs = [...pendingProfile.rewardPrefs];
+  state.profile.avatarType = pendingAvatarType || 'text';
+  state.profile.avatarValue = pendingAvatarValue || '🌱';
+
+  syncPlannerWithProfile();
+  closeModal('avatarModal');
+  render();
+  toast('孩子资料已保存');
+}
+
+function renderRewardTemplates(){
+  const box = document.getElementById('rewardTemplateGrid');
+  if(!box) return;
+  box.innerHTML = rewardTemplates.map((r, idx) => `
+    <button type="button" class="reward-template" onclick="applyRewardTemplate(${idx})">
+      <div class="top"><span class="emoji">${r.emoji}</span><span class="name">${esc(r.name)}</span></div>
+      <div class="cost">${r.cost} 积分</div>
+      <div class="tip">${esc(r.tip)}</div>
+    </button>
+  `).join('');
+}
+
+function updateRewardPreview(){
+  const emoji = document.getElementById('rewardEmoji')?.value || '🎁';
+  const name = document.getElementById('rewardName')?.value.trim() || '通用奖励';
+  const cost = Math.max(1, Math.floor(Number(document.getElementById('rewardCost')?.value)||1));
+  const iconBox = document.getElementById('rewardPreviewIcon');
+  const nameBox = document.getElementById('rewardPreviewName');
+  const descBox = document.getElementById('rewardPreviewDesc');
+  if(iconBox) iconBox.textContent = emoji;
+  if(nameBox) nameBox.textContent = name;
+  if(descBox) descBox.textContent = `${cost} 积分兑换 · ${rewardIconTips[emoji] || '自定义奖励，可按家庭情况灵活设置。'}`;
+}
+
+function pickRewardIcon(el){
+  document.querySelectorAll('#rewardIconChips .chip').forEach(x => x.classList.toggle('on', x === el));
+  selectedRewardEmoji = el?.dataset?.icon || '🎁';
+  const input = document.getElementById('rewardEmoji');
+  if(input) input.value = selectedRewardEmoji;
+  updateRewardPreview();
+}
+
+function applyRewardTemplate(index){
+  const t = rewardTemplates[index];
+  if(!t) return;
+  document.getElementById('rewardName').value = t.name;
+  document.getElementById('rewardCost').value = String(t.cost);
+  const match = [...document.querySelectorAll('#rewardIconChips .chip')].find(x => x.dataset.icon === t.emoji);
+  if(match){
+    pickRewardIcon(match);
+  }else{
+    const input = document.getElementById('rewardEmoji');
+    if(input) input.value = t.emoji;
+    selectedRewardEmoji = t.emoji;
+    updateRewardPreview();
+  }
+}
+
+function openRewardModal(mode='add', rid=null){
+  rewardModalMode = mode;
+  editingRewardId = rid;
+
+  const title = document.getElementById('rewardModalTitle');
+  const saveBtn = document.getElementById('rewardSaveBtn');
+
+  document.getElementById('rewardName').value = '';
+  document.getElementById('rewardCost').value = '';
+  document.getElementById('rewardEmoji').value = '🎁';
+  selectedRewardEmoji = '🎁';
+  document.querySelectorAll('#rewardIconChips .chip').forEach((x, i) => x.classList.toggle('on', i === 0));
+
+  if(mode === 'edit' && rid){
+    const r = rewardById(rid);
+    if(!r) return;
+    if(title) title.textContent = '编辑奖励';
+    if(saveBtn) saveBtn.textContent = '保存修改';
+    document.getElementById('rewardName').value = r.name || '';
+    document.getElementById('rewardCost').value = Math.max(1, Math.floor(Number(r.cost)||1));
+    selectedRewardEmoji = r.emoji || '🎁';
+    document.getElementById('rewardEmoji').value = selectedRewardEmoji;
+    document.querySelectorAll('#rewardIconChips .chip').forEach(x => x.classList.toggle('on', x.dataset.icon === selectedRewardEmoji));
+  }else{
+    if(title) title.textContent = '新建奖励';
+    if(saveBtn) saveBtn.textContent = '创建奖励';
+  }
+
+  renderRewardTemplates();
+  updateRewardPreview();
+  openModal('rewardModal');
+}
+
+function saveReward(){
+  const name = document.getElementById('rewardName').value.trim();
+  const cost = Math.max(1, Math.floor(Number(document.getElementById('rewardCost').value)||0));
+  const emoji = document.getElementById('rewardEmoji').value.trim() || selectedRewardEmoji || '🎁';
+
+  if(!name) return alertBox('奖励名称不能为空。', '还差一点', 'warn', '🎁');
+  if(!cost) return alertBox('兑换积分至少为 1。', '还差一点', 'warn', '🪙');
+
+  if(rewardModalMode === 'edit' && editingRewardId){
+    const r = rewardById(editingRewardId);
+    if(!r) return;
+    r.name = name;
+    r.cost = cost;
+    r.emoji = emoji;
+    toast('奖励已更新');
+  }else{
+    state.rewards.push({ id:'r'+Date.now(), name, cost, emoji });
+    toast('奖励已创建');
+  }
+
+  closeModal('rewardModal');
+  render();
+}
+async function redeemReward(id){
+  const r = rewardById(id); if(!r) return;
+  if(pointBalance() < r.cost){
+    return alertBox(`当前只有 ${pointBalance()} 积分，兑换“${r.name}”需要 ${r.cost} 积分。`, '积分不够', 'warn', '🪙', '我知道了');
+  }
+  const ok = await confirmBox(`确定用 ${r.cost} 积分兑换“${r.name}”吗？`, '兑换奖励？', 'primary', '🎁', '确认兑换', '再想想');
+  if(!ok) return;
+  addTx({ type:'spend', subtype:'redeem', points:r.cost, title:'兑换奖励：' + r.name, rewardId:r.id });
+  toast('兑换成功 🎉');
+  render();
+}
+async function deleteReward(id){
+  const r = rewardById(id); if(!r) return;
+  const ok = await confirmBox(`删除奖励“${r.name}”？\n\n历史兑换记录会保留。`, '删除奖励？', 'danger', '🗑', '确认删除', '先保留');
+  if(!ok) return;
+  state.rewards = state.rewards.filter(x => x.id !== id);
+  toast('奖励已删除');
+  render();
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '成长打卡备份.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function triggerImport(){ document.getElementById('importFile').click(); }
+document.getElementById('importFile').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      localStorage.setItem(K, JSON.stringify(parsed));
+      state = loadState();
+      syncPlannerWithProfile();
+      render();
+      toast('备份已导入');
+    }catch(err){
+      await alertBox('这个文件看起来不是有效的备份 JSON。', '导入失败', 'danger', '!', '我知道了');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+async function resetAll(){
+  const ok = await confirmBox('确定清空全部计划、积分、奖励和历史记录吗？\n\n这个操作不能恢复。', '清空全部数据？', 'danger', '⚠', '确认清空', '先别清');
+  if(!ok) return;
+  localStorage.removeItem(K);
+  state = createDefaultState();
+  syncPlannerWithProfile();
+  viewDate = new Date();
+  render();
+  toast('数据已清空');
+}
+
+
+
+function normalizedStateSnapshot(s){
+  const x = s && typeof s === 'object' ? s : {};
+  return {
+    plans: Array.isArray(x.plans) ? x.plans : [],
+    days: x.days && typeof x.days === 'object' ? x.days : {},
+    rewards: Array.isArray(x.rewards) ? x.rewards : [],
+    transactions: Array.isArray(x.transactions) ? x.transactions : [],
+    calendarOverrides: x.calendarOverrides && typeof x.calendarOverrides === 'object' ? x.calendarOverrides : {},
+    growth: x.growth && typeof x.growth==='object' ? x.growth : createGrowthState(),
+    profile: x.profile && typeof x.profile === 'object' ? x.profile : {}
+  };
+}
+
+function isDefaultLikeState(s){
+  const x = normalizedStateSnapshot(s);
+  const hasActivity =
+    Object.keys(x.days).length > 0 ||
+    x.rewards.length > 0 ||
+    x.transactions.length > 0 ||
+    Object.keys(x.calendarOverrides).length > 0 || !!x.growth.draft || !!x.growth.intake || !!x.growth.programs?.length;
+
+  if(hasActivity) return false;
+  if(x.plans.some(p=>Array.isArray(p.scheduleDates))) return false;
+  if(x.plans.length !== defaultPlans.length) return false;
+
+  const a = x.plans.map(p => ({
+    name:p.name, desc:p.desc, icon:p.icon,
+    points:Number(p.points)||0,
+    dayTypes:Array.isArray(p.dayTypes)?[...p.dayTypes].sort():[],
+    required:p.required===true
+  }));
+  const b = defaultPlans.map(p => ({
+    name:p.name, desc:p.desc, icon:p.icon,
+    points:Number(p.points)||0,
+    dayTypes:Array.isArray(p.dayTypes)?[...p.dayTypes].sort():['study','weekend'],
+    required:p.required===true
+  }));
+
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function isMeaningfulState(s){
+  return !isDefaultLikeState(s);
+}
+
+function statesEquivalent(a,b){
+  return JSON.stringify(normalizedStateSnapshot(a)) === JSON.stringify(normalizedStateSnapshot(b));
+}
+
+function setSyncStatus(msg){
+  const el = document.getElementById('syncStatus');
+  if(el) el.textContent = msg;
+  const cloud = document.getElementById('accountCloudState');
+  if(cloud && currentUser) cloud.textContent = msg;
+}
+
+function updateAccountUI(){
+  const out = document.getElementById('signedOutBox');
+  const inn = document.getElementById('signedInBox');
+  const email = document.getElementById('accountEmail');
+  const storage = document.getElementById('storageModeLabel');
+  if(!out || !inn) return;
+
+  if(currentUser){
+    out.style.display = 'none';
+    inn.style.display = 'block';
+    if(email) email.textContent = currentUser.email || '已登录';
+    if(storage) storage.textContent = 'Supabase 云端';
+    setSyncStatus(cloudReady ? '已同步' : '已登录');
+  }else{
+    out.style.display = 'block';
+    inn.style.display = 'none';
+    if(storage) storage.textContent = '本机浏览器';
+    setSyncStatus(sb ? '未登录' : '云连接不可用 · 本机保存');
+  }
+}
+
+function showCloudUnavailable(){
+  setSyncStatus('云连接不可用 · 本机保存');
+  const message='云服务组件未能加载，暂时无法登录或同步。请点“检查登录连接”，检查后可切换 Wi-Fi / 手机流量并刷新重试。本机已有打卡和资料仍保留。检查编号：SDK_UNAVAILABLE。';
+  setAuthErrorDetail(message);
+  return alertBox(message, '云连接暂不可用', 'warn', '☁');
+}
+
+let authRequestBusy=false;
+let authConnectionBusy=false;
+function setAuthRequestBusy(busy, action=''){
+  authRequestBusy=busy;
+  for(const [id,label,key] of [['authSignInButton','登录','login'],['authSignUpButton','注册账号','signup']]){
+    const el=document.getElementById(id);
+    if(el){el.disabled=busy;el.textContent=busy && action===key ? (key==='login'?'登录中…':'注册中…') : label;}
+  }
+}
+function setAuthErrorDetail(message=''){
+  const el=document.getElementById('authErrorDetail');
+  if(el){el.textContent=message;el.hidden=!message;}
+}
+function authFailureInfo(error){
+  const code=String(error?.code||'');
+  const raw=String(error?.message||'');
+  const status=Number(error?.status)||0;
+  const network=error?.name==='AuthRetryableFetchError' || error?.name==='AbortError' || /failed to fetch|fetch failed|network\s*(error|request)|load failed|offline|timed?\s*out/i.test(raw);
+  let title='登录失败', message='登录未完成，请稍后重试。如果再次失败，请把下方检查编号告诉我们。';
+  if(network){title='登录连接失败';message='当前浏览器未能连通登录服务，暂时无法判断账号或密码是否正确。请点“检查登录连接”，或切换 Wi-Fi / 手机流量后重试。';}
+  else if(code==='invalid_credentials' || /invalid login credentials/i.test(raw)) message='邮箱或密码不匹配。请核对完整邮箱，并重新手动输入密码，留意大小写和输入法；不要重复注册同一账号。';
+  else if(code==='email_not_confirmed' || /email not confirmed/i.test(raw)) message='这个账号尚未验证邮箱。请打开注册邮件完成验证，再回来登录。';
+  else if(status===429 || /rate.?limit|too many requests/i.test(raw)) message='登录尝试过于频繁，请稍等一会儿再试。';
+  else if(code==='captcha_failed') message='登录验证未通过，请刷新后重试。持续失败时请把检查编号告诉我们。';
+  else if(status>=500) message='登录服务暂时异常，请稍后重试。';
+  const safeCode=/^[a-z0-9_]{1,60}$/i.test(code)?code:(network?'NETWORK_UNREACHABLE':'AUTH_UNKNOWN');
+  return {title,message:message+' 检查编号：'+safeCode+(status?' / HTTP '+status:'')+'。'};
+}
+function showAuthFailure(error, action='login'){
+  const info=authFailureInfo(error);
+  const title=action==='signup'?(info.title==='登录连接失败'?'注册连接失败':'注册失败'):info.title;
+  const message=action==='signup'?info.message.replace(/^登录未完成/,'注册未完成'):info.message;
+  setSyncStatus(title);setAuthErrorDetail(message);
+  return alertBox(message,title,'danger','!');
+}
+async function checkAuthConnection(){
+  if(authConnectionBusy)return;
+  authConnectionBusy=true;
+  const button=document.getElementById('authConnectionButton');
+  const result=document.getElementById('authConnectionResult');
+  if(button){button.disabled=true;button.textContent='检查中…';}
+  const sdkText=sb?'云组件已加载':'云组件未加载';
+  if(result){result.hidden=false;result.textContent=sdkText+'；正在检查登录服务…';}
+  let timer;
+  try{
+    if(typeof fetch!=='function' || typeof AbortController!=='function')throw {code:'BROWSER_UNSUPPORTED'};
+    const controller=new AbortController();
+    timer=setTimeout(()=>controller.abort(),8000);
+    // Public settings probe only: never send email, password, session or family data.
+    const response=await fetch(SUPABASE_URL+'/auth/v1/settings',{
+      method:'GET',headers:{apikey:SUPABASE_PUBLISHABLE_KEY},credentials:'omit',cache:'no-store',signal:controller.signal
+    });
+    if(!response.ok)throw {code:'AUTH_SERVICE_HTTP',status:response.status};
+    const settings=await response.json();
+    if(typeof settings?.external?.email!=='boolean')throw {code:'AUTH_SERVICE_RESPONSE'};
+    const enabled=settings.external.email;
+    if(result)result.textContent=sdkText+'；'+(enabled?'登录服务连接正常，邮箱登录已开启。':'登录服务可连接，但邮箱登录未开启。')+
+      (!sb?'请刷新页面重新加载云组件。':'如果仍无法登录，请查看上方具体错误提示。')+
+      '此检查不验证账号密码，也不代表登录和云同步已经成功。检查编号：'+(!sb?'SDK_UNAVAILABLE':enabled?'CONNECTION_OK':'EMAIL_DISABLED')+'。';
+  }catch(error){
+    const code=error?.code==='BROWSER_UNSUPPORTED'?'BROWSER_UNSUPPORTED':error?.code==='AUTH_SERVICE_HTTP'?'AUTH_SERVICE_HTTP / HTTP '+Number(error.status):error?.code==='AUTH_SERVICE_RESPONSE'?'AUTH_SERVICE_RESPONSE':error?.name==='AbortError'?'CONNECTION_TIMEOUT':'NETWORK_UNREACHABLE';
+    if(result)result.textContent=sdkText+'；'+(code==='BROWSER_UNSUPPORTED'?'浏览器缺少连接检查所需功能，请用系统浏览器打开。':'登录服务连接检查未通过，请切换 Wi-Fi / 手机流量后重试。也可以用系统浏览器打开同一网页比较结果。')+'检查编号：'+code+'。';
+  }finally{
+    clearTimeout(timer);authConnectionBusy=false;
+    if(button){button.disabled=false;button.textContent='检查登录连接';}
+  }
+}
+
+function cloudRowPayload(){
+  return {
+    user_id: currentUser.id,
+    data: state,
+    updated_at: new Date().toISOString()
+  };
+}
+
+async function fetchCloudState(){
+  if(!currentUser) return null;
+  const { data, error } = await sb
+    .from('user_app_state')
+    .select('data, updated_at')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if(error) throw error;
+  return data || null;
+}
+
+async function writeCloudState(){
+  if(!currentUser || !cloudReady) return;
+  setSyncStatus('同步中…');
+
+  const { error } = await sb
+    .from('user_app_state')
+    .upsert(cloudRowPayload(), { onConflict: 'user_id' });
+
+  if(error){
+    setSyncStatus('同步失败');
+    throw error;
+  }
+  setSyncStatus('已同步');
+}
+
+function scheduleCloudSave(){
+  if(!currentUser || !cloudReady) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(async () => {
+    cloudSaveTimer = null;
+    try{
+      await writeCloudState();
+    }catch(err){
+      console.error('Cloud sync failed:', err);
+    }
+  }, 500);
+}
+
+async function loadCloudAfterLogin(){
+  if(!currentUser) return;
+
+  cloudReady = false;
+  setSyncStatus('读取云端…');
+
+  try{
+    const row = await fetchCloudState();
+    const cloudState = row?.data && typeof row.data === 'object' ? row.data : null;
+
+    // 云端已有数据：直接作为账号的主数据源，不再每次登录弹选择框。
+    if(cloudState){
+      localStorage.setItem(K, JSON.stringify(cloudState));
+      state = loadState();
+      syncPlannerWithProfile();
+      cloudReady = true;
+      render();
+      setSyncStatus('已同步');
+      return;
+    }
+
+    // 云端还没有数据：把当前本机数据作为账号的第一份云端数据。
+    cloudReady = true;
+    await writeCloudState();
+    render();
+    setSyncStatus('已同步');
+  }catch(err){
+    console.error('Initial cloud sync failed:', err);
+    cloudReady = false;
+    setSyncStatus('同步失败');
+    throw err;
+  }
+}
+
+
+async function refreshFromCloudSilently(){
+  if(!currentUser || !cloudReady) return;
+
+  try{
+    // 如果本机刚有改动还在等待上传，先把本机写完，避免刚切回页面就被旧云端覆盖。
+    if(cloudSaveTimer){
+      clearTimeout(cloudSaveTimer);
+      cloudSaveTimer = null;
+      await writeCloudState();
+    }
+
+    const row = await fetchCloudState();
+    const cloudState = row?.data && typeof row.data === 'object' ? row.data : null;
+    if(!cloudState) return;
+
+    if(!statesEquivalent(state, cloudState)){
+      localStorage.setItem(K, JSON.stringify(cloudState));
+      state = loadState();
+      syncPlannerWithProfile();
+      render();
+    }
+
+    setSyncStatus('已同步');
+  }catch(err){
+    console.error('Cloud refresh failed:', err);
+    setSyncStatus('同步失败');
+  }
+}
+
+async function signUpAccount(){
+  if(authRequestBusy)return;
+  if(!sb) return showCloudUnavailable();
+  const email = document.getElementById('authEmail')?.value.trim();
+  const password = document.getElementById('authPassword')?.value || '';
+
+  if(!email || password.length < 6){
+    return alertBox('请输入有效邮箱，密码至少 6 位。', '信息不完整', 'warn', '✎');
+  }
+
+  setSyncStatus('注册中…');
+  setAuthErrorDetail();setAuthRequestBusy(true,'signup');
+  try{
+  let data;
+  try{
+    const response=await sb.auth.signUp({email,password});
+    if(response.error)throw response.error;
+    data=response.data;
+  }catch(error){return showAuthFailure(error,'signup');}
+
+  if(data.session && data.user){
+    currentUser = data.user;
+    updateAccountUI();
+    try{
+      await loadCloudAfterLogin();
+      toast('注册成功，已开启云同步');
+    }catch(err){
+      await alertBox(err.message || '云同步失败', '同步失败', 'danger', '!');
+    }
+    return;
+  }
+
+  setSyncStatus('等待邮箱验证');
+  await alertBox(
+    '账号已经创建。Supabase 当前要求先验证邮箱，请打开注册邮箱里的验证邮件，完成后再回来登录。',
+    '请验证邮箱',
+    'primary',
+    '✉',
+    '我知道了'
+  );
+  }finally{setAuthRequestBusy(false);}
+}
+
+async function signInAccount(){
+  if(authRequestBusy)return;
+  if(!sb) return showCloudUnavailable();
+  const email = document.getElementById('authEmail')?.value.trim();
+  const password = document.getElementById('authPassword')?.value || '';
+
+  if(!email || !password){
+    return alertBox('请输入邮箱和密码。', '信息不完整', 'warn', '✎');
+  }
+
+  setSyncStatus('登录中…');
+  setAuthErrorDetail();setAuthRequestBusy(true,'login');
+  try{
+  let data;
+  try{
+    const response=await sb.auth.signInWithPassword({email,password});
+    if(response.error)throw response.error;
+    data=response.data;
+    if(!data?.user)throw {code:'AUTH_EMPTY_RESPONSE'};
+  }catch(error){return showAuthFailure(error);}
+
+  currentUser = data.user;
+  updateAccountUI();
+
+  try{
+    await loadCloudAfterLogin();
+    toast('登录成功，云端数据已同步');
+  }catch(err){
+    const message='账号已登录，但云端资料尚未读取成功。请先检查连接并刷新重试，暂时不要修改或手动上传本机数据，以免覆盖云端资料。';
+    setAuthErrorDetail(message);
+    await alertBox(message, '已登录，云同步失败', 'danger', '!');
+  }
+  }finally{setAuthRequestBusy(false);}
+}
+
+async function signOutAccount(){
+  if(!sb)return showCloudUnavailable();
+  const ok = await confirmBox(
+    '退出账号后，这台设备仍会保留当前本地数据，但之后的修改不会再同步到云端。',
+    '退出登录？',
+    'warn',
+    '↪',
+    '确认退出',
+    '取消'
+  );
+  if(!ok) return;
+
+  try{
+    const {error}=await sb.auth.signOut({scope:'local'});
+    if(error)throw error;
+  }catch(error){
+    const info=authFailureInfo(error);
+    return alertBox('本次退出未完成。'+info.message,'退出失败','danger','!');
+  }
+  clearTimeout(cloudSaveTimer);cloudSaveTimer=null;
+  currentUser = null;
+  cloudReady = false;
+  updateAccountUI();
+  toast('已退出这台设备');
+}
+
+async function manualCloudSync(){
+  if(!sb) return showCloudUnavailable();
+  if(!currentUser){
+    return alertBox('请先登录账号。', '还没登录', 'warn', '☁');
+  }
+
+  try{
+    if(!cloudReady){
+      await loadCloudAfterLogin();
+      toast('已重新读取云端资料');
+      return;
+    }
+    await writeCloudState();
+    toast('云端同步完成');
+  }catch(err){
+    await alertBox(err.message || '云同步失败', '同步失败', 'danger', '!');
+  }
+}
+
+async function initCloudAuth(){
+  updateAccountUI();
+  if(!sb) return;
+
+  try{
+    const { data, error } = await sb.auth.getSession();
+    if(error) throw error;
+
+    currentUser = data.session?.user || null;
+    updateAccountUI();
+
+    if(currentUser){
+      await loadCloudAfterLogin();
+    }
+  }catch(err){
+    console.error('Auth init failed:', err);
+    setSyncStatus('连接失败');
+  }
+
+  sb.auth.onAuthStateChange((event, session) => {
+    if(event === 'SIGNED_OUT'){
+      currentUser = null;
+      cloudReady = false;
+      updateAccountUI();
+    }
+  });
+}
+
+// 在不改动原有业务代码的情况下，让每次本地保存自动排队同步云端。
+const originalSaveState = saveState;
+saveState = function(){
+  originalSaveState();
+  scheduleCloudSave();
+};
+
+
+
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible'){
+    refreshFromCloudSilently();
+  }
+});
+
+window.addEventListener('focus', () => {
+  refreshFromCloudSilently();
+});
+
+const avatarFileInput = document.getElementById('avatarFileInput');
+document.getElementById('rewardName')?.addEventListener('input', updateRewardPreview);
+document.getElementById('rewardCost')?.addEventListener('input', updateRewardPreview);
+if(avatarFileInput){
+  avatarFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    await handleAvatarFile(file);
+    e.target.value = '';
+  });
+}
+
+syncPlannerWithProfile();
+render();
+initCloudAuth();
+</script>
+</body>
+</html>
