@@ -504,6 +504,17 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
   .plan-sheet .sheet-actions{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
   .plan-sheet .chip{max-width:100%;white-space:normal}
 }
+
+/* Concrete English resources and parent community directory. */
+.bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr));padding-left:8px;padding-right:8px}
+.gv-media-route,.gv-media-week{margin:18px 0;border:1px solid #dfe5f5;border-radius:17px;padding:14px;background:#f8faff;min-width:0}
+.gv-media-route h4,.gv-media-week h4{font-size:16px;margin:0 0 10px;color:#283b60}
+.gv-phase-list{display:grid;gap:9px}.gv-phase{border:1px solid #e0e5f4;border-radius:12px;padding:12px;background:#fff;min-width:0}.gv-phase.current{border-color:#abb2ff}.gv-phase summary{font-size:14px;font-weight:800;cursor:pointer;line-height:1.6}
+.gv-phase p,.gv-media-resource p,.community-card p,.community-intro p,.community-detail p,.community-detail li,.community-home p{font-size:13px;line-height:1.75;color:#5c6c85;overflow-wrap:anywhere}
+.gv-phase a,.gv-media-resource a{color:#545fca;text-decoration:underline;overflow-wrap:anywhere}.gv-media-resource{padding:12px;margin-top:9px;border:1px solid #e4e8f2;background:#fff;border-radius:12px;min-width:0;font-size:13px;line-height:1.65}.gv-media-resource b{display:block;overflow-wrap:anywhere;color:#354564}
+.community-list{display:grid;gap:12px}.community-filters{margin:18px 0}.community-card{background:#fff;border:1px solid #e1e6f3;border-radius:18px;padding:16px;min-width:0}.community-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.community-card h3{font-size:17px;margin:0;overflow-wrap:anywhere}.community-status{font-size:12px;color:#746138;background:#fff5dc;border-radius:20px;padding:4px 9px;white-space:nowrap}.community-topics{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.community-topics span{font-size:12px;color:#5d69a2;background:#f0f3ff;border-radius:8px;padding:5px 8px}.community-card .btn{width:100%}.community-intro h3{font-size:20px;line-height:1.5;margin:14px 0 8px}.community-detail h4{font-size:15px;margin:15px 0 8px}.community-detail ul{padding-left:20px}
+@media(max-width:360px){.nav-btn b{font-size:20px}.nav-btn span{font-size:11px}.gv-media-route,.gv-media-week{padding:10px}.community-card{padding:13px}}
+
 </style>
 </head>
 <body>
@@ -560,6 +571,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
       </div>
       <div id="homeRewardList" class="reward-list"></div>
     </section>
+    <section class="section community-home card card-block"><div class="panel-head"><h3>家长同行</h3><span class="community-status">筹备中</span></div><p>按年龄或年级，寻找一起讨论成长计划的家长。</p><button type="button" class="btn btn-soft" onclick="openCommunity()">了解家长社群 →</button></section>
 
     <section class="section">
       <div class="section-title">
@@ -635,7 +647,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
           <div class="plan-assistant-icon">✨</div>
           <div><h3>成长计划助手</h3><p>根据孩子年龄、兴趣和家庭时间，安排四周成长方向与每天的具体活动。查看陪伴方法和材料建议，每周复盘，调整适合孩子的节奏。</p></div>
         </div>
-        <div class="gv-note">英语启蒙提供适合 4–6 岁的入门活动、绘本与儿歌建议；阅读、运动、生活自理等方向可结合孩子的情况选择和调整。</div>
+        <div class="gv-note">英语启蒙按起点推荐具体动画、同名音频与绘本；同一材料重复使用，周一至周五轻松执行。其他成长方向也可一起安排。</div>
         <details id="growthIntakePanel" class="gv-intake" open>
           <summary>① 了解孩子与家庭安排</summary>
           <form id="growthIntakeForm" onsubmit="event.preventDefault(); generateGrowthPlan()">
@@ -647,15 +659,15 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
             <div class="field"><label for="gvPriority">这次最想先推进</label><select id="gvPriority" class="input"></select><div class="gv-note">其他方向会穿插、结合或放到后续阶段，生成后可以查看每项原因。</div></div>
             <div class="gv-grid">
               <div class="field"><label for="gvBudget">每天活动总预算</label><select id="gvBudget" class="input"><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option><option value="40">40 分钟</option><option value="60">60 分钟</option><option value="90">90 分钟</option></select></div>
-              <div class="field"><label for="gvAdult">大人每天可陪伴</label><select id="gvAdult" class="input"><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option><option value="40">40 分钟</option><option value="60">60 分钟</option><option value="90">90 分钟</option></select></div>
+              <div class="field"><label for="gvAdult">大人每天可主动陪伴</label><select id="gvAdult" class="input"><option value="5">5 分钟</option><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30">30 分钟</option><option value="40">40 分钟</option><option value="60">60 分钟</option><option value="90">90 分钟</option></select></div>
             </div>
             <div class="field"><label for="gvOccupied">给已有任务预留多少分钟</label><input id="gvOccupied" class="input" type="number" min="0" max="90" step="1" value="0"><div class="gv-note">原有任务继续保留。请把希望一起执行的已有活动计入预留时间，助手用剩余时间排新增活动。</div></div>
-            <div class="field"><label>每周哪些天方便（至少一天）</label><div id="gvDays" class="plan-choice-grid"></div></div>
+            <div class="field"><label>每周哪些天方便（默认周一至周五，可调整）</label><div id="gvDays" class="plan-choice-grid"></div></div>
             <div class="field"><label for="gvInterest">喜欢什么、最近有什么困难</label><textarea id="gvInterest" maxlength="240" placeholder="例如：喜欢恐龙，愿意听故事，但不喜欢被要求跟读"></textarea></div>
             <details class="gv-sub" id="gvEnglishQuestions"><summary>英语活动的起点与资源</summary>
-              <div class="field"><label for="gvExperience">目前的英语接触情况</label><select id="gvExperience" class="input"><option value="new">接触很少，从熟悉声音和游戏开始</option><option value="some">听过儿歌，主要跟着大人做</option><option value="ready">熟悉简单词语，能回应部分动作或指图</option><option value="unsure">不确定，先观察孩子的反应</option></select></div>
-              <div class="gv-grid"><div class="field"><label for="gvMode">更喜欢的活动</label><select id="gvMode" class="input"><option value="play">玩具与动作游戏</option><option value="song">儿歌与节奏</option><option value="book">图片与故事</option></select></div><div class="field"><label for="gvScreen">孩子的屏幕安排</label><select id="gvScreen" class="input"><option value="none">暂不用屏幕</option><option value="short">大人陪同，短时听看</option></select></div></div>
-              <div class="gv-grid"><div class="field"><label for="gvBook">家中可用的英语绘本</label><select id="gvBook" class="input"><option value="no">暂时没有，使用玩具或自画图片</option><option value="yes">已有合法取得的 Dear Zoo</option><option value="brown">已有合法取得的 Brown Bear</option></select></div><div class="field"><label for="gvParent">大人的英语信心</label><select id="gvParent" class="input"><option value="help">希望有简单示范与准备指导</option><option value="confident">可以示范简短日常表达</option></select></div></div>
+              <div class="field"><label for="gvExperience">目前的英语接触情况</label><select id="gvExperience" class="input"><option value="new">接触很少，先看懂一点，再听熟悉声音</option><option value="some">听过儿歌，继续积累熟悉内容</option><option value="ready">熟悉简单词语，能回应部分动作或指图</option><option value="unsure">不确定，先从简单儿歌观察</option><option value="story">能理解部分简单故事的大意</option></select></div>
+              <div class="gv-grid"><div class="field"><label for="gvMode">孩子更容易接受的形式</label><select id="gvMode" class="input"><option value="play">玩具与动作游戏</option><option value="song">儿歌与节奏</option><option value="book">图片与故事</option></select></div><div class="field"><label for="gvScreen">孩子的屏幕安排</label><select id="gvScreen" class="input"><option value="none">暂不用屏幕</option><option value="short">大人陪同，短时听看</option></select></div></div>
+              <div class="gv-grid"><div class="field"><label for="gvBook">家中可用的英语绘本</label><select id="gvBook" class="input"><option value="no">暂时没有，先看听，绘本作为选书参考</option><option value="yes">已有合法取得的 Dear Zoo</option><option value="brown">已有合法取得的 Brown Bear</option><option value="readersA">已有 First Little Readers A 级</option></select></div><div class="field"><label for="gvParent">大人的英语信心</label><select id="gvParent" class="input"><option value="help">希望减少备课，按清单播放与共读</option><option value="confident">可以示范简短日常表达</option></select></div></div>
             </details>
             <div class="sheet-actions"><button class="btn btn-soft" type="button" onclick="resetGrowthPlanner()">从孩子资料重新填写</button><button class="btn btn-primary" type="submit">生成四周方案</button></div>
           </form>
@@ -701,6 +713,15 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
       <div class="panel-head"><h3>积分记录</h3><span class="muted">最近 30 条</span></div>
       <div id="txList" class="tx-list"></div>
     </section>
+  </main>
+
+
+  <main id="communityPage" class="page">
+    <div class="topbar"><div class="brand"><h2>家长同行</h2><p>找到相近成长阶段的家庭，一起讨论孩子的成长与教育。</p></div></div>
+    <section class="community-intro card card-block"><span class="community-status">社群筹备中</span><h3>计划有人陪，坚持更容易</h3><p>按孩子年龄或年级寻找社群，交流计划执行、材料选择和亲子陪伴中的真实问题。</p><p class="gv-note">目前可以了解各社群的方向，加入方式将在社群开放后提供。</p></section>
+    <div class="chips community-filters" role="group" aria-label="选择社群分类"><button type="button" class="chip on" data-community-filter="age" aria-pressed="true" onclick="setCommunityFilter('age')">按年龄</button><button type="button" class="chip" data-community-filter="grade" aria-pressed="false" onclick="setCommunityFilter('grade')">按年级</button></div>
+    <div id="communityList" class="community-list"></div>
+    <p class="gv-note">社群面向家长交流。每个孩子节奏不同，分享经验时尊重差异，保护孩子隐私。</p>
   </main>
 
   <main id="mePage" class="page">
@@ -750,7 +771,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
       <div style="margin-top:12px">
         <button id="authConnectionButton" class="btn btn-soft" onclick="checkAuthConnection()">检查登录连接</button>
         <div id="authConnectionResult" class="range-note" role="status" aria-live="polite" hidden></div>
-        <div class="range-note">当前版本 · 20261001-5</div>
+        <div class="range-note">当前版本 · 20261001-6</div>
       </div>
     </section>
 
@@ -788,8 +809,11 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
   <button class="nav-btn" onclick="navTo('calendarPage', this)"><b>▦</b><span>日历</span></button>
   <button class="nav-btn" onclick="navTo('tasksPage', this)"><b>☷</b><span>任务</span></button>
   <button class="nav-btn" onclick="navTo('statsPage', this)"><b>▥</b><span>统计</span></button>
+  <button class="nav-btn" data-page="communityPage" onclick="openCommunity()"><b>♧</b><span>社群</span></button>
   <button class="nav-btn" onclick="navTo('mePage', this)"><b>●</b><span>我的</span></button>
 </nav>
+
+<div id="communityDetailModal" class="modal" onclick="closeOnBg(event, 'communityDetailModal')"><div class="sheet"><h3 id="communityDetailTitle">社群介绍</h3><div id="communityDetailBody" class="community-detail"></div><div class="sheet-actions"><button type="button" class="btn btn-soft" onclick="closeModal('communityDetailModal')">返回社群</button></div></div></div>
 
 <div id="checkModal" class="modal" onclick="closeOnBg(event, 'checkModal')">
   <div class="sheet">
@@ -1594,7 +1618,7 @@ function growthDefaults(){
   const goals=(state.profile?.goals||[]).filter(g=>growthGoalNames[g]);
   const time=Number(state.profile?.dailyMinutes)||20;
   const budget=[5,10,15,20,30,40,60,90].reduce((a,b)=>Math.abs(b-time)<Math.abs(a-time)?b:a,20);
-  return {age,start:todayKey(),goals:goals.length?goals:['english','reading'],priority:goals.includes('english')?'english':(goals[0]||'english'),budget,adult:Math.min(budget,15),occupied:0,days:[1,2,3,5,6],interest:(state.profile?.interests||[]).join('、'),experience:'new',mode:'play',screen:'none',book:'no',parent:'help'};
+  return {age,start:todayKey(),goals:goals.length?goals:['english','reading'],priority:goals.includes('english')?'english':(goals[0]||'english'),budget,adult:Math.min(budget,5),occupied:0,days:[1,2,3,4,5],interest:(state.profile?.interests||[]).join('、'),experience:'new',mode:'song',screen:'short',book:'no',parent:'help',englishStyle:'media-v1'};
 }
 function fillGrowthIntake(intake){
   const f={...growthDefaults(),...(intake||{})};
@@ -1628,7 +1652,7 @@ function resetGrowthPlanner(){
 function readGrowthIntake(){
   const value=id=>document.getElementById(id).value;
   const goals=[...document.querySelectorAll('#gvGoals input:checked')].map(x=>x.value);
-  return {age:Number(value('gvAge')),start:value('gvStart'),goals,priority:value('gvPriority'),budget:Number(value('gvBudget')),adult:Number(value('gvAdult')),occupied:Number(value('gvOccupied')),days:[...document.querySelectorAll('#gvDays input:checked')].map(x=>Number(x.value)),interest:value('gvInterest').trim(),experience:value('gvExperience'),mode:value('gvMode'),screen:value('gvScreen'),book:value('gvBook'),parent:value('gvParent')};
+  return {age:Number(value('gvAge')),start:value('gvStart'),goals,priority:value('gvPriority'),budget:Number(value('gvBudget')),adult:Number(value('gvAdult')),occupied:Number(value('gvOccupied')),days:[...document.querySelectorAll('#gvDays input:checked')].map(x=>Number(x.value)),interest:value('gvInterest').trim(),experience:value('gvExperience'),mode:value('gvMode'),screen:value('gvScreen'),book:value('gvBook'),parent:value('gvParent'),englishStyle:'media-v1'};
 }
 function validateGrowthIntake(f){
   if(!Number.isInteger(f.age)||f.age<3||f.age>15)return '年龄请填写 3–15 岁之间的整数。';
@@ -1641,7 +1665,7 @@ function validateGrowthIntake(f){
   return '';
 }
 function growthGenericGuide(goal,stage,f){
-  if(goal==='english')return growthEnglishGuide(stage,{...f,screen:'none'},0);
+  if(goal==='english')return isMediaEnglish(f)?timeEnglishMediaGuide(englishMediaGuide(stage,{...f,screen:'none'},0),3,{...f,screen:'none'}):growthEnglishGuide(stage,{...f,screen:'none'},0);
   const topic=f.interest?`孩子提到的兴趣“${f.interest}”`:'孩子今天愿意参与的内容';
   const guides={
     reading:{name:['挑一本愿意翻的书','找熟悉故事里的细节','轮流讲一小段','故事里的办法用到生活'][stage],prepare:'家里已有的一本图多、孩子愿意看的书；不需要买新书。',steps:['让孩子选书或选一页，大人接住这个选择。','大人读或讲一小段，停下来给孩子指图、翻页或提问的机会。','聊一个具体发现，再由孩子决定是否继续；时间到了一起收好。'],say:'“你想先看哪一页？可以指给我看，不用把整本讲完。”',observe:'是否愿意选书、指图或停留；不以读了几页评价效果。',fallback:'没有合适的书，用家中照片或孩子画的一张图共同讲一件事。'},
@@ -1722,24 +1746,120 @@ function growthEnglishGuide(stage,f,session){
   if(g.combined.includes('selfcare'))g.steps[2]+=' 邀请孩子收好一件材料，大人先等待。';
   return g;
 }
+// New plans store their resource selections and timing; previously confirmed guides remain unchanged.
+Object.assign(growthResourceCatalog, {
+  peek:{title:'Peekaboo · Super Simple Songs',url:'https://supersimple.com/song/peekaboo/',owner:'Super Simple',type:'儿歌动画 / 同名歌曲音频',checked:'2026-10-01',note:'官方页面提供动画和 Listen 入口。先认清画面中的角色，再听熟悉声音。'},
+  pet:{title:'I Have A Pet · Super Simple Songs',url:'https://supersimple.com/song/i-have-a-pet/',owner:'Super Simple',type:'儿歌动画 / 同名歌曲音频',checked:'2026-10-01',note:'本周重复同一首，不要求记住所有动物或模仿声音。'},
+  teeth:{title:'Brush Your Teeth (Finny the Shark)',url:'https://supersimple.com/song/brush-your-teeth-finny-the-shark/',owner:'Super Simple',type:'儿歌动画 / 同名歌曲音频',checked:'2026-10-01',note:'先由家长预览，用熟悉的刷牙情境帮助理解。'},
+  birthday:{title:'Happy Birthday, Finny!',url:'https://supersimple.com/finny-the-shark/happy-birthday-finny/',owner:'Super Simple',type:'故事动画',checked:'2026-10-01',note:'对话比入门儿歌多。先选一个能理解的短片段，不要求看完整集。独立故事音频未确认。'},
+  help:{title:'A Big Help · Finny the Shark',url:'https://supersimple.com/finny-the-shark/a-big-help/',owner:'Super Simple',type:'故事动画',checked:'2026-10-01',note:'用于已有熟悉词语与简单情境理解的孩子。先预览，再选短片段。独立故事音频未确认。'},
+  readersA:{title:'First Little Readers · Guided Reading Level A',url:'https://shop.scholastic.com/parent-ecommerce/featured-shops/beginning-readers.html',owner:'Scholastic',type:'分级绘本套装 · A 级',checked:'2026-10-01',note:'出版社入门读物目录。Level A 是这套书的分级，不能与其他品牌直接等同。先共读一册，不把它作为识字测验；不同版本的音频配置需要单独确认。'}
+});
+const englishMediaPhases=[
+  {title:'阶段 1 · 熟悉声音',period:'第一个月建议',series:'Super Simple Songs · 儿歌动画',keys:['hello','walking','peek','pet'],books:['zoo','brown'],entry:'适合接触很少或起点不确定的孩子，从画面与熟悉声音开始。',next:'愿意重复，并能把熟悉声音与画面联系起来，再考虑阶段 2。'},
+  {title:'阶段 2 · 重复生活主题',period:'第二个月参考',series:'Finny the Shark · 歌曲动画',keys:['finnyHide','teeth','finnyHide','teeth'],books:['brown','readersA'],entry:'已经能回应部分熟悉词语，选择躲藏、刷牙等可理解的情境。',next:'能理解熟悉片段的大意，且仍有兴趣，再尝试阶段 3。'},
+  {title:'阶段 3 · 尝试短故事',period:'第三个月参考',series:'Finny the Shark · 故事动画',keys:['birthday','birthday','help','help'],books:['readersA'],entry:'适合已能理解简单情境的孩子；先看一小段，难了就回到歌曲动画。',next:'继续重复喜欢的内容，再逐步增加一册绘本或一个短故事。'}
+];
+function isMediaEnglish(f){return f?.englishStyle==='media-v1';}
+function englishMediaPhase(f){return f.experience==='story'?2:f.experience==='ready'?1:0;}
+function englishMediaSelection(f,stage){
+  const phase=englishMediaPhase(f),p=englishMediaPhases[phase];
+  const key=p.keys[Math.max(0,Math.min(3,stage))];
+  const book=f.book==='yes'?'zoo':f.book==='brown'?'brown':f.book==='readersA'?'readersA':p.books[0];
+  return {phase,key,book,audio:phase===2?'finnyHide':key,series:p.series};
+}
+function englishMediaGuide(stage,f,session){
+  const pick=englishMediaSelection(f,stage),media=growthResourceCatalog[pick.key],audio=growthResourceCatalog[pick.audio],book=growthResourceCatalog[pick.book];
+  const repeat=session%5;
+  const watch=f.screen==='short'&&repeat!==2&&(f.mode!=='book'||[0,3].includes(repeat));
+  const actions=['认识本周内容','重看同一片段','只听熟悉内容','再看再听','保留孩子喜欢的内容'];
+  const combined=f.book!=='no'?['reading'].filter(goal=>f.goals.includes(goal)):[];
+  return {goal:'english',name:`${actions[repeat]} · ${media.title.split(' · ')[0]}`,resource:watch?pick.key:null,combined,screenMinutes:0,
+    media:{...pick,watch,repeat,hasBook:f.book!=='no',audioFamiliar:repeat>0,segments:[]},
+    why:`本月围绕${pick.series}少量内容重复，减少每天选材料和准备游戏的负担。${f.age>=7?'可由孩子先判断画风是否喜欢，起点按理解情况选择，不按年龄强行升级。':''}`,
+    sessionFocus:repeat===0?'本周先认识一个片段，之后用同名音频重复。':repeat===2?'今天不增加屏幕时间，听上一个活动日已熟悉的内容。':'沿用本周同一片段，听当天或上一个活动日的熟悉声音。',
+    prepare:`每周准备一次：收藏 ${media.title}；找到 ${audio.title} 的正版音频入口；${f.book==='no'?`可借阅或预览 ${book.title}，暂时没有书也能先执行听看。`:`使用已有的 ${book.title}，一周重复少量图页。`}`,
+    steps:['','', ''],say:'“今天还是我们熟悉的这个。你想再看、听一会儿，还是到这里？”',
+    parent:'只负责选好片段、控制播放时段并陪同观看；不需要设计教具、逐句翻译或安排跟读。共读时指图、说大意即可。音频可在自由玩耍时短时播放，大人在附近照看；主动陪伴时间包括准备、看画面和共读，不包括无需教学的听音频时段。',
+    observe:'是否愿意重复、对熟悉角色或声音有反应，以及家长能否坚持；播放完成不等于理解或掌握。',
+    fallback:'资源打不开时，用已经可播放的熟悉音频；没有可用音频就看已有图片说大意，今天暂停新材料，不补任务。',
+    harder:'保持同一系列，孩子主动愿意且理解熟悉内容时再增加一个片段；不因为一周结束就升级材料。',
+    busy:'今天只听一小段已经熟悉的音频，或翻一页已有绘本，约 3 分钟即可，不补做。'};
+}
+function timeEnglishMediaGuide(guide,minutes,f){
+  const m=guide.media,watch=m.watch?Math.min(5,Math.floor(minutes/3),Math.max(0,f.adult-1)):0;
+  const read=m.hasBook?Math.min(3,Math.max(1,Math.floor(minutes/4)),Math.max(0,f.adult-watch-1)):0;
+  const listen=minutes-watch-read;
+  const movie=growthResourceCatalog[m.key].title,voice=growthResourceCatalog[m.audio].title,book=growthResourceCatalog[m.book].title;
+  m.unavailable=!!f.mediaUnavailable;m.segments=[watch,listen,read];guide.screenMinutes=watch;guide.adultMinutes=1+watch+read;
+  if(!read)guide.combined=[];
+  guide.steps=[watch?`陪同看 ${movie} 的同一个片段，最多 ${watch} 分钟；到时间就停，不为看完一集延长。`:'今天不看动画。沿用熟悉的声音；第一次使用音频时，可以先结合书中图片或家中物品理解大意。',
+    `听 ${voice}，约 ${listen} 分钟。${m.phase===2?'故事的独立音频未确认，此处用之前已熟悉的歌曲音频复习。':m.repeat===0?'当日先看再听；之后听同一段熟悉内容。':'听当天或上一个活动日已经熟悉的同名音频。'} 从官方 Listen 入口或已合法取得的音频播放；仅关闭画面但视频仍可见时，仍计入屏幕时间。`,
+    read?`一起翻 ${book} 中喜欢的少量图页，约 ${read} 分钟。不需要读完、跟读或讲解每个单词。`:'暂时没有绘本，本周不额外安排阅读。结束播放即可，绘本可以以后借阅或再决定。'];
+  if(f.mediaUnavailable){guide.prepare='使用家中已能播放的熟悉音频或已有图片，不需要新链接或购买。';guide.name='继续已有英语材料';guide.steps=['选家中已可用的一个熟悉材料，先说说画面的大意。',`用已有熟悉音频短时重复，最多 ${minutes} 分钟；没有音频就看图聊一两句，提前结束也可以。`,'孩子不想继续就结束，不为完成时长补听或补任务。'];guide.busy='看一张已有图片、说一句大意即可；没有合适材料今天休息。';}
+  return guide;
+}
+function englishMediaRouteHTML(f){
+  const current=englishMediaPhase(f);
+  return `<section class="gv-media-route"><h4>英语启蒙 · 分阶段材料路线</h4><p class="gv-note">月份是参考节奏，理解和兴趣合适时再换阶段；本轮只安排当前阶段的四周任务。</p><div class="gv-phase-list">${englishMediaPhases.map((p,i)=>`<details class="gv-phase ${i===current?'current':''}" ${i===current?'open':''}><summary>${esc(p.title)} · ${esc(p.period)}${i===current?' · 本轮采用':''}</summary><p><b>动画：</b>${esc(p.series)}；${[...new Set(p.keys)].map(k=>`<a href="${esc(growthResourceCatalog[k].url)}" target="_blank" rel="noopener noreferrer">${esc(growthResourceCatalog[k].title.split(' · ')[0])}</a>`).join('、')}。</p><p><b>听力：</b>${i===2?'故事独立音频未确认，优先复习前阶段已熟悉的同名歌曲。':'当日或下一个活动日，听已看内容的同名歌曲音频；本周重复，不每天换新。'}</p><p><b>绘本：</b>${p.books.map(k=>`<a href="${esc(growthResourceCatalog[k].url)}" target="_blank" rel="noopener noreferrer">${esc(growthResourceCatalog[k].title)}</a>`).join(' 或 ')}。已有合适书籍可继续用，不需整套购买。</p><p>${esc(p.entry)}</p><p><b>下一步：</b>${esc(p.next)}</p></details>`).join('')}</div></section>`;
+}
+function englishMediaActivityResourcesHTML(g){
+  const m=g.media;if(m.unavailable)return '';
+  const movie=growthResourceCatalog[m.key],audio=growthResourceCatalog[m.audio],book=growthResourceCatalog[m.book];
+  return `<div class="gv-resource">${g.screenMinutes?`<a href="${esc(movie.url)}" target="_blank" rel="noopener noreferrer">打开 ${esc(movie.title)} 动画入口 →</a><br>`:''}<a href="${esc(audio.url)}" target="_blank" rel="noopener noreferrer">查看 ${esc(audio.title)} 音频来源 →</a>${m.hasBook?`<br><a href="${esc(book.url)}" target="_blank" rel="noopener noreferrer">查看绘本介绍 →</a>`:''}<p class="gv-note">外部官方入口，本站不提供完整媒体。音频从 Listen 入口或已有正版材料播放；国内播放可用性未确认。</p></div>`;
+}
+function englishMediaWeekHTML(week){
+  const f=week.intake;if(f.mediaUnavailable)return '<section class="gv-media-week"><h4>本周沿用已有材料</h4><p class="gv-note">你反馈资源不方便，本周不依赖新链接或购书。使用家中已能播放的熟悉音频；没有音频时看已有图片说大意，约几分钟即可。下一轮重新填写资源情况后再选新材料。</p></section>';const pick=englishMediaSelection(f,week.stage),m=growthResourceCatalog[pick.key],voice=growthResourceCatalog[pick.audio],book=growthResourceCatalog[pick.book];
+  return `<section class="gv-media-week"><h4>本周只准备这些</h4><div class="gv-media-resource"><b>🎬 ${esc(m.title)}</b><p>${esc(pick.series)}。${f.screen==='none'?'你选择了不看屏幕，本周不安排动画观看。':'同一片段反复看，每日卡片会按时间预算缩短；周中安排一次只听日。'}</p><a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">查看官方内容 →</a></div><div class="gv-media-resource"><b>🎧 ${esc(voice.title)}</b><p>${pick.phase===2?'复习已熟悉歌曲，暂不提供故事音频文件。':'先看懂一点，再在当日或下一个活动日重复同名音频。'} 打开官方页面的 Listen 入口选择可用平台，或播放家中合法取得的同名音频。</p><a href="${esc(voice.url)}" target="_blank" rel="noopener noreferrer">查看音频来源 →</a></div><div class="gv-media-resource"><b>📚 ${esc(book.title)}</b><p>${f.book==='no'?'本周先列为借阅或选书参考；尚未拥有时不加入每日阅读时间。':'沿用已有书，一周重复一册或少量图页，不需要每天读一本新的。'}</p><a href="${esc(book.url)}" target="_blank" rel="noopener noreferrer">查看出版社介绍 →</a></div><p class="gv-note">每周收藏材料一次即可。链接为官方介绍或外部播放入口，本站不提供完整视频、音频和绘本；国内可用性与版本配套音频尚需确认。打不开时继续已有可用材料。</p></section>`;
+}
+
+// Community directory contains no invented members, posts, or invitation targets.
+const communityDirectory=[
+  {id:'age3',kind:'age',title:'3–4 岁家长同行',range:'初入幼儿园',min:3,max:4,topics:['入园适应','情绪陪伴','生活自理']},
+  {id:'age5',kind:'age',title:'5–6 岁家长同行',range:'幼儿园与幼小衔接',min:5,max:6,topics:['英语启蒙','阅读习惯','幼小衔接']},
+  {id:'age7',kind:'age',title:'7–8 岁家长同行',range:'小学起步',min:7,max:8,topics:['学习习惯','亲子沟通','自主安排']},
+  {id:'age9',kind:'age',title:'9–12 岁家长同行',range:'小学中高年段',min:9,max:12,topics:['时间安排','兴趣发展','同伴相处']},
+  {id:'age13',kind:'age',title:'13–15 岁家长同行',range:'青春期成长',min:13,max:15,topics:['亲子沟通','自主学习','情绪支持']},
+  ...['幼儿园小班','幼儿园中班','幼儿园大班','一年级','二年级','三年级','四年级','五年级','六年级'].map(grade=>({id:'grade'+grade,kind:'grade',title:grade+'家长同行',grade,range:'同年级家庭交流',topics:grade.startsWith('幼儿园')?['入园与适应','游戏与阅读','英语启蒙']:['作息与学习','亲子沟通','课外阅读']}))
+];
+let communityFilter='age';
+function communityRecommended(c){return c.kind==='grade'?!!state.profile?.grade&&c.grade===state.profile.grade:Number(state.profile?.age)>=c.min&&Number(state.profile?.age)<=c.max;}
+function renderCommunity(){
+  const list=document.getElementById('communityList');if(!list)return;
+  document.querySelectorAll('[data-community-filter]').forEach(b=>{const selected=b.dataset.communityFilter===communityFilter;b.classList.toggle('on',selected);b.setAttribute('aria-pressed',String(selected));});
+  const items=communityDirectory.filter(c=>c.kind===communityFilter).sort((a,b)=>Number(communityRecommended(b))-Number(communityRecommended(a)));
+  list.innerHTML=items.map(c=>`<article class="community-card"><div class="community-card-head"><h3>${esc(c.title)}</h3><span class="community-status">筹备中</span></div><p>${esc(c.range)}${communityRecommended(c)?' · 与孩子资料匹配':''}</p><div class="community-topics">${c.topics.map(t=>`<span>${esc(t)}</span>`).join('')}</div><button type="button" class="btn btn-soft" onclick="${growthCall('openCommunityDetail',c.id)}">了解社群</button></article>`).join('');
+}
+function setCommunityFilter(kind){if(!['age','grade'].includes(kind))return;communityFilter=kind;renderCommunity();}
+function openCommunity(){const btn=[...document.querySelectorAll('.nav-btn')].find(b=>b.dataset.page==='communityPage');renderCommunity();navTo('communityPage',btn);}
+function openCommunityDetail(id){
+  const c=communityDirectory.find(c=>c.id===id);if(!c)return;
+  document.getElementById('communityDetailTitle').textContent=c.title;
+  document.getElementById('communityDetailBody').innerHTML=`<span class="community-status">社群筹备中</span><p>为${esc(c.kind==='grade'?c.grade:c.title.replace('家长同行',''))}家庭准备的交流空间，围绕${c.topics.map(esc).join('、')}分享经验。</p><h4>计划一起做什么</h4><ul><li>分享一周安排和坚持过程中遇到的困难。</li><li>交流适合本阶段的绘本、动画与家庭活动。</li><li>讨论孩子的实际反应，尊重每个家庭的节奏。</li></ul><h4>交流约定</h4><p>由家长参与。尊重差异，不攀比、不刷广告；不公开孩子的姓名、照片、学校和联系方式。</p><p class="gv-note">尚未开放加入，暂无群链接或二维码。开放后，这里会显示加入方式。本页不收集联系方式，也不会自动订阅通知。</p>`;
+  document.getElementById('communityDetailModal').classList.add('show');
+}
+
 function buildGrowthWeek(f,index,stage,programId,options={}){
   const start=options.start||growthDatePlus(f.start,index*7);
-  const available=Math.min(f.budget-f.occupied,f.adult,options.short?5:90);
+  const mediaMain=f.priority==='english'&&isMediaEnglish(f);
+  const available=Math.min(f.budget-f.occupied,mediaMain?90:f.adult,options.short?5:90);
   const limitDays=options.fewer?3:7;
   const dayList=[];let session=0;
   for(let n=0;n<7;n++){
     const date=growthDatePlus(start,n),dow=parseLocalDate(date).getDay();
     const day={date,activities:[],reserved:f.occupied,total:f.occupied,adult:0,screen:0};
     if(f.days.includes(dow)&&session<limitDays){
-      const guide=f.priority==='english'?growthEnglishGuide(stage,f,session):growthGenericGuide(f.priority,stage,f);
+      const guide=f.priority==='english'?(isMediaEnglish(f)?englishMediaGuide(stage,f,session):growthEnglishGuide(stage,f,session)):growthGenericGuide(f.priority,stage,f);
       const mainMinutes=Math.min(available,f.age<=6?10:12);
-      guide.screenMinutes=['hello','walking','finnyHide'].includes(guide.resource)&&f.screen==='short'?Math.min(3,Math.floor(mainMinutes/3)):0;
-      const main={id:`${programId}w${index}d${n}a0`,minutes:mainMinutes,adultMinutes:mainMinutes,screenMinutes:guide.screenMinutes,goals:[f.priority,...guide.combined],guide};
+      if(guide.media)timeEnglishMediaGuide(guide,mainMinutes,f);
+      else guide.screenMinutes=['hello','walking','finnyHide'].includes(guide.resource)&&f.screen==='short'?Math.min(3,Math.floor(mainMinutes/3)):0;
+      const main={id:`${programId}w${index}d${n}a0`,minutes:mainMinutes,adultMinutes:guide.media?guide.adultMinutes:mainMinutes,screenMinutes:guide.screenMinutes,goals:[f.priority,...guide.combined],guide};
       day.activities.push(main);
-      const remaining=available-mainMinutes;
+      const remaining=Math.min(available-mainMinutes,f.adult-main.adultMinutes);
       const support=f.goals.filter(g=>g!==f.priority&&!main.goals.includes(g));
       if(support.length&&remaining>=3){
         const goal=support[(index*5+session)%support.length],extra=growthGenericGuide(goal,stage,f),minutes=Math.min(5,remaining);
+        if(extra.media)timeEnglishMediaGuide(extra,minutes,{...f,screen:'none'});
         day.activities.push({id:`${programId}w${index}d${n}a1`,minutes,adultMinutes:minutes,screenMinutes:0,goals:[goal],guide:extra});
       }
       day.total+=day.activities.reduce((s,a)=>s+a.minutes,0);
@@ -1749,10 +1869,10 @@ function buildGrowthWeek(f,index,stage,programId,options={}){
     }
     dayList.push(day);
   }
-  return {index,stage,start,end:growthDatePlus(start,6),title:growthStageTitles[f.priority][stage],intake:clone(f),constraints:{short:!!options.short,fewer:!!options.fewer},days:dayList,confirmed:false};
+  return {index,stage,start,end:growthDatePlus(start,6),title:f.priority==='english'&&isMediaEnglish(f)?growthResourceCatalog[englishMediaSelection(f,stage).key].title:growthStageTitles[f.priority][stage],intake:clone(f),constraints:{short:!!options.short,fewer:!!options.fewer},days:dayList,confirmed:false};
 }
 function buildGrowthProgram(f){
-  const id=growthId();const startingStage=f.priority==='english'&&f.experience==='ready'?1:0;
+  const id=growthId();const startingStage=f.priority==='english'&&!isMediaEnglish(f)&&f.experience==='ready'?1:0;
   return {id,version:2,title:`${growthGoalNames[f.priority]} · 家庭四周方案`,createdAt:new Date().toISOString(),intake:clone(f),activeWeek:0,reviews:[],weeks:Array.from({length:4},(_,w)=>buildGrowthWeek(f,w,Math.min(3,startingStage+w),id))};
 }
 function generateGrowthPlan(){
@@ -1780,6 +1900,7 @@ function growthResourceHTML(key){
 function growthEnglishWeekHTML(week){
   const f=week.intake;
   if(!f||!f.goals.includes('english'))return '';
+  if(isMediaEnglish(f)&&week.days.some(d=>d.activities.some(a=>a.guide.goal==='english')))return englishMediaWeekHTML(week);
   if(!week.days.some(d=>d.activities.some(a=>a.guide.goal==='english')))return '<div class="gv-note">英语方向仍保留在方案中，本周没有单独安排英语活动。可查看上方目标去向，复盘时调整重点或时间。</div>';
   const stage=week.stage,main=stage===0?'hello':stage===1?'walking':stage===2?(f.book==='brown'?'brown':'zoo'):'finnyHide';
   const aims=['让孩子愿意留下来，找到舒服的短时开场。','把两个熟悉声音和动作连起来，允许继续跟着大人做。','重复看少量动物图，支持指图、选择和共同讲述。','找出喜欢且家长能坚持的活动，在生活中重复。'];
@@ -1793,21 +1914,21 @@ function growthEnglishWeekHTML(week){
 function growthActivityHTML(a,date,feedback=true){
   const g=a.guide,resource=growthResourceHTML(g.resource),existing=state.plans.find(p=>p.growthActivityId===a.id);
   const first=Math.max(1,Math.floor(a.minutes/4)),last=1,middle=a.minutes-first-last;
-  const labels=[`开始约 ${first} 分钟`,`一起做约 ${middle} 分钟`,`结束约 ${last} 分钟`];
+  const labels=g.media?['看 / 理解画面','听熟悉内容','绘本 / 收尾']:[`开始约 ${first} 分钟`,`一起做约 ${middle} 分钟`,`结束约 ${last} 分钟`];
   const selected=state.growth.feedback[a.id];
   const buttons=feedback?`<h5>今天的感受（不代表掌握程度）</h5><div class="gv-feedback">${[['like','喜欢'],['mixed','一般'],['dislike','不喜欢'],['skip','今天没做']].map(([key,label])=>`<button type="button" class="plan-choice ${selected?.value===key?'on':''}" onclick="${growthCall('recordGrowthFeedback',a.id,key)}">${label}</button>`).join('')}</div>`:'';
   return `<details class="gv-activity" data-activity="${esc(a.id)}"><summary>${esc(g.name)} · ${a.minutes} 分钟${existing?' · 已加入任务':''}</summary>
     <p><b>为什么这样安排：</b>${esc(g.why)}</p>${g.sessionFocus?`<p><b>本次重点：</b>${esc(g.sessionFocus)}</p>`:''}
-    <p><b>孩子今天做：</b>${esc(g.name)}。可以用动作或指图参与。</p>
+    <p><b>孩子今天做：</b>${esc(g.name)}。${g.media?'无需跟读、背词或额外做题。':'可以用动作或指图参与。'}</p>
     <p><b>大人今天做：</b>${esc(g.parent)}</p>
-    <h5>准备材料</h5><p>${esc(g.prepare)}</p>${resource}
-    <h5>陪伴步骤</h5><ol>${g.steps.map((s,i)=>`<li><b>${labels[i]||'继续'}：</b>${esc(s)}</li>`).join('')}</ol>
+    <h5>准备材料</h5><p>${esc(g.prepare)}</p>${g.media?englishMediaActivityResourcesHTML(g):resource}
+    <h5>${g.media?'今天照着做':'陪伴步骤'}</h5><ol>${g.steps.map((s,i)=>`<li><b>${labels[i]||'继续'}：</b>${esc(s)}</li>`).join('')}</ol>
     <h5>家长可以这样说</h5><p>${esc(g.say)}</p>
     <h5>没有材料 / 不愿参与 / 太难</h5><p>${esc(g.fallback)}</p>
     <h5>已经很熟悉</h5><p>${esc(g.harder)}</p>
     <h5>今天只有几分钟</h5><p>${esc(g.busy)}</p>
     <h5>观察什么</h5><p>${esc(g.observe)}</p>
-    <p class="gv-note">${g.combined.length?'结合目标：'+g.combined.map(x=>growthGoalNames[x]).map(esc).join('、')+'；同一次活动只计一次时长和积分。':'完成参与后可打卡；打卡与能力观察分别记录。'}${a.screenMinutes?' 本次听看上限 '+a.screenMinutes+' 分钟，其余时间共同游戏。':' 本次孩子无需使用屏幕。'}</p>${buttons}</details>`;
+    <p class="gv-note">${g.combined.length?'结合目标：'+g.combined.map(x=>growthGoalNames[x]).map(esc).join('、')+'；同一次活动只计一次时长和积分。':'完成参与后可打卡；打卡与能力观察分别记录。'}${a.screenMinutes?' 本次看画面上限 '+a.screenMinutes+' 分钟'+(g.media?'，其余按音频与共读安排。':'，其余时间共同游戏。'):' 本次孩子无需使用屏幕。'}</p>${buttons}</details>`;
 }
 function renderGrowthAssistant(){
   if(!state.growth||!document.getElementById('growthPlanResults'))return;
@@ -1819,19 +1940,20 @@ function renderGrowthAssistant(){
   const week=program.weeks[selected],f=week.intake||program.intake,current=selected===program.activeWeek;
   const sessions=week.days.filter(d=>d.activities.length).length;
   const entries=week.days.flatMap(d=>d.activities).length;
-  summary.innerHTML=`<div class="gv-program"><h4>${esc(program.title)}</h4><span class="gv-tag">${draft?'方案预览':'已确认方案'}</span><p class="gv-note">${f.age} 岁 · 每天总预算 ${f.budget} 分钟，预留已有活动 ${f.occupied} 分钟 · 大人最多陪伴 ${f.adult} 分钟。${f.interest?'你填写：'+esc(f.interest)+'。':''}</p><p class="gv-note">本轮以${esc(growthGoalNames[f.priority])}为重点；四周是可调整的方向。第 ${selected+1} 周有 ${sessions} 个活动日、${entries} 项活动，日期到了也不强制进阶。</p>${f.priority==='english'&&f.experience==='unsure'?'<div class="gv-warning">起点尚不确定：先从简单互动观察参与情况，复盘时再决定是否继续。</div>':''}<div class="gv-goal-list">${f.goals.map(goal=>{const s=growthGoalStatus(program,week,goal);return `<div class="gv-goal"><strong>${esc(growthGoalNames[goal])} · ${esc(s.status)}</strong><span>${esc(s.reason)}</span></div>`;}).join('')}</div></div>`;
+  summary.innerHTML=`<div class="gv-program"><h4>${esc(program.title)}</h4><span class="gv-tag">${draft?'方案预览':'已确认方案'}</span><p class="gv-note">${f.age} 岁 · 每天总预算 ${f.budget} 分钟，预留已有活动 ${f.occupied} 分钟 · 大人主动陪伴最多 ${f.adult} 分钟。${f.interest?'你填写：'+esc(f.interest)+'。':''}</p><p class="gv-note">本轮以${esc(growthGoalNames[f.priority])}为重点；四周是可调整的方向。第 ${selected+1} 周有 ${sessions} 个活动日、${entries} 项活动，日期到了也不强制进阶。</p>${f.priority==='english'&&f.experience==='unsure'?'<div class="gv-warning">起点尚不确定：先从简单互动观察参与情况，复盘时再决定是否继续。</div>':''}<div class="gv-goal-list">${f.goals.map(goal=>{const s=growthGoalStatus(program,week,goal);return `<div class="gv-goal"><strong>${esc(growthGoalNames[goal])} · ${esc(s.status)}</strong><span>${esc(s.reason)}</span></div>`;}).join('')}</div></div>`;
   const roadmap=`<h4 class="gv-section-title" style="margin-top:18px">② 四周路线</h4><div class="gv-roadmap">${program.weeks.map(w=>`<div class="gv-road ${w.index===selected?'active':''}"><span>第 ${w.index+1} 周 · ${w.confirmed?'已确认':'可调整预览'}</span><b>${esc(w.title)}</b><span>${esc(w.start)} — ${esc(w.end)}</span></div>`).join('')}</div><div class="gv-tabs" role="tablist" aria-label="查看不同周安排">${program.weeks.map(w=>`<button type="button" class="plan-choice" role="tab" aria-selected="${selected===w.index}" onclick="${growthCall('showGrowthWeek',w.index)}">第 ${w.index+1} 周</button>`).join('')}</div>`;
   let actions='';
   if(draft&&selected===0)actions=`<div class="gv-actions"><button type="button" class="btn btn-primary" onclick="confirmGrowthWeek()">确认并加入本周任务</button>${growthActiveProgram()?'<button type="button" class="btn btn-soft" onclick="discardGrowthDraft()">回到当前方案</button>':''}</div>`;
   else if(draft)actions='<div class="gv-note">后续周用于预览。先确认第 1 周，再根据周复盘确认后续安排。</div>';
   else if(!current&&!week.confirmed)actions='<div class="gv-note">这是后续预览。请在当前执行周完成复盘，再确认下一周的具体安排。</div>';
   else if(week.confirmed)actions=`<div class="gv-note">本周活动按指定日期显示在首页，未安排的日子可以休息。过去的打卡与积分记录保留。</div><button type="button" class="btn btn-soft" onclick="restoreGrowthWeekTasks()">补回本周误删的未完成活动</button>`;
-  const days=`<h4 class="gv-section-title" style="margin-top:18px">③ 第 ${selected+1} 周 · 每日陪伴指南</h4>${week.days.map(day=>`<div class="gv-day"><div class="gv-day-head"><span>${esc(day.date)} · ${['周日','周一','周二','周三','周四','周五','周六'][parseLocalDate(day.date).getDay()]}</span><span class="gv-budget">总计 ${day.total}/${f.budget} 分钟 · 新增陪伴 ${day.adult} 分钟</span></div>${day.activities.length?day.activities.map(a=>growthActivityHTML(a,day.date,!draft&&week.confirmed&&day.date<=todayKey())).join(''):'<p class="gv-note">今天不安排新活动，可以休息或按原有安排活动。</p>'}</div>`).join('')}`;
-  results.innerHTML=roadmap+growthEnglishWeekHTML(week)+actions+days+(!draft&&current?growthReviewHTML(program,week):'');
+  const days=`<h4 class="gv-section-title" style="margin-top:18px">③ 第 ${selected+1} 周 · 每日陪伴指南</h4>${week.days.map(day=>`<div class="gv-day"><div class="gv-day-head"><span>${esc(day.date)} · ${['周日','周一','周二','周三','周四','周五','周六'][parseLocalDate(day.date).getDay()]}</span><span class="gv-budget">总计 ${day.total}/${f.budget} 分钟 · 主动陪伴 ${day.adult} 分钟</span></div>${day.activities.length?day.activities.map(a=>growthActivityHTML(a,day.date,!draft&&week.confirmed&&day.date<=todayKey())).join(''):'<p class="gv-note">今天不安排新活动，可以休息或按原有安排活动。</p>'}</div>`).join('')}`;
+  results.innerHTML=(f.priority==='english'&&isMediaEnglish(f)?englishMediaRouteHTML(f):'')+roadmap+growthEnglishWeekHTML(week)+actions+days+(!draft&&current?growthReviewHTML(program,week):'');
   document.querySelectorAll('#growthPlanResults details.gv-activity').forEach(el=>{el.open=openActivities.includes(el.dataset.activity);});
   const review=state.growth.nextDraft?.programId===program.id?state.growth.nextDraft.review:null;
   if(review&&!draft&&current){Object.entries({gvReviewCause:'cause',gvReviewInterest:'interest',gvReviewUnderstanding:'understanding',gvReviewNote:'note'}).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.value=review[key]||'';});}
   renderGrowthHomeBanner();
+  renderCommunity();
 }
 function showGrowthWeek(index){growthViewWeek=index;renderGrowthAssistant();}
 function discardGrowthDraft(){state.growth.draft=null;growthViewWeek=null;saveState();renderGrowthAssistant();}
@@ -1901,7 +2023,7 @@ function buildGrowthAdjustment(program,week,review){
   if(review.cause==='time'){options.short=true;options.fewer=true;reasons.push('时间不足：下一周最多三个活动日，每次最多 5 分钟，保持熟悉内容。');}
   if(review.cause==='difficulty'){stage=Math.max(0,stage-1);reasons.push('感觉太难：退回一个更简单的活动阶段，大人先示范。');}
   else if(review.understanding==='needsdemo'){reasons.push('仍需要示范：维持当前阶段，允许动作和指图回应。');}
-  if(review.cause==='unavailable'){f.book='no';f.screen='none';reasons.push('材料或资源不方便：改用家中物品与自画图片，无需屏幕或购买。');}
+  if(review.cause==='unavailable'){f.book='no';f.screen='none';f.mediaUnavailable=true;reasons.push('材料或资源不方便：改用家中物品与自画图片，无需屏幕或购买。');}
   if(review.cause==='resistance'||review.interest==='dislike'){f.mode='play';f.screen='none';options.short=true;reasons.push('暂时不喜欢：缩短为最多 5 分钟，改用孩子选择的游戏，不强迫跟读。');}
   const advance=review.cause==='none'&&review.interest==='like'&&review.understanding==='responds';
   if(advance){stage=Math.min(3,stage+1);reasons.push('愿意参与且有熟悉回应：试下一步；不同时增加时长。');}
@@ -2235,6 +2357,7 @@ function navTo(pageId, btn){
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   window.scrollTo(0,0);
+  if(pageId==='communityPage')renderCommunity();
   if(pageId==='tasksPage'){
     const today=todayKey();
     if(!document.getElementById('dateTypeStart').value) document.getElementById('dateTypeStart').value=today;
