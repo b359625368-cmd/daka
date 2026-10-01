@@ -87,11 +87,13 @@ button{cursor:pointer}
   background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);
   backdrop-filter:blur(8px)
 }
-.hero-metric:first-child{text-align:left;align-items:flex-start;background:transparent;border-color:transparent;padding-left:0}
-.hero-label{font-size:11px;opacity:.9;margin-bottom:4px}
-.hero-num{font-size:42px;font-weight:900;line-height:1;letter-spacing:-.03em}
-.hero-value{font-size:25px;font-weight:900;line-height:1.05;white-space:nowrap}
-.hero-value small{font-size:11px;font-weight:800;opacity:.9}
+.hero-metric:first-child{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;gap:12px;text-align:left;background:transparent;border-color:transparent;padding:4px 0 12px}
+.hero-label{font-size:17px;font-weight:750;opacity:.96;margin-bottom:10px}
+.hero-metric:first-child .hero-label{margin:0}
+.hero-num{font-size:50px;font-weight:900;line-height:1.1;letter-spacing:-.03em;min-width:0;max-width:72%;overflow-wrap:anywhere;text-align:right;font-variant-numeric:tabular-nums}
+.hero-value{display:flex;justify-content:center;align-items:baseline;gap:7px;flex-wrap:wrap;font-size:40px;font-weight:900;line-height:1.2;max-width:100%;font-variant-numeric:tabular-nums}
+.hero-value>span{min-width:0;overflow-wrap:anywhere}
+.hero-value small{font-size:18px;font-weight:800;opacity:.96;flex:none}
 .hero-progress-block{position:relative;z-index:1;margin-top:14px}
 .hero-progress-head{
   display:flex;align-items:center;justify-content:space-between;gap:8px;
@@ -322,10 +324,10 @@ textarea{min-height:92px;resize:none}
   .hero-top{gap:7px}
   .hero-metric{padding:9px 5px;border-radius:14px}
   .hero-metric:first-child{padding-left:0}
-  .hero-num{font-size:38px}
-  .hero-value{font-size:22px}
-  .hero-num{font-size:40px}
-  .hero-subnum{font-size:26px}
+  .hero-label{font-size:16px}
+  .hero-num{font-size:46px}
+  .hero-value{font-size:36px}
+  .hero-value small{font-size:17px}
   .task-name,.reward-name{font-size:16px}
   .action-row{gap:6px}
   .btn{padding:10px 12px;font-size:13px}
@@ -468,6 +470,30 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
 @media(max-width:380px){.gv-grid{grid-template-columns:1fr}.gv-roadmap{grid-template-columns:1fr}.gv-day-head{display:block}.gv-budget{display:block;margin-top:4px}.plan-assistant-card{padding:13px}}
 
 .gv-next{border:1px solid #cfd8f6;background:#f3f6ff;border-radius:15px;padding:13px;margin-top:14px}.gv-next p{font-size:12px;line-height:1.7}.gv-next .btn{margin:5px 4px 0 0}
+/* Shared product layout and reading rhythm */
+:root{--muted:#68778e}
+.topbar{gap:12px;align-items:flex-start}.brand{min-width:0}.brand p{line-height:1.6;overflow-wrap:anywhere}.avatar{flex:none}
+.hero-top{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.hero-metric{padding:16px 10px;border-radius:20px}
+.hero-progress-head{font-size:14px}.hero-progress-value{font-size:18px}.hero-foot{font-size:13px;line-height:1.6}.hero-foot span{white-space:normal}
+.gv-home-banner{font-size:13px;line-height:1.65}.gv-home-banner b{display:block;font-size:14px;color:#354564;margin-bottom:4px}.gv-home-banner button{margin-top:8px;border:0;border-radius:12px;background:var(--blue-soft);color:var(--primary);font-size:13px;font-weight:750;padding:8px 12px}
+.nav-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;border-radius:12px}
+.section-title,.panel-head{gap:10px;flex-wrap:wrap}.section-title .link{flex:none}
+.task-desc,.reward-desc{font-size:14px;line-height:1.55;overflow-wrap:anywhere}
+.task-card .action-row,.reward-card .action-row,.task-manage-card .action-row{flex:none}
+.task-manage-card .action-row{flex-direction:column;align-items:stretch}
+.setting-item{gap:12px;align-items:flex-start}.setting-item>span{flex:none}.setting-item>b{min-width:0;text-align:right;overflow-wrap:anywhere}
+.profile-box h3,.profile-box p,.dialog-text{overflow-wrap:anywhere}
+.daytype-badge,.points-pill{max-width:100%;overflow-wrap:anywhere}
+.mini-card b{font-size:34px}.mini-card span{font-size:13px;line-height:1.4}
+.range-note,.gv-note{font-size:13px;line-height:1.65}.gv-intake .field label{font-size:14px}
+.plan-assistant-head p{font-size:14px;line-height:1.7}.gv-activity p,.gv-activity li{font-size:13px}
+.schedule-card>summary{cursor:pointer;list-style:none;margin-bottom:0}.schedule-card>summary::-webkit-details-marker{display:none}
+.schedule-card>summary h3::before{content:'▸';margin-right:8px;color:var(--primary)}.schedule-card[open]>summary h3::before{content:'▾'}.schedule-card[open]>summary{margin-bottom:12px}
+.calendar-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;color:var(--muted);font-size:12px}.calendar-legend span{display:inline-flex;align-items:center;gap:5px}.calendar-legend i{width:9px;height:9px;border-radius:50%;background:#20b26c}.calendar-legend .partial-dot{background:#f6a437}.calendar-legend .planned-dot{background:var(--primary)}
+.day.full{background:#e8f7ee;color:#168653;border-color:#bce5c9}.day.partial{background:#fff3df;color:#a76208;border-color:#f4d5a0}
+@media(max-width:420px){.hero-metric{padding:14px 10px}.icon-bubble,.reward-bubble{width:48px;height:48px;font-size:24px;border-radius:16px}.task-card,.reward-card,.task-manage-card{gap:10px;padding:13px}.plan-assistant-head{gap:10px}.plan-assistant-icon{width:44px;height:44px;flex-basis:44px;font-size:24px}.plan-assistant-head h3{font-size:19px}}
+@media(max-width:350px){.hero-label{font-size:15px}.hero-num{font-size:40px}.hero-value{font-size:32px}.hero-value small{font-size:16px}.hero-top{gap:9px}.mini-card b{font-size:28px}}
 @media(max-width:480px){
   .gv-grid{grid-template-columns:minmax(0,1fr);gap:4px}
   .input,textarea,select.input{font-size:16px}
@@ -514,12 +540,12 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
         <div class="hero-inline-bar"><i id="progressBar" style="width:0%"></i></div>
       </div>
       <div class="hero-foot">
-        <span>每天一点点，比一口吃成学霸靠谱。</span>
+        <span>每一次陪伴与坚持，都让成长看得见。</span>
       </div>
     </section>
 
     <section class="section">
-      <div id="growthHomeBanner" class="gv-home-guide" style="display:none"></div>
+      <div id="growthHomeBanner" class="gv-home-banner" style="display:none"></div>
       <div class="section-title">
         <h3>今日计划</h3>
         <button class="link" onclick="openPlanModal('add')">＋ 新建计划</button>
@@ -551,7 +577,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     <div class="topbar">
       <div class="brand">
         <h2>打卡日历</h2>
-        <p>绿色全勤，橙色部分完成。</p>
+        <p>查看打卡记录，提前安排接下来的任务。</p>
       </div>
     </div>
     <section class="card calendar-shell">
@@ -565,7 +591,8 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
       </div>
       <div class="week-grid"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div>
       <div class="calendar-grid" id="calendarGrid"></div>
-      <div class="range-note">点选日期可查看安排、提前添加单日任务。右上角紫点表示有家长设置的单日任务。</div>
+      <div class="calendar-legend"><span><i></i>全部完成</span><span><i class="partial-dot"></i>部分完成</span><span><i class="planned-dot"></i>单日安排</span></div>
+      <div class="range-note">点选日期，查看当天安排或添加单日任务。</div>
     </section>
   </main>
 
@@ -574,19 +601,18 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     <div class="topbar">
       <div class="brand">
         <h2>任务与奖励管理</h2>
-        <p>任务和积分奖励都在这里管理；首页负责日常打卡和兑换，管理入口统一放在这里。</p>
       </div>
     </div>
 
-    <section class="card schedule-card">
-      <div class="panel-head">
-        <h3>日期类型设置</h3>
+    <details class="card schedule-card">
+      <summary class="panel-head">
+        <h3>日程设置</h3>
         <span class="muted" id="todayTypeText">今天</span>
-      </div>
-      <p class="hint" style="margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.6">默认周一到周五为学习日，周六周日为周末。学校放假、调休上课这类特殊日期，可以在这里覆盖默认规则。</p>
+      </summary>
+      <p class="hint" style="margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.6">学习日、周末和假期可分别安排任务。遇到学校放假或调休，可调整指定日期的类型。</p>
       <div class="range-grid">
-        <div class="field" style="margin-top:0"><label>开始日期</label><input id="dateTypeStart" class="input" type="date"></div>
-        <div class="field" style="margin-top:0"><label>结束日期</label><input id="dateTypeEnd" class="input" type="date"></div>
+        <div class="field" style="margin-top:0"><label for="dateTypeStart">开始日期</label><input id="dateTypeStart" class="input" type="date"></div>
+        <div class="field" style="margin-top:0"><label for="dateTypeEnd">结束日期</label><input id="dateTypeEnd" class="input" type="date"></div>
       </div>
       <div class="field">
         <label>设置为</label>
@@ -601,15 +627,15 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
         <button class="btn btn-primary" onclick="applyDateTypeRange()">保存日期设置</button>
       </div>
       <div class="range-note">结束日期可以不填，系统会只设置开始日期。手动设置优先于“工作日 / 周末”自动判断。</div>
-    </section>
+    </details>
 
     <section class="section" id="growthAssistant">
       <div class="plan-assistant-card">
         <div class="plan-assistant-head">
           <div class="plan-assistant-icon">✨</div>
-          <div><h3>成长计划助手 <span class="gv-tag">V2</span></h3><p>从家庭情况出发，安排四周方向、本周活动和家长陪伴方法。每周一起复盘，按实际情况调整。</p></div>
+          <div><h3>成长计划助手</h3><p>根据孩子年龄、兴趣和家庭时间，安排四周成长方向与每天的具体活动。查看陪伴方法和材料建议，每周复盘，调整适合孩子的节奏。</p></div>
         </div>
-        <div class="gv-note">当前为家庭活动试用版，使用已整理的活动和资源生成建议。英语详细样例以 4–6 岁家庭入门为主；其他年龄与方向提供基础活动参考。</div>
+        <div class="gv-note">英语启蒙提供适合 4–6 岁的入门活动、绘本与儿歌建议；阅读、运动、生活自理等方向可结合孩子的情况选择和调整。</div>
         <details id="growthIntakePanel" class="gv-intake" open>
           <summary>① 了解孩子与家庭安排</summary>
           <form id="growthIntakeForm" onsubmit="event.preventDefault(); generateGrowthPlan()">
@@ -643,12 +669,12 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     <section class="section">
       <div class="section-title"><h3>全部任务</h3><button class="link" onclick="openPlanModal('add')">＋ 新建计划</button></div>
       <div class="chips" style="margin-bottom:10px"><button class="chip" type="button" onclick="openSingleDayPlan()">📅 添加单日任务</button></div>
-      <div class="range-note" style="margin:0 0 12px">假期每天安排不同时，可提前添加单日任务，只在指定日期出现。学习日、周末和假期的重复任务仍按原设置显示；不需要的学习任务可编辑为仅适用学习日。</div>
+      <div class="range-note" style="margin:0 0 12px">单日任务只在指定日期出现；重复任务按学习日、周末或假期显示。</div>
       <div id="manageTaskList" class="task-list"></div>
     </section>
 
     <section class="section">
-      <div class="section-title"><h3>奖励管理</h3><button class="link" onclick="openRewardModal('add')">＋ 新建奖励</button></div><div class="range-note" style="margin:0 0 12px">这里负责新增、编辑和删除奖励；首页只显示兑换按钮。</div>
+      <div class="section-title"><h3>奖励管理</h3><button class="link" onclick="openRewardModal('add')">＋ 新建奖励</button></div><div class="range-note" style="margin:0 0 12px">设置孩子期待的小奖励，用完成任务获得的积分兑换。</div>
       <div id="manageRewardList" class="reward-list"></div>
     </section>
   </main>
@@ -657,7 +683,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     <div class="topbar">
       <div class="brand">
         <h2>数据统计</h2>
-        <p>记录是为了鼓励，不是为了把日子过成 KPI。</p>
+        <p>看见每一次坚持，了解孩子的成长节奏。</p>
       </div>
     </div>
 
@@ -681,7 +707,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     <div class="topbar">
       <div class="brand">
         <h2>我的</h2>
-        <p>把奖励规则固定下来，家长也轻松一点。</p>
+        <p>管理孩子资料、账号同步与数据备份。</p>
       </div>
     </div>
 
@@ -724,7 +750,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
       <div style="margin-top:12px">
         <button id="authConnectionButton" class="btn btn-soft" onclick="checkAuthConnection()">检查登录连接</button>
         <div id="authConnectionResult" class="range-note" role="status" aria-live="polite" hidden></div>
-        <div class="range-note">当前版本 · 20261001-4</div>
+        <div class="range-note">当前版本 · 20261001-5</div>
       </div>
     </section>
 
@@ -739,11 +765,9 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
 
     <section class="card card-block section">
       <div class="settings-list">
-        <div class="setting-item"><span>计划数量</span><b id="planCount">0</b></div>
+        <div class="setting-item"><span>任务数量</span><b id="planCount">0</b></div>
         <div class="setting-item"><span>奖励数量</span><b id="rewardCount">0</b></div>
         <div class="setting-item"><span>数据保存</span><b id="storageModeLabel">本机浏览器</b></div>
-        <div class="setting-item"><span>广告</span><b>0</b></div>
-        <div class="setting-item"><span>会员</span><b>不存在这玩意</b></div>
       </div>
     </section>
 
@@ -770,9 +794,9 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
 <div id="checkModal" class="modal" onclick="closeOnBg(event, 'checkModal')">
   <div class="sheet">
     <h3 id="checkTitle">完成打卡</h3>
-    <p class="hint">可以顺手记一句今天做了什么，后面回看会很有成就感。</p>
+    <p class="hint">记录今天的活动和感受，留下孩子成长的点滴。</p>
     <div class="field">
-      <label>今日备注</label>
+      <label for="checkNote">今日备注</label>
       <textarea id="checkNote" placeholder="例如：一起玩了问候游戏；读了喜欢的一页绘本……"></textarea>
     </div>
     <div class="field">
@@ -795,7 +819,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
   <div class="sheet plan-sheet">
     <div class="sheet-header">
     <h3 id="planModalTitle">新建计划</h3>
-    <p class="hint">任务名称尽量短一点，看起来更清爽，也更容易让孩子一眼知道今天做什么。</p>
+    <p class="hint">写清要做的事情，让孩子更容易理解。可设置重复任务，或提前安排指定日期。</p>
     </div>
     <div class="sheet-body">
     <div class="field">
@@ -1020,7 +1044,7 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
 <div id="rewardModal" class="modal" onclick="closeOnBg(event, 'rewardModal')">
   <div class="sheet">
     <h3 id="rewardModalTitle">新建奖励</h3>
-    <p class="hint">把奖励定得具体一些，比如“周末吃一次冰淇淋”，比“奖励一下”更有仪式感。下面这些是适合低龄孩子的常用奖励，可以一键带入。</p>
+    <p class="hint">选择孩子喜欢的奖励，设置兑换积分，也可以使用下方建议。</p>
 
     <div class="field">
       <label>推荐奖励（点一下自动填入）</label>
@@ -1028,11 +1052,11 @@ select.input{appearance:auto;-webkit-appearance:menulist;background:#fbfcff}
     </div>
 
     <div class="field">
-      <label>奖励名称</label>
+      <label for="rewardName">奖励名称</label>
       <input id="rewardName" class="input" placeholder="例如：周末吃一次冰淇淋">
     </div>
     <div class="field">
-      <label>兑换所需积分</label>
+      <label for="rewardCost">兑换所需积分</label>
       <input id="rewardCost" class="input" type="number" min="1" step="1" placeholder="例如：30">
     </div>
     <div class="field">
@@ -1764,7 +1788,7 @@ function growthEnglishWeekHTML(week){
   const resource=growthResourceCatalog[main];
   const canUse=week.days.some(d=>d.activities.some(a=>a.guide.resource===main));
   const chosen=stage===2&&canUse?'优先用你已有的 '+resource.title+'，选一两幅喜欢的动物图反复共读。':backup[stage];
-  return `<details class="gv-review"><summary>本周英语准备清单与材料选择</summary><p><b>本阶段目的：</b>${esc(aims[stage])}</p><p><b>按家庭情况先这样做：</b>${esc(chosen)} ${f.screen==='none'?'你选择了不使用屏幕，孩子活动无需打开视频。':''}${f.book==='no'&&stage===2?'你填写了暂无绘本，已按玩具/图片排活动，无需为执行计划先买书。':''}</p><p><b>具体材料${canUse?'':'（可选参考）'}：</b>${esc(resource.title)}。${stage===3?'只在有熟悉理解线索、喜欢儿歌且允许短时听看的活动中作为选项；先由家长预览。':'同一材料可以整周重复，不用每天换新。'}</p>${growthResourceHTML(main)}${stage===2?'<p class="gv-note">如果家里已有另一种书，可作为备选；不需要两本都买。</p>'+growthResourceHTML(main==='zoo'?'brown':'zoo'):''}<p><b>本周准备一次即可：</b>${stage===1?'一个玩偶、一个纸盒和安全的活动空间。':stage===2?'两幅喜欢的动物图或已有书中的少量图页，以及一个纸盒。':'两个熟悉的角色、一张纸和一个收纳盒。'} ${f.parent==='help'?'先只熟悉活动卡上的一两个表达；中文解释玩法也可以。':'先熟悉步骤，给孩子等待和选择的机会。'}</p><p><b>周末观察：</b>${esc(observe[stage])} 只有愿意参与且对熟悉内容有回应时，复盘才建议下一步；否则重复或缩短。</p><p class="gv-note">这些是家庭陪伴建议，四周并非掌握进度承诺。资源介绍已核对，国内实际播放及书籍取得仍需家长确认；没有材料时可直接使用本页原创活动。</p></details>`;
+  return `<details class="gv-review"><summary>本周英语准备清单与材料选择</summary><p><b>本阶段目的：</b>${esc(aims[stage])}</p><p><b>按家庭情况先这样做：</b>${esc(chosen)} ${f.screen==='none'?'你选择了不使用屏幕，孩子活动无需打开视频。':''}${f.book==='no'&&stage===2?'你填写了暂无绘本，已按玩具/图片排活动，无需为执行计划先买书。':''}</p><p><b>具体材料${canUse?'':'（可选参考）'}：</b>${esc(resource.title)}。${stage===3?'只在有熟悉理解线索、喜欢儿歌且允许短时听看的活动中作为选项；先由家长预览。':'同一材料可以整周重复，不用每天换新。'}</p>${growthResourceHTML(main)}${stage===2?'<p class="gv-note">如果家里已有另一种书，可作为备选；不需要两本都买。</p>'+growthResourceHTML(main==='zoo'?'brown':'zoo'):''}<p><b>本周准备一次即可：</b>${stage===1?'一个玩偶、一个纸盒和安全的活动空间。':stage===2?'两幅喜欢的动物图或已有书中的少量图页，以及一个纸盒。':'两个熟悉的角色、一张纸和一个收纳盒。'} ${f.parent==='help'?'先只熟悉活动卡上的一两个表达；中文解释玩法也可以。':'先熟悉步骤，给孩子等待和选择的机会。'}</p><p><b>周末观察：</b>${esc(observe[stage])} 只有愿意参与且对熟悉内容有回应时，复盘才建议下一步；否则重复或缩短。</p><p class="gv-note">按孩子的兴趣和反应调整节奏，四周安排可重复或延长。请先预览资源，确认适合孩子；没有材料时，也可以使用页面中的替代活动。</p></details>`;
 }
 function growthActivityHTML(a,date,feedback=true){
   const g=a.guide,resource=growthResourceHTML(g.resource),existing=state.plans.find(p=>p.growthActivityId===a.id);
@@ -1802,7 +1826,7 @@ function renderGrowthAssistant(){
   else if(draft)actions='<div class="gv-note">后续周用于预览。先确认第 1 周，再根据周复盘确认后续安排。</div>';
   else if(!current&&!week.confirmed)actions='<div class="gv-note">这是后续预览。请在当前执行周完成复盘，再确认下一周的具体安排。</div>';
   else if(week.confirmed)actions=`<div class="gv-note">本周活动按指定日期显示在首页，未安排的日子可以休息。过去的打卡与积分记录保留。</div><button type="button" class="btn btn-soft" onclick="restoreGrowthWeekTasks()">补回本周误删的未完成活动</button>`;
-  const days=`<h4 class="gv-section-title" style="margin-top:18px">③ 第 ${selected+1} 周 · 每日陪伴指南</h4>${week.days.map(day=>`<div class="gv-day"><div class="gv-day-head"><span>${esc(day.date)} · ${['周日','周一','周二','周三','周四','周五','周六'][parseLocalDate(day.date).getDay()]}</span><span class="gv-budget">总计 ${day.total}/${f.budget} 分钟 · 新增陪伴 ${day.adult} 分钟</span></div>${day.activities.length?day.activities.map(a=>growthActivityHTML(a,day.date,!draft&&week.confirmed&&day.date<=todayKey())).join(''):'<p class="gv-note">本日不新增活动。可以休息或继续已预留的安排；不补做欠账。</p>'}</div>`).join('')}`;
+  const days=`<h4 class="gv-section-title" style="margin-top:18px">③ 第 ${selected+1} 周 · 每日陪伴指南</h4>${week.days.map(day=>`<div class="gv-day"><div class="gv-day-head"><span>${esc(day.date)} · ${['周日','周一','周二','周三','周四','周五','周六'][parseLocalDate(day.date).getDay()]}</span><span class="gv-budget">总计 ${day.total}/${f.budget} 分钟 · 新增陪伴 ${day.adult} 分钟</span></div>${day.activities.length?day.activities.map(a=>growthActivityHTML(a,day.date,!draft&&week.confirmed&&day.date<=todayKey())).join(''):'<p class="gv-note">今天不安排新活动，可以休息或按原有安排活动。</p>'}</div>`).join('')}`;
   results.innerHTML=roadmap+growthEnglishWeekHTML(week)+actions+days+(!draft&&current?growthReviewHTML(program,week):'');
   document.querySelectorAll('#growthPlanResults details.gv-activity').forEach(el=>{el.open=openActivities.includes(el.dataset.activity);});
   const review=state.growth.nextDraft?.programId===program.id?state.growth.nextDraft.review:null;
@@ -1965,7 +1989,7 @@ function renderTasks(){
   const type = dateTypeFor(k);
   const plans = applicablePlansForDate(k);
   if(!plans.length){
-    box.innerHTML = `<div class="empty">今天是 ${dayTypeIcon(type)} ${dayTypeLabel(type)}，没有需要显示的任务。<br>可以到“任务”栏调整任务适用日期。</div>`;
+    box.innerHTML = `<div class="empty">今天是 ${dayTypeIcon(type)} ${dayTypeLabel(type)}，暂无安排。<br>可以添加单日任务，或在“任务”页设置重复任务。</div>`;
     return;
   }
   box.innerHTML = plans.map(p => {
@@ -2851,7 +2875,7 @@ function updateAccountUI(){
     out.style.display = 'none';
     inn.style.display = 'block';
     if(email) email.textContent = currentUser.email || '已登录';
-    if(storage) storage.textContent = 'Supabase 云端';
+    if(storage) storage.textContent = '账号云端';
     setSyncStatus(cloudReady ? '已同步' : '已登录');
   }else{
     out.style.display = 'block';
