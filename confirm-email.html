@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>邮箱验证 · 成长打卡</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f7f7ff;color:#202b43;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;padding:28px 18px}.card{max-width:460px;margin:10vh auto 0;background:#fff;border:1px solid #eeedf7;border-radius:24px;padding:28px;box-shadow:0 14px 36px #2e345e0b}h1{font-size:24px;margin:0 0 10px}p{color:#77809a;line-height:1.7}.notice{margin-top:18px;color:#614bc8}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>邮箱验证</h1>
+    <p id="notice" class="notice" role="status">正在检查验证结果…</p>
+    <p>完成后请返回成长打卡小程序，使用刚注册的邮箱和密码登录。</p>
+  </main>
+  <script>
+    'use strict';
+    const hash = new URLSearchParams(location.hash.slice(1));
+    const query = new URLSearchParams(location.search.slice(1));
+    const error = hash.get('error') || hash.get('error_description') || query.get('error') || query.get('error_description');
+    const verified = hash.has('access_token') || query.has('code');
+    history.replaceState(null, '', location.pathname);
+    document.getElementById('notice').textContent = error
+      ? '验证链接不可用或已过期，请返回小程序重新尝试。'
+      : verified
+        ? '邮箱已验证，可以返回小程序登录。'
+        : '未收到明确的验证结果。请返回小程序尝试登录；如仍提示未验证，请重新发送验证邮件。';
+  </script>
+</body>
+</html>
